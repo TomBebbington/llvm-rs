@@ -25,6 +25,7 @@ impl Index<usize> for Value {
     }
 }
 impl Value {
+    /// Create a new constant struct from the values given
     pub fn new_struct<'a>(context: &'a Context, vals: &[&'a Value], packed: bool) -> &'a Value {
         unsafe { core::LLVMConstStructInContext(context.into(), vals.as_ptr() as *mut LLVMValueRef, vals.len() as c_uint, packed as c_int) }.into()
     }
