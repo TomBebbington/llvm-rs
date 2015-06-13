@@ -20,4 +20,4 @@ lto = true
 
 [dependencies]
 libc = "*"
-llvm_sys = "*"
+llvm-alt-sys = "*"

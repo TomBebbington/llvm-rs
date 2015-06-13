@@ -8,13 +8,19 @@ after_success: |
   sudo pip install ghp-import &&
   ghp-import -n target/doc &&
   git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+before_install:
+  - sudo sh -c "add-apt-repository -y ppa:ubuntu-toolchain-r/test"
+  - sudo sh -c "echo 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main' >> /etc/apt/sources.list"
+  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
 install:
-    - sudo apt-get install -y libllvm3.6 libllvm3.6-dbg cmake
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq llvm-3.6 libllvm3.6 libllvm3.6-dbg cmake libedit-dev
+  - sudo ln -s /usr/bin/llvm-config-* /usr/bin/llvm-config
 script:
-    - cargo build --verbose
-    - cargo test --verbose
-    - cargo bench --verbose
-    - cargo run --example tan
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo bench --verbose
+  - cargo run --example tan
 notifications:
   email:
     - tophattedcoder@gmail.com

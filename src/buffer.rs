@@ -1,7 +1,7 @@
+use libc::c_char;
 use ffi::{core, LLVMMemoryBuffer};
 use ffi::prelude::LLVMMemoryBufferRef;
 use std::ops::Deref;
-use std::raw::Slice;
 use std::mem;
 use util::{self, CBox, DisposeRef};
 
@@ -25,7 +25,12 @@ impl Deref for MemoryBuffer {
     type Target = str;
     fn deref(&self) -> &str {
         unsafe {
-            mem::transmute(Slice {
+            #[allow(dead_code)]
+            struct StrSlice {
+                data: *const c_char,
+                len: usize
+            }
+            mem::transmute(StrSlice {
                 data: core::LLVMGetBufferStart(self.into()),
                 len: core::LLVMGetBufferSize(self.into()) as usize
             })

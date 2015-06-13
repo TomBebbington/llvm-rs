@@ -1,7 +1,6 @@
 //! This library provides wrappers for LLVM that are (mostly) memory-safe and follow
 //! Rust idioms
 
-#![feature(core, unboxed_closures)]
 extern crate llvm_sys as ffi;
 extern crate libc;
 
