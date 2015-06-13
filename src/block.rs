@@ -1,0 +1,33 @@
+use ffi::core;
+use ffi::prelude::LLVMBasicBlockRef;
+use value::Value;
+use util;
+
+/// A container of instructions that execute sequentially
+pub struct BasicBlock;
+native_ref!(&BasicBlock = LLVMBasicBlockRef);
+impl BasicBlock {
+    /// Return the enclosing method, or `None` if it is non-existant
+    pub fn get_parent(&self) -> Option<&Value> {
+        unsafe { util::ptr_to_null(core::LLVMGetBasicBlockParent(self.into())) }
+    }
+    /// Move this basic block after the `other` basic block in its function
+    pub fn move_after(&self, other: &BasicBlock) {
+        unsafe { core::LLVMMoveBasicBlockAfter(self.into(), other.into()) }
+    }
+    /// Move this basic block before the `other` basic block in its function
+    pub fn move_before(&self, other: &BasicBlock) {
+        unsafe { core::LLVMMoveBasicBlockBefore(self.into(), other.into()) }
+    }
+    /// Unlink from the containing function, but do not delete it
+    pub fn remove(&self) {
+        unsafe { core::LLVMRemoveBasicBlockFromParent(self.into()) }
+    }
+    /// Delete this basic block
+    ///
+    /// This is unsafe because there should be no other reference to this, but
+    /// this can't be guranteed
+    pub unsafe fn delete(&self) {
+        core::LLVMDeleteBasicBlock(self.into())
+    }
+}

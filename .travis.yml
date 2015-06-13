@@ -1,0 +1,20 @@
+language: rust
+rust: beta
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  cargo doc &&
+  echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html &&
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+install:
+    - sudo apt-get install -y libllvm3.6 libllvm3.6-dbg cmake
+script:
+    - cargo build --verbose
+    - cargo test --verbose
+    - cargo bench --verbose
+    - cargo run --example tan
+notifications:
+  email:
+    - tophattedcoder@gmail.com
