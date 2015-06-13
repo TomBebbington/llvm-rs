@@ -77,6 +77,10 @@ impl Builder {
     pub fn build_select(&self, cond: &Value, true_val: &Value, false_val: &Value) -> &Value {
         unsafe { core::LLVMBuildSelect(self.into(), cond.into(), true_val.into(), false_val.into(), NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that casts a value into a certain type
+    pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
+        unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
+    }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
@@ -85,6 +89,8 @@ impl Builder {
     bin_op!{build_mul, LLVMBuildMul}
     bin_op!{build_fdiv, LLVMBuildFDiv}
     bin_op!{build_sdiv, LLVMBuildSDiv}
+    bin_op!{build_shl, LLVMBuildShl}
+    bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
 }
