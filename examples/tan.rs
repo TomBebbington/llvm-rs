@@ -3,8 +3,8 @@ use llvm::*;
 fn main() {
     let ctx = Context::new();
     let module = Module::new("simple", &ctx);
-    let cos = module.add_function("cos", Type::get::<fn(f64) -> f64>(&ctx));
-    let sin = module.add_function("sin", Type::get::<fn(f64) -> f64>(&ctx));
+    let cos = module.add_function("llvm.cos.f64", Type::get::<fn(f64) -> f64>(&ctx));
+    let sin = module.add_function("llvm.sin.f64", Type::get::<fn(f64) -> f64>(&ctx));
     let func = module.add_function("tan", Type::get::<fn(f64) -> f64>(&ctx));
     let entry = func.append("entry");
     let builder = Builder::new(&ctx);
