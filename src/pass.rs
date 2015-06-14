@@ -38,7 +38,7 @@ impl Drop for PassManager {
         unsafe { core::LLVMDisposePassManager(self.into()) }
     }
 }
-/// Defines the options that can be passed to `PassManager`
+/// Sets up a standard optimization sequence for languages like C and C++, allowing some APIs to customize the pass sequence in various ways
 pub struct PassManagerBuilder {
     builder: LLVMPassManagerBuilderRef
 }
@@ -49,11 +49,15 @@ impl PassManagerBuilder {
         unsafe { builder::LLVMPassManagerBuilderCreate().into() }
     }
     /// Set the optimisation level of the pass manager
+    ///
+    ///  0 = -O0, 1 = -O1, 2 = -O2, 3 = -O3
     pub fn with_opt_level(self, level: usize) -> PassManagerBuilder {
         unsafe { builder::LLVMPassManagerBuilderSetOptLevel((&self).into(), level as c_uint) };
         self
     }
-    /// Set the size level of the pass manager
+    /// Specify how much we're optimizing for size
+    ///
+    ///  0 = none, 1 = -Os, 2 = -Oz
     pub fn with_size_level(self, size: usize) -> PassManagerBuilder {
         unsafe { builder::LLVMPassManagerBuilderSetOptLevel((&self).into(), size as c_uint) };
         self
