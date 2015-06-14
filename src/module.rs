@@ -7,8 +7,11 @@ use ffi::bit_reader as reader;
 use cbox::CBox;
 use std::ffi::CString;
 use std::iter::{Iterator, IntoIterator};
-use std::{fmt, mem};
+use std::io::Result as IoResult;
+use std::{env, fmt, mem};
 use std::marker::PhantomData;
+use std::path::Path;
+use std::process::Command;
 use buffer::MemoryBuffer;
 use context::{Context, GetContext};
 use value::Function;
@@ -108,6 +111,24 @@ impl Module {
                 Ok(())
             }
         }
+    }
+
+    /// Compile the module into an object file at the given location
+    ///
+    /// Note that this uses the LLVM tool `llc` to do this
+    pub fn compile(&self, path: &Path, opt_level: usize) -> IoResult<()> {
+        let dir = env::temp_dir();
+        let path = path.to_str().unwrap();
+        let mod_path = dir.join("module.bc");
+        let mod_path = mod_path.to_str().unwrap();
+        self.write_bitcode(mod_path);
+        Command::new("llc")
+            .arg(&format!("-O={}", opt_level))
+            .arg("-filetype=obj")
+            .arg("-o").arg(path)
+            .arg(mod_path)
+            .spawn()
+            .map(|_| ())
     }
 }
 impl<'a> IntoIterator for &'a Module {
