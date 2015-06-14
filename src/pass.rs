@@ -38,25 +38,32 @@ impl Drop for PassManager {
         unsafe { core::LLVMDisposePassManager(self.into()) }
     }
 }
-/// Defines the options that can be passed `PassManager`
+/// Defines the options that can be passed to `PassManager`
 pub struct PassManagerBuilder {
     builder: LLVMPassManagerBuilderRef
 }
 native_ref!(PassManagerBuilder, builder: LLVMPassManagerBuilderRef);
 impl PassManagerBuilder {
+    /// Create a new pass manager builder
+    pub fn new() -> PassManagerBuilder {
+        unsafe { builder::LLVMPassManagerBuilderCreate().into() }
+    }
     /// Set the optimisation level of the pass manager
-    pub fn set_opt_level(&self, level: usize) {
-        unsafe { builder::LLVMPassManagerBuilderSetOptLevel(self.into(), level as c_uint) }
+    pub fn with_opt_level(self, level: usize) -> PassManagerBuilder {
+        unsafe { builder::LLVMPassManagerBuilderSetOptLevel((&self).into(), level as c_uint) };
+        self
     }
     /// Set the size level of the pass manager
-    pub fn set_size_level(&self, size: usize) {
-        unsafe { builder::LLVMPassManagerBuilderSetOptLevel(self.into(), size as c_uint) }
+    pub fn with_size_level(self, size: usize) -> PassManagerBuilder {
+        unsafe { builder::LLVMPassManagerBuilderSetOptLevel((&self).into(), size as c_uint) };
+        self
     }
     /// Use an inliner with threshold given
     ///
     /// This threshold should be the degree to which the inlining should be done
-    pub fn use_inliner(&self, threshold: usize) {
-        unsafe { builder::LLVMPassManagerBuilderUseInlinerWithThreshold(self.into(), threshold as c_uint) }
+    pub fn with_inliner(self, threshold: usize) -> PassManagerBuilder {
+        unsafe { builder::LLVMPassManagerBuilderUseInlinerWithThreshold((&self).into(), threshold as c_uint) };
+        self
     }
 }
 impl Drop for PassManagerBuilder {
