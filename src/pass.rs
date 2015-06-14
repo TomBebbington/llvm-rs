@@ -20,7 +20,7 @@ impl PassManager {
     pub fn add_target_data(&self, data: &TargetData) {
         unsafe { target::LLVMAddTargetData(data.into(), self.into()) }
     }
-    /// Run this pass manager
+    /// Initializes, executes on the provided module, and finalizes all of the passes scheduled in the pass manage
     pub fn run(&self, module: &Module) -> Result<(), ()> {
         if unsafe { core::LLVMRunPassManager(self.into(), module.into()) } == 0 {
             Ok(())
@@ -28,7 +28,7 @@ impl PassManager {
             Err(())
         }
     }
-
+    /// Pupulate this pass manager with the options given in the builder
     pub fn populate(&self, builder: PassManagerBuilder) {
         unsafe { builder::LLVMPassManagerBuilderPopulateModulePassManager(builder.into(), self.into()) }
     }
@@ -38,6 +38,7 @@ impl Drop for PassManager {
         unsafe { core::LLVMDisposePassManager(self.into()) }
     }
 }
+/// Defines the options that can be passed `PassManager`
 pub struct PassManagerBuilder {
     builder: LLVMPassManagerBuilderRef
 }
@@ -50,6 +51,12 @@ impl PassManagerBuilder {
     /// Set the size level of the pass manager
     pub fn set_size_level(&self, size: usize) {
         unsafe { builder::LLVMPassManagerBuilderSetOptLevel(self.into(), size as c_uint) }
+    }
+    /// Use an inliner with threshold given
+    ///
+    /// This threshold should be the degree to which the inlining should be done
+    pub fn use_inliner(&self, threshold: usize) {
+        unsafe { builder::LLVMPassManagerBuilderUseInlinerWithThreshold(self.into(), threshold as c_uint) }
     }
 }
 impl Drop for PassManagerBuilder {
