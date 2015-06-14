@@ -171,7 +171,7 @@ macro_rules! get_context(
 );
 macro_rules! dispose(
     ($ty:ty, $ref_ty:ty, $func:expr) => (
-        impl ::util::DisposeRef for $ty {
+        impl ::cbox::DisposeRef for $ty {
             type RefTo = $ref_ty;
             #[inline(always)]
             unsafe fn dispose(ptr: *mut $ref_ty) {

@@ -1,6 +1,6 @@
 use ffi::prelude::LLVMContextRef;
 use ffi::{core, LLVMContext};
-use util::CBox;
+use cbox::CBox;
 
 /// Contains all the LLVM entities
 ///

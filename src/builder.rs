@@ -1,11 +1,11 @@
 use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder};
+use cbox::{CBox, DisposeRef};
 use std::{mem, ptr};
 use block::BasicBlock;
 use context::Context;
 use ty::Type;
-use util::{CBox, DisposeRef};
 use value::Value;
 
 static NULL_NAME:[c_char; 1] = [0];

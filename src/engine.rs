@@ -3,13 +3,14 @@ use ffi::{core, target};
 use ffi::execution_engine as engine;
 use ffi::execution_engine::*;
 use ffi::target_machine::LLVMCodeModel;
+use cbox::CBox;
 use std::marker::PhantomData;
 use std::{mem, ptr};
 use std::ops::*;
 use compile::Compile;
 use context::Context;
 use module::Module;
-use util::{self, CBox};
+use util;
 use value::{Function, Value};
 
 /// Runs the module

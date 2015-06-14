@@ -19,5 +19,6 @@ name = "llvm"
 lto = true
 
 [dependencies]
+cbox = "*"
 libc = "*"
 llvm-alt-sys = "*"

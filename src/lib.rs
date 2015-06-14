@@ -1,8 +1,13 @@
 //! This library provides wrappers for LLVM that are (mostly) memory-safe and follow
 //! Rust idioms
+//!
+//! Ownership of some of the LLVM types is managed through the `CBox` struct, which
+//! just wraps a pointer and calls a destructor when it falls out of scope, but allows
+//! being dereferenced into the type it represents e.g. a `Context`
 
 extern crate llvm_sys as ffi;
 extern crate libc;
+extern crate cbox;
 
 #[macro_use]
 mod macros;
@@ -19,6 +24,7 @@ mod ty;
 mod value;
 mod util;
 
+pub use cbox::CBox;
 pub use builder::Builder;
 pub use block::BasicBlock;
 pub use compile::Compile;
@@ -29,4 +35,3 @@ pub use pass::{PassManager, PassManagerBuilder};
 pub use target::{TargetData, Target};
 pub use ty::{FunctionType, Type};
 pub use value::{Value, Function};
-pub use util::CBox;

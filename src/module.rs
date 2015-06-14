@@ -3,6 +3,7 @@ use ffi::prelude::{LLVMValueRef, LLVMModuleRef};
 use ffi::{core, LLVMModule};
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
+use cbox::CBox;
 use std::ffi::CString;
 use std::iter::{Iterator, IntoIterator};
 use std::{fmt, mem};
@@ -11,7 +12,7 @@ use buffer::MemoryBuffer;
 use context::{Context, GetContext};
 use value::Function;
 use ty::Type;
-use util::{self, CBox};
+use util;
 
 /// Represents a translation unit
 ///

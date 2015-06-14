@@ -1,10 +1,11 @@
 use libc::{c_char,  c_uint};
 use ffi::target_machine::{self, LLVMTargetRef};
 use ffi::target::{self, LLVMTargetDataRef, LLVMOpaqueTargetData};
+use cbox::{CBox, DisposeRef};
 use std::ffi::CString;
 use std::fmt;
 use ty::Type;
-use util::{self, CBox, DisposeRef};
+use util;
 
 pub struct TargetData;
 native_ref!(&TargetData = LLVMTargetDataRef);

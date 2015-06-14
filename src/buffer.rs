@@ -1,9 +1,10 @@
 use libc::c_char;
 use ffi::{core, LLVMMemoryBuffer};
 use ffi::prelude::LLVMMemoryBufferRef;
+use cbox::{CBox, DisposeRef};
 use std::ops::Deref;
 use std::mem;
-use util::{self, CBox, DisposeRef};
+use util;
 
 
 pub struct MemoryBuffer;
