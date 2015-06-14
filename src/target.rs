@@ -1,4 +1,4 @@
-use libc::c_char;
+use libc::{c_char,  c_uint};
 use ffi::target_machine::{self, LLVMTargetRef};
 use ffi::target::{self, LLVMTargetDataRef, LLVMOpaqueTargetData};
 use std::ffi::CString;
@@ -9,12 +9,19 @@ pub struct TargetData;
 native_ref!(&TargetData = LLVMTargetDataRef);
 
 impl TargetData {
+    /// Creates target data from a target layout string
     pub fn new(rep: &str) -> CBox<TargetData> {
         let c_rep = CString::new(rep).unwrap();
         CBox::new(unsafe {
             target::LLVMCreateTargetData(c_rep.as_ptr())
         }.into())
     }
+    /// Returns true if the target is big endian
+    pub fn is_big_endian(&self) -> bool {
+        let order = unsafe { target::LLVMByteOrder(self.into()) } as c_uint;
+        order == 0
+    }
+    /// Convers this to a target layout string
     pub fn as_str(&self) -> CBox<str> {
         unsafe {
             CBox::new(target::LLVMCopyStringRepOfTargetData(self.into()))
