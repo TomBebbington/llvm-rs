@@ -21,6 +21,10 @@ impl TargetData {
         let order = unsafe { target::LLVMByteOrder(self.into()) } as c_uint;
         order == 0
     }
+    /// Returns the size of a pointer on the target
+    pub fn get_pointer_size(&self) -> usize {
+        unsafe { target::LLVMPointerSize(self.into()) as usize }
+    }
     /// Convers this to a target layout string
     pub fn as_str(&self) -> CBox<str> {
         unsafe {
