@@ -47,6 +47,15 @@ impl Arg {
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddAttribute(self.into(), attr.into()) }
     }
+    /// Add attributes to this function argument
+    pub fn add_attributes(&self, attrs: &[Attribute]) {
+        let mut sum = LLVMAttribute::empty();
+        for attr in attrs {
+            let attr:LLVMAttribute = (*attr).into();
+            sum = sum | attr;
+        }
+        unsafe { core::LLVMAddAttribute(self.into(), sum.into()) }
+    }
     /// Get the attributes set for a function argument
     pub fn has_attribute(&self, attr: Attribute) -> bool {
         unsafe {
@@ -102,6 +111,15 @@ impl Function {
     /// Add an attribute to this function
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddFunctionAttr(self.into(), attr.into()) }
+    }
+    /// Add attributes to this function
+    pub fn add_attributes(&self, attrs: &[Attribute]) {
+        let mut sum = LLVMAttribute::empty();
+        for attr in attrs {
+            let attr:LLVMAttribute = (*attr).into();
+            sum = sum | attr;
+        }
+        unsafe { core::LLVMAddFunctionAttr(self.into(), sum.into()) }
     }
     /// Check if the attribute is set
     pub fn has_attribute(&self, attr: Attribute) -> bool {

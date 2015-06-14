@@ -1,11 +1,13 @@
 extern crate llvm;
 use llvm::*;
+use llvm::Attribute::*;
 fn main() {
     let ctx = Context::new();
     let module = Module::new("simple", &ctx);
     let cos = module.add_function("llvm.cos.f64", Type::get::<fn(f64) -> f64>(&ctx));
     let sin = module.add_function("llvm.sin.f64", Type::get::<fn(f64) -> f64>(&ctx));
     let func = module.add_function("tan", Type::get::<fn(f64) -> f64>(&ctx));
+    func.add_attributes(&[NoUnwind, ReadNone]);
     let entry = func.append("entry");
     let builder = Builder::new(&ctx);
     builder.position_at_end(entry);
