@@ -34,4 +34,4 @@ pub use module::{Module, Functions};
 pub use pass::{PassManager, PassManagerBuilder};
 pub use target::{TargetData, Target};
 pub use ty::{FunctionType, Type};
-pub use value::{Value, Function};
+pub use value::{Arg, Attribute, Value, Function};
