@@ -64,21 +64,17 @@ impl Module {
     /// Returns the function with the name given if it exists
     pub fn get_function<'a>(&'a self, name: &str) -> Option<&'a Function> {
         let c_name = CString::new(name).unwrap();
-        let val = unsafe { core::LLVMGetNamedFunction(self.into(), c_name.as_ptr()) };
-        if val.is_null() {
-            None
-        } else {
-            Some(val.into())
+        unsafe {
+            let ty = core::LLVMGetNamedFunction(self.into(), c_name.as_ptr());
+            util::ptr_to_null(ty)
         }
     }
     /// Returns the type with the name given if it exists
     pub fn get_type<'a>(&'a self, name: &str) -> Option<&'a Type> {
         let c_name = CString::new(name).unwrap();
-        let ty = unsafe { core::LLVMGetTypeByName(self.into(), c_name.as_ptr()) };
-        if ty.is_null() {
-            None
-        } else {
-            Some(ty.into())
+        unsafe {
+            let ty = core::LLVMGetTypeByName(self.into(), c_name.as_ptr());
+            util::ptr_to_null(ty)
         }
     }
     /// Clone this module
@@ -127,11 +123,7 @@ impl<'a> Iterator for Functions<'a> {
         } else {
             let c_next = unsafe { core::LLVMGetNextFunction(self.value) };
             self.value = c_next;
-            if c_next.is_null() {
-                None
-            } else {
-                Some(c_next.into())
-            }
+            Some(self.value.into())
         }
     }
 }
