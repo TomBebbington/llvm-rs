@@ -48,10 +48,10 @@ impl Builder {
     ///
     /// The size of this array will be the `size` of elem times `size`
     pub fn build_array_alloca(&self, elem: &Type, size: &Value) -> &Value {
-        unsafe { core::LLVMBuildArrayAlloca(self.into(), elem.into(), size.into(), ptr::null_mut()) }.into()
+        unsafe { core::LLVMBuildArrayAlloca(self.into(), elem.into(), size.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
     pub fn build_alloca(&self, ty: &Type) -> &Value {
-        unsafe { core::LLVMBuildAlloca(self.into(), ty.into(), ptr::null_mut()) }.into()
+        unsafe { core::LLVMBuildAlloca(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
     /// Frees the `val`
     pub fn build_free(&self, val: &Value) -> &Value {
@@ -71,8 +71,13 @@ impl Builder {
     }
     /// Build an instruction that calls the function `func` with the arguments `args`
     pub fn build_call(&self, func: &Value, args: &[&Value]) -> &Value {
-        unsafe { core::LLVMBuildCall(self.into(), func.into(), args.as_ptr() as *mut LLVMValueRef, args.len() as c_uint, NULL_NAME.as_ptr()).into() }
+        unsafe {
+            let call = core::LLVMBuildCall(self.into(), func.into(), args.as_ptr() as *mut LLVMValueRef, args.len() as c_uint, NULL_NAME.as_ptr());
+            core::LLVMSetTailCall(call, 0);
+            call.into()
+        }
     }
+
     /// Build an instruction that calls the function `func` with the arguments `args`
     pub fn build_tail_call(&self, func: &Value, args: &[&Value]) -> &Value {
         unsafe {

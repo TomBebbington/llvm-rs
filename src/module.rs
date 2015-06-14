@@ -7,6 +7,7 @@ use ffi::bit_reader as reader;
 use cbox::CBox;
 use std::ffi::CString;
 use std::iter::{Iterator, IntoIterator};
+use std::io::{Error, ErrorKind};
 use std::io::Result as IoResult;
 use std::{env, fmt, mem};
 use std::marker::PhantomData;
@@ -53,10 +54,12 @@ impl Module {
         }
     }
     /// Write this module's bitcode to the path given
-    pub fn write_bitcode(&self, path: &str) {
+    pub fn write_bitcode(&self, path: &str) -> IoResult<()> {
         util::with_cstr(path, |cpath| unsafe {
             if writer::LLVMWriteBitcodeToFile(self.into(), cpath) != 0 {
-                panic!("failed to write bitcode to file {}", path)
+                Err(Error::new(ErrorKind::Other, &format!("could not write to {}", path) as &str))
+            } else {
+                Ok(())
             }
         })
     }
@@ -121,7 +124,7 @@ impl Module {
         let path = path.to_str().unwrap();
         let mod_path = dir.join("module.bc");
         let mod_path = mod_path.to_str().unwrap();
-        self.write_bitcode(mod_path);
+        try!(self.write_bitcode(mod_path));
         Command::new("llc")
             .arg(&format!("-O={}", opt_level))
             .arg("-filetype=obj")
