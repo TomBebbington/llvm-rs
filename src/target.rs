@@ -3,6 +3,7 @@ use ffi::target_machine::{self, LLVMTargetRef};
 use ffi::target::{self, LLVMTargetDataRef, LLVMOpaqueTargetData};
 use std::ffi::CString;
 use std::fmt;
+use ty::Type;
 use util::{self, CBox, DisposeRef};
 
 pub struct TargetData;
@@ -24,6 +25,18 @@ impl TargetData {
     /// Returns the size of a pointer on the target
     pub fn get_pointer_size(&self) -> usize {
         unsafe { target::LLVMPointerSize(self.into()) as usize }
+    }
+    /// Returns the size of the type given in bits
+    pub fn size_of_in_bits(&self, ty: &Type) -> u64 {
+        unsafe { target::LLVMSizeOfTypeInBits(self.into(), ty.into()) }
+    }
+    /// Returns the size of the type given in bytes
+    pub fn size_of(&self, ty: &Type) -> u64 {
+        unsafe { target::LLVMStoreSizeOfType(self.into(), ty.into()) }
+    }
+    /// Returns the alignment of the type given in bytes
+    pub fn alignment_of(&self, ty: &Type) -> usize {
+        unsafe { target::LLVMABIAlignmentOfType(self.into(), ty.into()) as usize }
     }
     /// Convers this to a target layout string
     pub fn as_str(&self) -> CBox<str> {
