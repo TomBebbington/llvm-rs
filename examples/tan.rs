@@ -14,13 +14,14 @@ fn main() {
     let cos_v = builder.build_call(cos, &[value]);
     let value = builder.build_fdiv(sin_v, cos_v);
     builder.build_ret(value);
-    println!("{:?}", &module as &Module);
+    println!("{:?}", module);
+    module.verify().unwrap();
     let pass = PassManager::new();
     let builder = PassManagerBuilder::new()
         .with_opt_level(3);
     pass.populate(builder);
     pass.run(&module).unwrap();
-    println!("{:?}", &module as &Module);
+    println!("{:?}", module);
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
     ee.with_function(func, |tan: extern fn(f64) -> f64| {
         for i in 0..10 {

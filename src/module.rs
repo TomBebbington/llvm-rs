@@ -1,6 +1,7 @@
 use libc::c_char;
 use ffi::prelude::{LLVMValueRef, LLVMModuleRef};
-use ffi::{core, LLVMModule};
+use ffi::analysis::LLVMVerifierFailureAction;
+use ffi::{analysis, core, LLVMModule};
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
 use cbox::CBox;
@@ -91,9 +92,22 @@ impl Module {
     }
 
     /// Set the target data of this module
-    pub fn set_target(&mut self, target: &str) {
+    pub fn set_target(&self, target: &str) {
         let c_target = CString::new(target).unwrap();
         unsafe { core::LLVMSetTarget(self.into(), c_target.as_ptr()) }
+    }
+
+    /// Verify the module
+    pub fn verify(&self) -> Result<(), CBox<str>> {
+        unsafe {
+            let mut error = mem::uninitialized();
+            let action = LLVMVerifierFailureAction::LLVMReturnStatusAction;
+            if analysis::LLVMVerifyModule(self.into(), action, &mut error) == 1 {
+                Err(CBox::new(error))
+            } else {
+                Ok(())
+            }
+        }
     }
 }
 impl<'a> IntoIterator for &'a Module {
