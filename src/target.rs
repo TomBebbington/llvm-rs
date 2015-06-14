@@ -38,6 +38,14 @@ impl TargetData {
     pub fn alignment_of(&self, ty: &Type) -> usize {
         unsafe { target::LLVMABIAlignmentOfType(self.into(), ty.into()) as usize }
     }
+    /// Computes the structure element that contains the byte offset for a target
+    pub fn element_at(&self, struct_ty: &Type, offset: u64) -> usize {
+        unsafe { target::LLVMElementAtOffset(self.into(), struct_ty.into(), offset) as usize }
+    }
+    /// Compute the byte offset of an element in the struct type given
+    pub fn offset_of(&self, struct_ty: &Type, element: usize) -> u64 {
+        unsafe { target::LLVMOffsetOfElement(self.into(), struct_ty.into(), element as c_uint) }
+    }
     /// Convers this to a target layout string
     pub fn as_str(&self) -> CBox<str> {
         unsafe {
