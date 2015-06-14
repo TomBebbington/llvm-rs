@@ -81,6 +81,12 @@ impl Builder {
     pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that computes the address of a subelement of an aggregate data structure
+    ///
+    /// Basically type-safe pointer arithmetic
+    pub fn build_gep(&self, pointer: &Value, indices: &[&Value]) -> &Value {
+        unsafe { core::LLVMBuildGEP(self.into(), pointer.into(), indices.as_ptr() as *mut LLVMValueRef, indices.len() as c_uint, NULL_NAME.as_ptr()).into() }
+    }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
