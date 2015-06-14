@@ -1,9 +1,10 @@
 use libc::c_uint;
 use ffi::prelude::LLVMPassManagerRef;
-use ffi::core;
+use ffi::{core, target};
 use ffi::transforms::pass_manager_builder as builder;
 use ffi::transforms::pass_manager_builder::LLVMPassManagerBuilderRef;
 use module::Module;
+use target::TargetData;
 
 /// Runs transformations on bitcode
 pub struct PassManager {
@@ -14,6 +15,10 @@ impl PassManager {
     /// Create a new pass manager
     pub fn new() -> PassManager {
         unsafe { core::LLVMCreatePassManager() }.into()
+    }
+    /// Adds target data information to a pass manage
+    pub fn add_target_data(&self, data: &TargetData) {
+        unsafe { target::LLVMAddTargetData(data.into(), self.into()) }
     }
     /// Run this pass manager
     pub fn run(&self, module: &Module) -> Result<(), ()> {
