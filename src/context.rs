@@ -24,8 +24,8 @@ impl Context {
 }
 dispose!(Context, LLVMContext, core::LLVMContextDispose);
 
-/// Implemented by everything that is inside the context
+/// Implemented by everything that is owned by a context
 pub trait GetContext {
-    /// Get the context containing this type
+    /// Returns a reference to the context that owns this value
     fn get_context(&self) -> &Context;
 }
