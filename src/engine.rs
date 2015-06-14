@@ -16,6 +16,8 @@ use value::{Function, Value};
 pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self> {
     /// The options given to this upon creation
     type Options : Copy;
+    /// Create a new execution engine with the given `Module` and options, or return a
+    /// description of the error
     fn new(module: &'a Module, options: Self::Options) -> Result<Self, CBox<'a, str>>;
 
     /// Add a module to the list of modules
@@ -53,16 +55,20 @@ pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self>
     }
 }
 
+/// The options to pass to the MCJIT backend
 #[derive(Copy, Clone)]
 pub struct JitOptions {
+    /// The degree to which optimisations should be done, between 0 and 3
     pub opt_level: usize
 }
+/// The MCJIT backend, which compiles functions into machine code
 pub struct JitEngine<'a> {
     engine: LLVMExecutionEngineRef,
     marker: PhantomData<&'a ()>
 }
 native_ref!{contra JitEngine, engine: LLVMExecutionEngineRef}
 impl<'a, 'b> JitEngine<'a> {
+    /// Run `cb` with the machine code for the `function`
     pub fn with_function<C, A, R>(&self, function: &'b Function, cb: C) where C:FnOnce(extern fn(A) -> R) {
         unsafe {
             let ptr:&u8 = self.get_pointer(function);
@@ -100,6 +106,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
         }
     }
 }
+/// The interpreter backend
 pub struct Interpreter<'a> {
     engine: LLVMExecutionEngineRef,
     marker: PhantomData<&'a ()>
@@ -128,6 +135,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'a> {
         }
     }
 }
+/// A wrapped value that can be passed to an interpreter function or returned from one
 pub struct GenericValue<'a> {
     value: LLVMGenericValueRef,
     marker: PhantomData<&'a ()>
@@ -141,8 +149,11 @@ impl<'a> Drop for GenericValue<'a> {
     }
 }
 
+/// A value that can be cast into a `GenericValue` and that a generic value can be cast into
 pub trait GenericValueCast<'a> {
+    /// Create a `GenericValue` from this value
     fn to_generic(self, context: &'a Context) -> GenericValue<'a>;
+    /// Convert the `GenericValue` into a value of this type again
     fn from_generic(value: GenericValue<'a>, context: &'a Context) -> Self;
 }
 
@@ -213,22 +224,3 @@ generic_int!{some i8, u8}
 generic_int!{some i16, u16}
 generic_int!{some i32, u32}
 generic_int!{some i64, u64}
-
-pub trait Args<'a> {
-    fn cast(self, context: &'a Context) -> Vec<GenericValue<'a>>;
-}
-impl<'a> Args<'a> for () {
-    fn cast(self, _: &'a Context) -> Vec<GenericValue<'a>> {
-        Vec::new()
-    }
-}
-impl<'a, T> Args<'a> for (T) where T:GenericValueCast<'a> {
-    fn cast(self, ctx: &'a Context) -> Vec<GenericValue<'a>> {
-        vec![self.to_generic(ctx)]
-    }
-}
-impl<'a, A, B> Args<'a> for (A, B) where A:GenericValueCast<'a>, B:GenericValueCast<'a> {
-    fn cast(self, ctx: &'a Context) -> Vec<GenericValue<'a>> {
-        vec![self.0.to_generic(ctx), self.1.to_generic(ctx)]
-    }
-}
