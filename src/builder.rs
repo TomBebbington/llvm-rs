@@ -73,6 +73,14 @@ impl Builder {
     pub fn build_call(&self, func: &Value, args: &[&Value]) -> &Value {
         unsafe { core::LLVMBuildCall(self.into(), func.into(), args.as_ptr() as *mut LLVMValueRef, args.len() as c_uint, NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that calls the function `func` with the arguments `args`
+    pub fn build_tail_call(&self, func: &Value, args: &[&Value]) -> &Value {
+        unsafe {
+            let call = core::LLVMBuildCall(self.into(), func.into(), args.as_ptr() as *mut LLVMValueRef, args.len() as c_uint, NULL_NAME.as_ptr());
+            core::LLVMSetTailCall(call, 1);
+            call.into()
+        }
+    }
     /// Build an instruction that yields to `true_val` if `cond` is equal to `1`, and `false_val` otherwise
     pub fn build_select(&self, cond: &Value, true_val: &Value, false_val: &Value) -> &Value {
         unsafe { core::LLVMBuildSelect(self.into(), cond.into(), true_val.into(), false_val.into(), NULL_NAME.as_ptr()).into() }
@@ -86,6 +94,16 @@ impl Builder {
     /// Basically type-safe pointer arithmetic
     pub fn build_gep(&self, pointer: &Value, indices: &[&Value]) -> &Value {
         unsafe { core::LLVMBuildGEP(self.into(), pointer.into(), indices.as_ptr() as *mut LLVMValueRef, indices.len() as c_uint, NULL_NAME.as_ptr()).into() }
+    }
+    /// Build an instruction that runs whichever block matches the value, or `default`
+    pub fn build_switch(&self, value: &Value, default: &BasicBlock, cases: &[(&Value, &BasicBlock)]) -> &Value {
+        unsafe {
+            let switch = core::LLVMBuildSwitch(self.into(), value.into(), default.into(), cases.len() as c_uint);
+            for case in cases {
+                core::LLVMAddCase(switch, case.0.into(), case.1.into());
+            }
+            switch.into()
+        }
     }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
