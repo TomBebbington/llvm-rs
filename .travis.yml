@@ -22,7 +22,6 @@ script:
   - cargo bench --verbose
   - cargo run --example tan
   - cargo run --example fib
-  - cargo run --example hello
 notifications:
   email:
     - tophattedcoder@gmail.com
