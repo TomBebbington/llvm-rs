@@ -9,14 +9,15 @@ use ty::{StructType, Type};
 use std::mem;
 use std::ffi::CStr;
 
-/// Implemented for any type that can be represeented in IR
+/// Implemented for any type that can be represented in IR.
 ///
 /// Please note that destructors are NOT compiled and must be handled manually in the code
-/// you compile using LLVM
+/// you compile using LLVM. Make sure to free any returned pointers to keep your generated
+/// code memory-safe
 pub trait Compile<'a> {
-    /// Compile this value with the builder given in the context given
+    /// Compile this value with the builder given in the context given.
     fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value;
-    /// Get the type descriptor for this type
+    /// Get the type descriptor for this type in the context given.
     fn get_type(context: &'a Context) -> &'a Type;
 }
 impl<'a, T> Compile<'a> for &'a T where T:Sized + Copy + Compile<'a> {
@@ -213,16 +214,3 @@ compile_func!{A, B, C, D}
 compile_func!{A, B, C, D, E}
 compile_func!{A, B, C, D, E, F}
 compile_func!{A, B, C, D, E, F, G}
-
-/*
-impl<'a, 'b> Compile<'a> for &'b str {
-    fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
-        unsafe {
-            let text = core::LLVMConstStringInContext(context.into(), self.as_ptr() as *const i8, self.len() as c_uint, 1);
-            let ptr = builder.alloca()
-        }
-    }
-    fn get_type(context: &'a Context) -> &'a Type {
-        <(*mut i8, usize) as Compile<'a>>::get_type(context)
-    }
-}*/

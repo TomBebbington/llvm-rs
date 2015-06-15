@@ -19,16 +19,16 @@ use value::Function;
 use ty::Type;
 use util;
 
-/// Represents a translation unit
+/// Represents a single translation unit of code.
 ///
-/// This is attached to the lifetime of the context that constructs it
+/// This is attached to the lifetime of the context that constructs it, but is owned by the `CBox`.
 pub struct Module;
 native_ref!(&Module = LLVMModuleRef);
 impl Module {
-    /// Create a new module in the context given with the name given
+    /// Create a new module in the context given with the name given.
     ///
     /// The lifetime of the module will match the lifetime of the context
-    /// you instance it in because the context contains it
+    /// you instance it in because the context contains it.
     ///
     /// ```rust
     /// use llvm::*;
@@ -40,7 +40,7 @@ impl Module {
         let c_name = CString::new(name).unwrap();
         unsafe { CBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
     }
-    /// Parse this bitcode file into a module
+    /// Parse this bitcode file into a module, or return an error string.
     pub fn parse_bitcode<'a, 'b>(context: &'a Context, path: &'b str) -> Result<CBox<'b, Module>, CBox<'b, str>> {
         unsafe {
             let mut out = mem::uninitialized();
@@ -53,7 +53,7 @@ impl Module {
             }
         }
     }
-    /// Write this module's bitcode to the path given
+    /// Write this module's bitcode to the path given.
     pub fn write_bitcode(&self, path: &str) -> IoResult<()> {
         util::with_cstr(path, |cpath| unsafe {
             if writer::LLVMWriteBitcodeToFile(self.into(), cpath) != 0 {
@@ -63,12 +63,12 @@ impl Module {
             }
         })
     }
-    /// Add a function to the module with the name given
+    /// Add a function to the module with the name given.
     pub fn add_function<'a>(&'a self, name: &str, sig: &'a Type) -> &'a mut Function {
         let c_name = CString::new(name).unwrap();
         unsafe { core::LLVMAddFunction(self.into(), c_name.as_ptr(), sig.into()) }.into()
     }
-    /// Returns the function with the name given if it exists
+    /// Returns the function with the name given if it exists.
     pub fn get_function<'a>(&'a self, name: &str) -> Option<&'a Function> {
         let c_name = CString::new(name).unwrap();
         unsafe {
@@ -76,7 +76,7 @@ impl Module {
             util::ptr_to_null(ty)
         }
     }
-    /// Returns the type with the name given if it exists
+    /// Returns the type with the name given if it exists.
     pub fn get_type<'a>(&'a self, name: &str) -> Option<&'a Type> {
         let c_name = CString::new(name).unwrap();
         unsafe {
@@ -84,12 +84,12 @@ impl Module {
             util::ptr_to_null(ty)
         }
     }
-    /// Clone this module
+    /// Clone this module.
     pub fn clone<'a>(&'a self) -> CBox<'a, Module> {
         CBox::new(unsafe { core::LLVMCloneModule(self.into()) })
     }
 
-    /// Get the target data of this module
+    /// Returns the target data of this module represented as a string
     pub fn get_target(&self) -> &str {
         unsafe {
             let target = core::LLVMGetTarget(self.into());
@@ -103,7 +103,7 @@ impl Module {
         unsafe { core::LLVMSetTarget(self.into(), c_target.as_ptr()) }
     }
 
-    /// Verify the module
+    /// Verify that the module is safe to run.
     pub fn verify(&self) -> Result<(), CBox<str>> {
         unsafe {
             let mut error = mem::uninitialized();
@@ -116,9 +116,10 @@ impl Module {
         }
     }
 
-    /// Compile the module into an object file at the given location
+    /// Compile the module into an object file at the given location.
     ///
-    /// Note that this uses the LLVM tool `llc` to do this
+    /// Note that this uses the LLVM tool `llc` to do this, which may or may not be
+    /// installed on the user's machine.
     pub fn compile(&self, path: &Path, opt_level: usize) -> IoResult<()> {
         let dir = env::temp_dir();
         let path = path.to_str().unwrap();
@@ -149,6 +150,7 @@ get_context!(Module, LLVMGetModuleContext);
 to_str!(Module, LLVMPrintModuleToString);
 dispose!(Module, LLVMModule, core::LLVMDisposeModule);
 #[derive(Copy, Clone)]
+/// An iterator through the functions contained in a module.
 pub struct Functions<'a> {
     value: LLVMValueRef,
     marker: PhantomData<&'a ()>

@@ -1,9 +1,5 @@
 //! This library provides wrappers for LLVM that are (mostly) memory-safe and follow
-//! Rust idioms
-//!
-//! Ownership of some of the LLVM types is managed through the `CBox` struct, which
-//! just wraps a pointer and calls a destructor when it falls out of scope, but allows
-//! being dereferenced into the type it represents e.g. a `Context`
+//! Rust idioms.
 
 extern crate llvm_sys as ffi;
 extern crate libc;

@@ -14,21 +14,21 @@ use ty::{StructType, Type};
 use util::{self, CastFrom};
 use value::{Function, Value};
 
-/// An abstract interface for implementation execution of LLVM modules
+/// An abstract interface for implementation execution of LLVM modules.
 ///
-/// This is designed to support both interpreter and just-in-time (JIT) compiler implementations
+/// This is designed to support both interpreter and just-in-time (JIT) compiler implementations.
 pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self> {
-    /// The options given to this upon creation
+    /// The options given to this upon creation.
     type Options : Copy;
     /// Create a new execution engine with the given `Module` and options, or return a
-    /// description of the error
+    /// description of the error.
     fn new(module: &'a Module, options: Self::Options) -> Result<Self, CBox<'a, str>>;
 
-    /// Add a module to the list of modules to interpret or compile
+    /// Add a module to the list of modules to interpret or compile.
     fn add_module(&'b self, module: &'a Module) {
         unsafe { engine::LLVMAddModule(self.into(), (&*module).into()) }
     }
-    /// Remove a module from the list of modules to interpret or compile
+    /// Remove a module from the list of modules to interpret or compile.
     fn remove_module(&'b self, module: &'a Module) -> &'a Module {
         unsafe {
             let mut out = mem::uninitialized();
@@ -36,16 +36,16 @@ pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self>
             out.into()
         }
     }
-    /// Execute all of the static constructors for this program
+    /// Execute all of the static constructors for this program.
     fn run_static_constructors(&'b self) {
         unsafe { engine::LLVMRunStaticConstructors(self.into()) }
     }
-    /// Execute all of the static destructors for this program
+    /// Execute all of the static destructors for this program.
     fn run_static_destructors(&'b self) {
         unsafe { engine::LLVMRunStaticDestructors(self.into()) }
     }
     /// Attempt to find a function with the name given, or `None` if there wasn't
-    /// a function with that name
+    /// a function with that name.
     fn find_function(&'b self, name: &str) -> Option<&'a Function> {
         util::with_cstr(name, |c_name| unsafe {
             let mut out = mem::zeroed();
@@ -53,37 +53,42 @@ pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self>
             mem::transmute(out)
         })
     }
-    /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one
+    /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one.
     ///
     /// Note that if this engine is a `JitEngine`, it only supports a small fraction of combinations
     /// for the arguments and return value, so be warned.
     ///
     /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
-    /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method
+    /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method.
     fn run_function(&'b self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
         let ptr = args.as_ptr() as *mut LLVMGenericValueRef;
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
     }
-    /// Get a pointer to the global value given
-    unsafe fn get_pointer<T>(&'b self, global: &'a Value) -> &'b T {
+    /// Returns a pointer to the global value given.
+    ///
+    /// This is marked as unsafe because the type cannot be guranteed to be the same as the
+    /// type of the global value at this point.
+    unsafe fn get_global<T>(&'b self, global: &'a Value) -> &'b T {
         mem::transmute(engine::LLVMGetPointerToGlobal(self.into(), global.into()))
     }
 }
 
-/// The options to pass to the MCJIT backend
+/// The options to pass to the MCJIT backend.
 #[derive(Copy, Clone)]
 pub struct JitOptions {
-    /// The degree to which optimisations should be done, between 0 and 3
+    /// The degree to which optimizations should be done, between 0 and 3.
+    ///
+    /// 0 represents no optimizations, 3 represents maximum optimization
     pub opt_level: usize
 }
-/// The MCJIT backend, which compiles functions into machine code
+/// The MCJIT backend, which compiles functions and values into machine code.
 pub struct JitEngine<'a> {
     engine: LLVMExecutionEngineRef,
     marker: PhantomData<&'a ()>
 }
 native_ref!{contra JitEngine, engine: LLVMExecutionEngineRef}
 impl<'a, 'b> JitEngine<'a> {
-    /// Run the closure `cb` with the machine code for the function `function`
+    /// Run the closure `cb` with the machine code for the function `function`.
     ///
     /// This will check that the types match at runtime when in debug mode, but not release mode.
     /// You should make sure to use debug mode if you want it to error when the types don't match.
@@ -103,12 +108,12 @@ impl<'a, 'b> JitEngine<'a> {
             cb(self.get_function::<A, R>(function));
         }
     }
-    /// Returns a pointer to the machine code for the function `function`
+    /// Returns a pointer to the machine code for the function `function`.
     ///
     /// This is marked as unsafe because the types given as arguments and return could be different
-    /// from their internal representation
+    /// from their internal representation.
     pub unsafe fn get_function<A, R>(&self, function: &'b Function) -> extern fn(A) -> R {
-        let ptr:&u8 = self.get_pointer(function);
+        let ptr:&u8 = self.get_global(function);
         mem::transmute(ptr)
     }
 }
@@ -149,10 +154,10 @@ pub struct Interpreter<'a> {
 }
 native_ref!{contra Interpreter, engine: LLVMExecutionEngineRef}
 impl<'a> Interpreter<'a> {
-    /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one
+    /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one.
     ///
     /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
-    /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method
+    /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method.
     pub fn run_function(&self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
         let ptr = args.as_ptr() as *mut LLVMGenericValueRef;
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
@@ -188,14 +193,14 @@ impl<'a> Drop for GenericValue<'a> {
     }
 }
 
-/// A value that can be cast into a `GenericValue` and that a `GenericValue` can be cast into
+/// A value that can be cast into a `GenericValue` and that a `GenericValue` can be cast into.
 ///
 /// Both these methods require contexts because some `Type` constructors are needed for the
-/// conversion and these constructors need a context
+/// conversion and these constructors need a context.
 pub trait GenericValueCast<'a> {
-    /// Create a `GenericValue` from this value
+    /// Create a `GenericValue` from this value.
     fn to_generic(self, context: &'a Context) -> GenericValue<'a>;
-    /// Convert the `GenericValue` into a value of this type again
+    /// Convert the `GenericValue` into a value of this type again.
     fn from_generic(value: GenericValue<'a>, context: &'a Context) -> Self;
 }
 
