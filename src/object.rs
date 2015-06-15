@@ -1,19 +1,20 @@
 use libc::c_void;
-use ffi::object::{self,  LLVMObjectFileRef, LLVMSectionIteratorRef, LLVMSymbolIteratorRef};
+use ffi::object::{self,  LLVMObjectFileRef, LLVMSymbolIteratorRef};
 use cbox::CBox;
-use std::ffi::CStr;
 use std::fmt;
-use std::iter::{IntoIterator, Iterator};
+use std::iter::Iterator;
 use std::marker::PhantomData;
 use std::mem;
 use buffer::MemoryBuffer;
 use util;
 
+/// An external object file that has been parsed by LLVLM
 pub struct ObjectFile {
     obj: LLVMObjectFileRef
 }
 native_ref!(ObjectFile, obj: LLVMObjectFileRef);
 impl ObjectFile {
+    /// Attempt to parse the object file at the path given
     pub fn read(path: &str) -> Result<ObjectFile, CBox<str>> {
         let buf = try!(MemoryBuffer::new_from_file(path));
         unsafe {
@@ -25,6 +26,7 @@ impl ObjectFile {
             }
         }
     }
+    /// Iterate through the symbols in this object fil
     pub fn symbols(&self) -> Symbols {
         Symbols {
             iter: unsafe { object::LLVMGetSymbols(self.obj) },
@@ -58,7 +60,6 @@ impl<'a> Drop for Symbols<'a> {
         }
     }
 }
-
 pub struct Symbol<'a> {
     pub name: &'a str,
     pub address: *const c_void,
