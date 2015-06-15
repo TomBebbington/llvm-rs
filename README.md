@@ -1,7 +1,8 @@
 LLVM-rs
 =======
-[![](https://meritbadge.herokuapp.com/llvm-alt)](https://crates.io/crates/llvm-alt)
-[![](https://img.shields.io/crates/d/llvm-alt.svg)](https://crates.io/crates/llvm-alt)
+[![Crate Version](https://img.shields.io/crates/v/llvm-alt.svg)](https://crates.io/crates/llvm-alt)
+[![Crate Downloads](https://img.shields.io/crates/d/llvm-alt.svg)](https://crates.io/crates/llvm-alt)
+[![Crate License](https://img.shields.io/crates/l/llvm-alt.svg)](https://crates.io/crates/llvm-alt)
 [![Build Status](https://travis-ci.org/TomBebbington/llvm-rs.svg?branch=master)](https://travis-ci.org/TomBebbington/llvm-rs)
 
 This is a library that wraps [LLVM](http://llvm.org) using Rust idioms and the cbox library. There is
