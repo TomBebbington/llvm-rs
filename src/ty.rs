@@ -4,7 +4,7 @@ use libc::{c_int, c_uint};
 use compile::Compile;
 use context::{Context, GetContext};
 use target::TargetData;
-use util;
+use util::{self, CastFrom};
 use std::{fmt, mem};
 use std::iter::Iterator;
 use std::ops::Deref;
@@ -30,10 +30,6 @@ impl Type {
     pub fn new_vector<'a>(element: &'a Type, size: usize) -> &'a Type {
         unsafe { core::LLVMVectorType(element.into(), size as c_uint) }.into()
     }
-    /// Make a new struct with the given fields
-    pub fn new_struct<'a>(context: &'a Context, fields: &[&'a Type], packed: bool) -> &'a Type {
-        unsafe { core::LLVMStructTypeInContext(context.into(), fields.as_ptr() as *mut LLVMTypeRef, fields.len() as c_uint, packed as c_int) }.into()
-    }
     /// Make a new pointer with the given type
     pub fn new_pointer<'a>(elem: &'a Type) -> &'a Type {
         unsafe { core::LLVMPointerType(elem.into(), 0 as c_uint) }.into()
@@ -41,6 +37,11 @@ impl Type {
     /// Returns true if the size of the type is known
     pub fn is_sized(&self) -> bool {
         unsafe { core::LLVMTypeIsSized(self.into()) != 0 }
+    }
+    /// Returns true if this type is a struct
+    pub fn is_struct(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
+        kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
     }
     /// Gets the size of the type in bytes
     pub fn get_size(&self, target: &TargetData) -> usize {
@@ -58,18 +59,55 @@ impl Type {
 get_context!(Type, LLVMGetTypeContext);
 to_str!(Type, LLVMPrintTypeToString);
 
-
-/// Defines how a value should be laid out in memory
-pub struct FunctionType;
-native_ref!(&FunctionType = LLVMTypeRef);
-impl Deref for FunctionType {
-    type Target = Type;
-    fn deref(&self) -> &Type {
-        unsafe { mem::transmute(self) }
+/// A structure type
+pub struct StructType;
+native_ref!(&StructType = LLVMTypeRef);
+impl StructType {
+    /// Make a new struct with the given fields
+    pub fn new<'a>(context: &'a Context, fields: &[&'a Type], packed: bool) -> &'a StructType {
+        unsafe { core::LLVMStructTypeInContext(context.into(), fields.as_ptr() as *mut LLVMTypeRef, fields.len() as c_uint, packed as c_int) }.into()
+    }
+    /// Make a new named struct with the given fields
+    pub fn new_named<'a>(context: &'a Context, name: &str, fields: &[&'a Type], packed: bool) -> &'a StructType {
+        util::with_cstr(name, |name| unsafe {
+            let ty = core::LLVMStructCreateNamed(context.into(), name);
+            core::LLVMStructSetBody(ty, fields.as_ptr() as *mut LLVMTypeRef, fields.len() as c_uint, packed as c_int);
+            ty.into()
+        })
+    }
+    pub fn get_elements(&self) -> Vec<Type> {
+        unsafe {
+            let size = core::LLVMCountStructElementTypes(self.into());
+            let mut els:Vec<_> = (0..size).map(|_| mem::uninitialized()).collect();
+            core::LLVMGetStructElementTypes(self.into(), els.as_mut_ptr() as *mut LLVMTypeRef);
+            els
+        }
     }
 }
-impl<'a> From<&'a Type> for &'a FunctionType {
-    fn from(mut ty: &'a Type) -> &'a FunctionType {
+impl CastFrom for StructType {
+    type From = Type;
+    fn cast(ty: &Type) -> Option<&StructType> {
+        unsafe {
+            let kind = core::LLVMGetTypeKind(ty.into());
+            if kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint {
+                mem::transmute(ty)
+            } else {
+                None
+            }
+        }
+    }
+}
+deref!(StructType, Type);
+get_context!(StructType, LLVMGetTypeContext);
+to_str!(StructType, LLVMPrintTypeToString);
+
+/// A function signature type
+pub struct FunctionType;
+native_ref!(&FunctionType = LLVMTypeRef);
+deref!(FunctionType, Type);
+impl CastFrom for FunctionType {
+    type From = Type;
+    fn cast(mut ty: &Type) -> Option<&FunctionType> {
         unsafe {
             use libc::c_uint;
             while let Some(elem) = ty.get_element() {
@@ -79,7 +117,7 @@ impl<'a> From<&'a Type> for &'a FunctionType {
             if kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint {
                 mem::transmute(ty)
             } else {
-                panic!("type {:?} cannot be cast into a function", ty)
+                None
             }
         }
     }
@@ -97,6 +135,9 @@ impl FunctionType {
             core::LLVMGetParamTypes(self.into(), types.as_mut_ptr() as *mut LLVMTypeRef);
             types
         }
+    }
+    pub fn get_return(&self) -> &Type {
+        unsafe { core::LLVMGetReturnType(self.into()).into() }
     }
 }
 get_context!(FunctionType, LLVMGetTypeContext);

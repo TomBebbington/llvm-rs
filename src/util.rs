@@ -2,6 +2,12 @@ use libc::c_char;
 use std::ffi::{CStr, CString};
 use std::str;
 
+/// Cast between types
+pub trait CastFrom {
+    type From;
+    fn cast<'a>(ty: &'a Self::From) -> Option<&'a Self>;
+}
+
 #[inline(always)]
 pub fn with_cstr<C, R>(text: &str, cb: C) -> R where C:FnOnce(*const c_char) -> R {
     let c_text = CString::new(text).unwrap();

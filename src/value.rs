@@ -55,15 +55,6 @@ impl Arg {
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddAttribute(self.into(), attr.into()) }
     }
-    /// Add attributes to this function argument
-    pub fn add_attributes(&self, attrs: &[Attribute]) {
-        let mut sum = LLVMAttribute::empty();
-        for attr in attrs {
-            let attr:LLVMAttribute = (*attr).into();
-            sum = sum | attr;
-        }
-        unsafe { core::LLVMAddAttribute(self.into(), sum.into()) }
-    }
     /// Get the attributes set for a function argument
     pub fn has_attribute(&self, attr: Attribute) -> bool {
         unsafe {
@@ -114,7 +105,10 @@ impl Function {
         }
     }
     pub fn get_signature(&self) -> &FunctionType {
-        unsafe { core::LLVMTypeOf(self.into()) }.into()
+        unsafe {
+            let ty = core::LLVMTypeOf(self.into());
+            core::LLVMGetElementType(ty).into()
+        }
     }
     /// Add an attribute to this function
     pub fn add_attribute(&self, attr: Attribute) {
@@ -139,6 +133,11 @@ impl Function {
     /// Remove an attribute from the function
     pub fn remove_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMRemoveAttribute(self.into(), attr.into()) }
+    }
+}
+impl GetContext for Function {
+    fn get_context(&self) -> &Context {
+        self.get_type().get_context()
     }
 }
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]

@@ -37,8 +37,9 @@ fn main() {
     pass.populate(builder);
     pass.run(&module).unwrap();
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
-    let fib = unsafe { ee.get_function::<u64, u64>(func) };
-    for i in 0..10 {
-        println!("fib {} = {}", i, fib(i))
-    }
+    ee.with_function(func, |fib: extern fn(u64) -> u64| {
+        for i in 0..10 {
+            println!("fib {} = {}", i, fib(i))
+        }
+    });
 }

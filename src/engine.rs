@@ -8,9 +8,10 @@ use std::marker::PhantomData;
 use std::{mem, ptr};
 use std::ops::*;
 use compile::Compile;
-use context::Context;
+use context::{Context, GetContext};
 use module::Module;
-use util;
+use ty::{StructType, Type};
+use util::{self, CastFrom};
 use value::{Function, Value};
 
 /// An abstract interface for implementation execution of LLVM modules
@@ -84,14 +85,23 @@ native_ref!{contra JitEngine, engine: LLVMExecutionEngineRef}
 impl<'a, 'b> JitEngine<'a> {
     /// Run the closure `cb` with the machine code for the function `function`
     ///
-    /// This is marked as unsafe because:
-    ///
-    /// + The closure could copy the function into a variable and make it outlive the lifetime
-    /// of the engine
-    /// + The types given as arguments and return could be different from their internal representation
-    pub unsafe fn with_function<C, A, R>(&self, function: &'b Function, cb: C) where C:FnOnce(extern fn(A) -> R) {
-        let ptr:&u8 = self.get_pointer(function);
-        cb(mem::transmute(ptr));
+    /// This will check that the types match at runtime when in debug mode, but not release mode.
+    /// You should make sure to use debug mode if you want it to error when the types don't match.
+    pub fn with_function<C, A, R>(&self, function: &'b Function, cb: C) where A:Compile<'b>, R:Compile<'b>, C:FnOnce(extern fn(A) -> R) {
+        if cfg!(not(ndebug)) {
+            let ctx = function.get_context();
+            let sig = function.get_signature();
+            assert_eq!(Type::get::<R>(ctx), sig.get_return());
+            let arg = Type::get::<A>(ctx);
+            if let Some(args) = StructType::cast(arg) {
+                assert_eq!(sig.get_params(), args.get_elements());
+            } else {
+                assert_eq!(arg, sig.get_return());
+            }
+        }
+        unsafe {
+            cb(self.get_function::<A, R>(function));
+        }
     }
     /// Returns a pointer to the machine code for the function `function`
     ///

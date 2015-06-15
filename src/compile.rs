@@ -5,7 +5,7 @@ use builder::Builder;
 use context::Context;
 use libc::c_char;
 use value::Value;
-use ty::Type;
+use ty::{StructType, Type};
 use std::mem;
 use std::ffi::CStr;
 
@@ -111,7 +111,7 @@ impl<'a> Compile<'a> for *const str {
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
         let usize_t = usize::get_type(ctx);
-        Type::new_struct(ctx, &[usize_t, usize_t], true)
+        StructType::new(ctx, &[usize_t, usize_t], true)
     }
 }
 impl<'a, 'b> Compile<'a> for &'b str {
@@ -144,7 +144,7 @@ macro_rules! compile_tuple(
                 Value::new_struct(context, &[$($oname.compile(builder, context)),+], false)
             }
             fn get_type(context: &'a Context) -> &'a Type {
-                Type::new_struct(context, &[$($name::get_type(context)),+], false)
+                StructType::new(context, &[$($name::get_type(context)),+], false)
             }
         }
     )

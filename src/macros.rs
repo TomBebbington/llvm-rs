@@ -1,7 +1,13 @@
 macro_rules! native_ref(
     (&$name:ident = $alias:ty) => (
         impl Eq for $name {}
-        impl PartialEq for $name {
+        impl PartialEq<$name> for $name {
+            fn eq(&self, other: &$name) -> bool {
+                use std::mem;
+                unsafe { mem::transmute::<_, isize>(self) == mem::transmute(other) }
+            }
+        }
+        impl<'a> PartialEq<$name> for &'a $name {
             fn eq(&self, other: &$name) -> bool {
                 use std::mem;
                 unsafe { mem::transmute::<_, isize>(self) == mem::transmute(other) }
@@ -165,6 +171,16 @@ macro_rules! get_context(
         impl GetContext for $ty {
             fn get_context(&self) -> &Context {
                 unsafe { core::$func(self.into()) }.into()
+            }
+        }
+    );
+);
+macro_rules! deref(
+    ($ty:ty, $to:ty) => (
+        impl Deref for $ty {
+            type Target = $to;
+            fn deref(&self) -> &$to {
+                unsafe { mem::transmute(self) }
             }
         }
     );

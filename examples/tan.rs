@@ -23,9 +23,10 @@ fn main() {
     pass.populate(builder);
     pass.run(&module).unwrap();
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
-    let tan = unsafe { ee.get_function::<f64, f64>(func) };
-    for i in 0..10 {
-        let i = i as f64;
-        println!("tan {} = {}", i, tan(i))
-    }
+    ee.with_function(func, |tan:extern fn(f64) -> f64| {
+        for i in 0..10 {
+            let i = i as f64;
+            println!("tan {} = {}", i, tan(i))
+        }
+    });
 }
