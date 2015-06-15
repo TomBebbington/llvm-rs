@@ -5,11 +5,11 @@ authors = [ "Tom Bebbington <tophattedcoder@gmail.com>" ]
 description = "A wrapper for LLVM, a powerful library and toolkit for compilers"
 documentation = "https://tombebbington.github.io/llvm-rs/llvm/index.html"
 keywords = [ "compile", "compiler", "jit", "interpreter" ]
-license = "BSD"
+license = "BSD-3-Clause"
 name = "llvm-alt"
 readme = "README.md"
 repository = "https://github.com/TomBebbington/llvm-rs"
-version = "0.1.2"
+version = "0.1.3"
 
 [lib]
 
