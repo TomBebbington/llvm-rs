@@ -130,6 +130,18 @@ impl Function {
             other.contains(attr.into())
         }
     }
+    /// Check if this function has all the attributes given
+    pub fn has_attributes(&self, attrs: &[Attribute]) -> bool {
+        unsafe {
+            let other = core::LLVMGetFunctionAttr(self.into());
+            for &attr in attrs {
+                if !other.contains(attr.into()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
     /// Remove an attribute from the function
     pub fn remove_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMRemoveFunctionAttr(self.into(), attr.into()) }
