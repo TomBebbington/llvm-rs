@@ -132,7 +132,7 @@ impl Function {
     }
     /// Remove an attribute from the function
     pub fn remove_attribute(&self, attr: Attribute) {
-        unsafe { core::LLVMRemoveAttribute(self.into(), attr.into()) }
+        unsafe { core::LLVMRemoveFunctionAttr(self.into(), attr.into()) }
     }
 }
 impl GetContext for Function {
