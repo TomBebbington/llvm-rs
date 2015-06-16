@@ -55,11 +55,32 @@ impl Arg {
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddAttribute(self.into(), attr.into()) }
     }
+    /// Add attributes to this function argument
+    pub fn add_attributes(&self, attrs: &[Attribute]) {
+        let mut sum = LLVMAttribute::empty();
+        for attr in attrs {
+            let attr:LLVMAttribute = (*attr).into();
+            sum = sum | attr;
+        }
+        unsafe { core::LLVMAddAttribute(self.into(), sum.into()) }
+    }
     /// Get the attributes set for a function argument
     pub fn has_attribute(&self, attr: Attribute) -> bool {
         unsafe {
             let other = core::LLVMGetAttribute(self.into());
             other.contains(attr.into())
+        }
+    }
+    /// Check if this argument has all the attributes given
+    pub fn has_attributes(&self, attrs: &[Attribute]) -> bool {
+        unsafe {
+            let other = core::LLVMGetAttribute(self.into());
+            for &attr in attrs {
+                if !other.contains(attr.into()) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
     /// Remove an attribute from a function argument
