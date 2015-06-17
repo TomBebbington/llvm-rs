@@ -19,3 +19,7 @@ To use this in your project, add the following to your `Cargo.toml`
 ...
 llvm-alt = "*"
 ```
+
+Bugs
+----
+While using this library, if you ever encounter a segmentation fault or similar unverbose error messages, please file an issue with what code caused the problem. Thanks!
