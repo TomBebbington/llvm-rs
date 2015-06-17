@@ -18,7 +18,7 @@ impl Context {
         core::LLVMGetGlobalContext().into()
     }
     /// Create a new context, owned by the block that calls it.
-    pub fn new<'a>() -> CBox<'a, Self> {
+    pub fn new() -> CBox<Self> {
         CBox::new(unsafe { core::LLVMContextCreate() })
     }
 }
@@ -31,7 +31,7 @@ pub trait GetContext {
     /// ```rust
     /// use llvm::*;
     /// let context = Context::new();
-    /// let module = Module::new("rowrowfightthapowa", &context);
+    /// let module = Module::new("rowrowfightthapowa", &context.as_semi());
     /// assert!(context == *module.get_context());
     /// ```
     fn get_context(&self) -> &Context;

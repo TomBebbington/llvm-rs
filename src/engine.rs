@@ -22,7 +22,7 @@ pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self>
     type Options : Copy;
     /// Create a new execution engine with the given `Module` and options, or return a
     /// description of the error.
-    fn new(module: &'a Module, options: Self::Options) -> Result<Self, CBox<'a, str>>;
+    fn new(module: &'a Module, options: Self::Options) -> Result<Self, CBox<str>>;
 
     /// Add a module to the list of modules to interpret or compile.
     fn add_module(&'b self, module: &'a Module) {
@@ -119,7 +119,7 @@ impl<'a, 'b> JitEngine<'a> {
 }
 impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
     type Options = JitOptions;
-    fn new(module: &'a Module, options: JitOptions) -> Result<JitEngine<'a>, CBox<'a, str>> {
+    fn new(module: &'a Module, options: JitOptions) -> Result<JitEngine<'a>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();
@@ -165,7 +165,7 @@ impl<'a> Interpreter<'a> {
 }
 impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'a> {
     type Options = ();
-    fn new(module: &'a Module, _: ()) -> Result<Interpreter<'a>, CBox<'a, str>> {
+    fn new(module: &'a Module, _: ()) -> Result<Interpreter<'a>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();

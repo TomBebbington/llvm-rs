@@ -4,7 +4,7 @@ use ffi::analysis::LLVMVerifierFailureAction;
 use ffi::{analysis, core, LLVMModule};
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
-use cbox::CBox;
+use cbox::{CBox, CSemiBox};
 use std::ffi::CString;
 use std::iter::{Iterator, IntoIterator};
 use std::io::{Error, ErrorKind};
@@ -21,7 +21,7 @@ use util;
 
 /// Represents a single translation unit of code.
 ///
-/// This is attached to the lifetime of the context that constructs it, but is owned by the `CBox`.
+/// This is attached to the lifetime of the context that constructs it, but is owned by the `CSemiBox`.
 pub struct Module;
 native_ref!(&Module = LLVMModuleRef);
 impl Module {
@@ -33,23 +33,24 @@ impl Module {
     /// ```rust
     /// use llvm::*;
     /// let context = Context::new();
+    /// let context = context.as_semi();
     /// let module = Module::new("name", &context);
     /// println!("{:?}", module)
     /// ```
-    pub fn new<'a>(name: &str, context: &'a Context) -> CBox<'a, Module> {
+    pub fn new<'a>(name: &str, context: &'a Context) -> CSemiBox<'a, Module> {
         let c_name = CString::new(name).unwrap();
-        unsafe { CBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
+        unsafe { CSemiBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
     }
     /// Parse this bitcode file into a module, or return an error string.
-    pub fn parse_bitcode<'a, 'b>(context: &'a Context, path: &'b str) -> Result<CBox<'b, Module>, CBox<'b, str>> {
+    pub fn parse_bitcode<'a>(context: &'a Context, path: &str) -> Result<CSemiBox<'a, Module>, CBox<str>> {
         unsafe {
             let mut out = mem::uninitialized();
             let mut err = mem::uninitialized();
             let buf = try!(MemoryBuffer::new_from_file(path));
-            if reader::LLVMParseBitcodeInContext(context.into(), (&*buf).into(), &mut out, &mut err) == 1 {
+            if reader::LLVMParseBitcodeInContext(context.into(), buf.as_ptr(), &mut out, &mut err) == 1 {
                 Err(CBox::new(err))
             } else {
-                Ok(CBox::new(out))
+                Ok(CSemiBox::new(out))
             }
         }
     }
@@ -85,8 +86,8 @@ impl Module {
         }
     }
     /// Clone this module.
-    pub fn clone<'a>(&'a self) -> CBox<'a, Module> {
-        CBox::new(unsafe { core::LLVMCloneModule(self.into()) })
+    pub fn clone<'a>(&'a self) -> CSemiBox<'a, Module> {
+        CSemiBox::new(unsafe { core::LLVMCloneModule(self.into()) })
     }
 
     /// Returns the target data of this module represented as a string

@@ -1,7 +1,7 @@
 use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder};
-use cbox::{CBox, DisposeRef};
+use cbox::{CSemiBox, DisposeRef};
 use std::mem;
 use block::BasicBlock;
 use context::Context;
@@ -29,8 +29,8 @@ macro_rules! un_op(
 );
 impl Builder {
     /// Create a new builder in the context given.
-    pub fn new(context: &Context) -> CBox<Builder> {
-        CBox::new(unsafe { core::LLVMCreateBuilderInContext(context.into()) }.into())
+    pub fn new(context: &Context) -> CSemiBox<Builder> {
+        CSemiBox::new(unsafe { core::LLVMCreateBuilderInContext(context.into()) }.into())
     }
     /// Position the builder at the end of `block`.
     pub fn position_at_end(&self, block: &BasicBlock) {

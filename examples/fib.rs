@@ -3,6 +3,7 @@ use llvm::*;
 use llvm::Attribute::*;
 fn main() {
     let ctx = Context::new();
+    let ctx = ctx.as_semi();
     let module = Module::new("simple", &ctx);
     let func = module.add_function("fib", Type::get::<fn(u64) -> u64>(&ctx));
     func.add_attributes(&[NoUnwind, ReadNone]);

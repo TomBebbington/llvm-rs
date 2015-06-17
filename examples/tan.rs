@@ -3,6 +3,7 @@ use llvm::*;
 use llvm::Attribute::*;
 fn main() {
     let ctx = Context::new();
+    let ctx = ctx.as_semi();
     let module = Module::new("simple", &ctx);
     let cos = module.add_function("llvm.cos.f64", Type::get::<fn(f64) -> f64>(&ctx));
     let sin = module.add_function("llvm.sin.f64", Type::get::<fn(f64) -> f64>(&ctx));
