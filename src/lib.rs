@@ -21,7 +21,7 @@ mod ty;
 mod value;
 mod util;
 
-pub use cbox::CSemiBox;
+pub use cbox::{CBox, CSemiBox};
 pub use builder::Builder;
 pub use block::BasicBlock;
 pub use compile::Compile;

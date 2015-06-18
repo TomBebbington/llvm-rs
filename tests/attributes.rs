@@ -4,7 +4,6 @@ use llvm::Attribute::*;
 #[test]
 fn test_function_attributes() {
     let ctx = Context::new();
-    let ctx = ctx.as_semi();
     let module = Module::new("simple", &ctx);
     let func = module.add_function("main", Type::get::<fn() -> ()>(&ctx));
     assert!(!func.has_attributes(&[NoUnwind, ReadNone]));
@@ -18,7 +17,6 @@ fn test_function_attributes() {
 #[test]
 fn test_argument_attributes() {
     let ctx = Context::new();
-    let ctx = ctx.as_semi();
     let module = Module::new("simple", &ctx);
     let func = module.add_function("main", Type::get::<fn(f64) -> ()>(&ctx));
     let x = &func[0];
