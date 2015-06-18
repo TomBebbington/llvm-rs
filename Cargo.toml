@@ -9,7 +9,7 @@ license = "BSD-3-Clause"
 name = "llvm-alt"
 readme = "README.md"
 repository = "https://github.com/TomBebbington/llvm-rs"
-version = "0.1.4"
+version = "0.1.5"
 
 [lib]
 
