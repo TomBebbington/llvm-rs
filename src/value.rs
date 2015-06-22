@@ -116,13 +116,15 @@ impl CastFrom for Function {
     type From = Value;
     fn cast<'a>(val: &'a Value) -> Option<&'a Function> {
         let ty = val.get_type();
-        ty.get_element().and_then(|e|
-            if e.is_struct() {
-                Some(unsafe { mem::transmute(e) })
-            } else {
-                None
-            }
-        )
+        let mut is_func = ty.is_function();
+        if let Some(elem) = ty.get_element() {
+            is_func = is_func || elem.is_function()
+        }
+        if is_func {
+            Some(unsafe { mem::transmute(val) })
+        } else {
+            None
+        }
     }
 }
 impl Function {
