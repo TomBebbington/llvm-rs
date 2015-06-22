@@ -64,6 +64,18 @@ impl Type {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMPointerTypeKind as c_uint
     }
+    /// Returns true if this type is an integer.
+    pub fn is_integer(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
+        kind as c_uint == LLVMTypeKind::LLVMIntegerTypeKind as c_uint
+    }
+    /// Returns true if this type is any floating-point number.
+    pub fn is_float(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) } as c_uint;
+        kind == LLVMTypeKind::LLVMHalfTypeKind as c_uint ||
+        kind == LLVMTypeKind::LLVMFloatTypeKind as c_uint ||
+        kind == LLVMTypeKind::LLVMDoubleTypeKind as c_uint
+    }
     /// Returns the size of the type in bytes.
     pub fn get_size(&self, target: &TargetData) -> usize {
         unsafe { target::LLVMABISizeOfType(target.into(), self.into()) as usize }
