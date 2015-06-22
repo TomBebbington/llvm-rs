@@ -8,7 +8,7 @@ use std::mem;
 use buffer::MemoryBuffer;
 use util;
 
-/// An external object file that has been parsed by LLVM.
+/// An external object file that has been parsed by LLVLM
 pub struct ObjectFile {
     obj: LLVMObjectFileRef
 }
