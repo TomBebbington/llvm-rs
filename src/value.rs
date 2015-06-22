@@ -7,7 +7,7 @@ use std::ops::{Deref, Index};
 use block::BasicBlock;
 use context::{Context, GetContext};
 use ty::{FunctionType, Type};
-use util;
+use util::{self, CastFrom};
 
 /// A typed value that can be used as an operand in instructions.
 pub struct Value;
@@ -110,6 +110,19 @@ impl Index<usize> for Function {
                 panic!("no such index {} on {:?}", index, self.get_type())
             }
         }
+    }
+}
+impl CastFrom for Function {
+    type From = Value;
+    fn cast<'a>(val: &'a Value) -> Option<&'a Function> {
+        let ty = val.get_type();
+        ty.get_element().and_then(|e|
+            if e.is_struct() {
+                Some(unsafe { mem::transmute(e) })
+            } else {
+                None
+            }
+        )
     }
 }
 impl Function {

@@ -44,10 +44,15 @@ impl Type {
     pub fn is_sized(&self) -> bool {
         unsafe { core::LLVMTypeIsSized(self.into()) != 0 }
     }
+    /// Returns true if this type is a function.
+    pub fn is_function(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
+        kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
+    }
     /// Returns true if this type is a struct.
     pub fn is_struct(&self) -> bool {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
-        kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
+        kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint
     }
     /// Returns the size of the type in bytes.
     pub fn get_size(&self, target: &TargetData) -> usize {
