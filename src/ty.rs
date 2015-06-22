@@ -54,6 +54,11 @@ impl Type {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint
     }
+    /// Returns true if this type is void.
+    pub fn is_void(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
+        kind as c_uint == LLVMTypeKind::LLVMVoidTypeKind as c_uint
+    }
     /// Returns the size of the type in bytes.
     pub fn get_size(&self, target: &TargetData) -> usize {
         unsafe { target::LLVMABISizeOfType(target.into(), self.into()) as usize }
