@@ -59,6 +59,11 @@ impl Type {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMVoidTypeKind as c_uint
     }
+    /// Returns true if this type is a pointer.
+    pub fn is_pointer(&self) -> bool {
+        let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
+        kind as c_uint == LLVMTypeKind::LLVMPointerTypeKind as c_uint
+    }
     /// Returns the size of the type in bytes.
     pub fn get_size(&self, target: &TargetData) -> usize {
         unsafe { target::LLVMABISizeOfType(target.into(), self.into()) as usize }
