@@ -1,12 +1,12 @@
 use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
-use ffi::{core, LLVMBuilder};
+use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::{CSemiBox, DisposeRef};
 use std::mem;
 use block::BasicBlock;
 use context::Context;
 use ty::Type;
-use value::{Function, Value};
+use value::{Function, Value, Predicate};
 
 static NULL_NAME:[c_char; 1] = [0];
 
@@ -130,6 +130,34 @@ impl Builder {
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    /// Build an instruction to compare two values with the predicate
+    pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
+        let (at, bt) = (a.get_type(), b.get_type());
+        assert_eq!(at, bt);
+        if at.is_integer() {
+            let pred = match pred {
+                Predicate::Equal => LLVMIntPredicate::LLVMIntEQ,
+                Predicate::NotEqual => LLVMIntPredicate::LLVMIntNE,
+                Predicate::GreaterThan => LLVMIntPredicate::LLVMIntSGT,
+                Predicate::GreaterThanOrEqual => LLVMIntPredicate::LLVMIntSGE,
+                Predicate::LessThan => LLVMIntPredicate::LLVMIntSLT,
+                Predicate::LessThanOrEqual => LLVMIntPredicate::LLVMIntSLE
+            };
+            unsafe { core::LLVMBuildICmp(self.into(), pred, a.into(), b.into(), NULL_NAME.as_ptr()) }.into()
+        } else if at.is_float() {
+            let pred = match pred {
+                Predicate::Equal => LLVMRealPredicate::LLVMRealOEQ,
+                Predicate::NotEqual => LLVMRealPredicate::LLVMRealONE,
+                Predicate::GreaterThan => LLVMRealPredicate::LLVMRealOGT,
+                Predicate::GreaterThanOrEqual => LLVMRealPredicate::LLVMRealOGE,
+                Predicate::LessThan => LLVMRealPredicate::LLVMRealOLT,
+                Predicate::LessThanOrEqual => LLVMRealPredicate::LLVMRealOLE
+            };
+            unsafe { core::LLVMBuildFCmp(self.into(), pred, a.into(), b.into(), NULL_NAME.as_ptr()) }.into()
+        } else {
+            panic!("expected numbers, got {:?}", at)
+        }
+    }
 }
 
 impl DisposeRef for Builder {

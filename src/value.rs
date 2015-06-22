@@ -44,6 +44,16 @@ impl Value {
         unsafe { core::LLVMTypeOf(self.into()) }.into()
     }
 }
+/// A way of comparing values
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub enum Predicate {
+    Equal,
+    NotEqual,
+    GreaterThan,
+    GreaterThanOrEqual,
+    LessThan,
+    LessThanOrEqual
+}
 /// A value that represents an argument that has been given to a function.
 pub struct Arg;
 native_ref!(&Arg = LLVMValueRef);

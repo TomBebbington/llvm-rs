@@ -32,5 +32,5 @@ pub use object::{ObjectFile, Symbol, Symbols};
 pub use pass::{PassManager, PassManagerBuilder};
 pub use target::{TargetData, Target};
 pub use ty::{FunctionType, StructType, Type};
-pub use value::{Arg, Attribute, Value, Function};
+pub use value::{Arg, Attribute, Value, Function, Predicate};
 pub use util::CastFrom;
