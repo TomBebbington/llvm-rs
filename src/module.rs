@@ -1,7 +1,7 @@
 use libc::c_char;
 use ffi::prelude::{LLVMValueRef, LLVMModuleRef};
 use ffi::analysis::LLVMVerifierFailureAction;
-use ffi::{analysis, core, LLVMModule};
+use ffi::{analysis, core, linker, LLVMModule};
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
 use cbox::{CBox, CSemiBox};
@@ -134,6 +134,34 @@ impl Module {
             .arg(mod_path)
             .spawn()
             .map(|_| ())
+    }
+
+    /// Link a module into this module
+    pub fn link(&self, src: &Module) -> Result<(), CBox<str>> {
+        unsafe {
+            let dest = self.into();
+            let src = src.into();
+            let mut message = mem::uninitialized();
+            if linker::LLVMLinkModules(dest, src, linker::LLVMLinkerMode::LLVMLinkerPreserveSource, &mut message) == 1 {
+                Err(CBox::new(message))
+            } else {
+                Ok(())
+            }
+        }
+    }
+
+    /// Link a module into this module
+    pub fn link_destroy(&self, src: CSemiBox<Module>) -> Result<(), CBox<str>> {
+        unsafe {
+            let dest = self.into();
+            let src = src.as_ptr();
+            let mut message = mem::uninitialized();
+            if linker::LLVMLinkModules(dest, src, linker::LLVMLinkerMode::LLVMLinkerDestroySource, &mut message) == 1 {
+                Err(CBox::new(message))
+            } else {
+                Ok(())
+            }
+        }
     }
 }
 impl<'a> IntoIterator for &'a Module {
