@@ -19,6 +19,18 @@ macro_rules! bin_op(
             unsafe { core::$func(self.into(), left.into(), right.into(), NULL_NAME.as_ptr()) }.into()
         }
     );
+    ($name:ident, $ifunc:ident, $ffunc:ident) => (
+        pub fn $name(&self, left: &Value, right: &Value) -> &Value {
+            let ty = left.get_type();
+            unsafe {
+                (if ty.is_integer() {
+                    core::$ifunc
+                } else {
+                    core::$ffunc
+                })(self.into(), left.into(), right.into(), NULL_NAME.as_ptr()).into()
+            }
+        }
+    );
 );
 macro_rules! un_op(
     ($name:ident, $func:ident) => (
@@ -121,11 +133,10 @@ impl Builder {
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
-    bin_op!{build_add, LLVMBuildAdd}
-    bin_op!{build_sub, LLVMBuildSub}
-    bin_op!{build_mul, LLVMBuildMul}
-    bin_op!{build_fdiv, LLVMBuildFDiv}
-    bin_op!{build_sdiv, LLVMBuildSDiv}
+    bin_op!{build_add, LLVMBuildAdd, LLVMBuildFAdd}
+    bin_op!{build_sub, LLVMBuildSub, LLVMBuildFSub}
+    bin_op!{build_mul, LLVMBuildMul, LLVMBuildFMul}
+    bin_op!{build_div, LLVMBuildSDiv, LLVMBuildFDiv}
     bin_op!{build_shl, LLVMBuildShl}
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}

@@ -14,7 +14,7 @@ fn main() {
     let value = &func[0];
     let sin_v = builder.build_call(sin, &[value]);
     let cos_v = builder.build_call(cos, &[value]);
-    let value = builder.build_fdiv(sin_v, cos_v);
+    let value = builder.build_div(sin_v, cos_v);
     builder.build_ret(value);
     module.verify().unwrap();
     let pass = PassManager::new();
