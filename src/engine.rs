@@ -117,6 +117,10 @@ impl<'a, 'b> JitEngine<'a> {
             cb(self.get_function::<A, R>(function));
         }
     }
+    /// Run the closure `cb` with the machine code for the function `function`.
+    pub unsafe fn with_function_unchecked<C, A, R>(&self, function: &'b Function, cb: C) where A:Compile<'b>, R:Compile<'b>, C:FnOnce(extern fn(A) -> R) {
+        cb(self.get_function::<A, R>(function));
+    }
     /// Returns a pointer to the machine code for the function `function`.
     ///
     /// This is marked as unsafe because the types given as arguments and return could be different
