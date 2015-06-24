@@ -17,6 +17,10 @@ impl Value {
     pub fn new_struct<'a>(context: &'a Context, vals: &[&'a Value], packed: bool) -> &'a Value {
         unsafe { core::LLVMConstStructInContext(context.into(), vals.as_ptr() as *mut LLVMValueRef, vals.len() as c_uint, packed as c_int) }.into()
     }
+    /// Create a new constant vector from the values given.
+    pub fn new_vector<'a>(vals: &[&'a Value]) -> &'a Value {
+        unsafe { core::LLVMConstVector(vals.as_ptr() as *mut LLVMValueRef, vals.len() as c_uint).into() }
+    }
     /// Create a new constant C string from the text given.
     pub fn new_string<'a>(context: &'a Context, text: &str, rust_style: bool) -> &'a Value {
         unsafe {
