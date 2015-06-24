@@ -15,7 +15,7 @@ use std::path::Path;
 use std::process::Command;
 use buffer::MemoryBuffer;
 use context::{Context, GetContext};
-use value::Function;
+use value::{Function, Value};
 use ty::Type;
 use util;
 
@@ -40,6 +40,19 @@ impl Module {
     pub fn new<'a>(name: &str, context: &'a Context) -> CSemiBox<'a, Module> {
         let c_name = CString::new(name).unwrap();
         unsafe { CSemiBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
+    }
+    /// Add a global to the module with the given type and name.
+    pub fn add_global<'a>(&'a self, ty: &'a Type, name: &str) -> &'a Value {
+        util::with_cstr(name, |ptr| unsafe {
+            core::LLVMAddGlobal(self.into(), ty.into(), ptr).into()
+        })
+    }
+    /// Get the global with the name given, or `None` if no global with that name exists.
+    pub fn get_global<'a>(&'a self, name: &str) -> Option<&'a Value> {
+        util::with_cstr(name, |ptr| unsafe {
+            let ptr = core::LLVMGetNamedGlobal(self.into(), ptr);
+            util::ptr_to_null(ptr)
+        })
     }
     /// Parse this bitcode file into a module, or return an error string.
     pub fn parse_bitcode<'a>(context: &'a Context, path: &str) -> Result<CSemiBox<'a, Module>, CBox<str>> {
