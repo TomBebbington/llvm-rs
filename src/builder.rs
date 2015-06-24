@@ -114,6 +114,10 @@ impl Builder {
     pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that inserts a value into an aggregate type.
+    pub fn build_insert_value(&self, agg: &Value, elem: &Value, index: usize) -> &Value {
+        unsafe { core::LLVMBuildInsertValue(self.into(), agg.into(), elem.into(), index as c_uint, NULL_NAME.as_ptr()).into() }
+    }
     /// Build an instruction that computes the address of a subelement of an aggregate data structure.
     ///
     /// Basically type-safe pointer arithmetic.
