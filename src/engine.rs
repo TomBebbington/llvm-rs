@@ -71,6 +71,15 @@ pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self>
     unsafe fn get_global<T>(&'b self, global: &'a Value) -> &'b T {
         mem::transmute(engine::LLVMGetPointerToGlobal(self.into(), global.into()))
     }
+    /// Returns a pointer to the global value with the name given.
+    ///
+    /// This is marked as unsafe because the type cannot be guranteed to be the same as the
+    /// type of the global value at this point.
+    unsafe fn find_global<T>(&'b self, name: &str) -> Option<&'b T> {
+        util::with_cstr(name, |ptr|
+            mem::transmute(engine::LLVMGetGlobalValueAddress(self.into(), ptr))
+        )
+    }
 }
 
 /// The options to pass to the MCJIT backend.
