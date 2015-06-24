@@ -106,7 +106,7 @@ impl Builder {
     ///
     /// Basically type-safe pointer arithmetic.
     pub fn build_gep(&self, pointer: &Value, indices: &[&Value]) -> &Value {
-        unsafe { core::LLVMBuildGEP(self.into(), pointer.into(), indices.as_ptr() as *mut LLVMValueRef, indices.len() as c_uint, NULL_NAME.as_ptr()).into() }
+        unsafe { core::LLVMBuildInBoundsGEP(self.into(), pointer.into(), indices.as_ptr() as *mut LLVMValueRef, indices.len() as c_uint, NULL_NAME.as_ptr()).into() }
     }
     /// Build an instruction that runs whichever block matches the value, or `default` if none of them matched it.
     pub fn build_switch(&self, value: &Value, default: &BasicBlock, cases: &[(&Value, &BasicBlock)]) -> &Value {
