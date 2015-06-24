@@ -31,11 +31,6 @@ fn main() {
     let fb = builder.build_tail_call(func, &[b]);
     builder.build_ret(builder.build_add(fa, fb));
     module.verify().unwrap();
-    let pass = PassManager::new();
-    let builder = PassManagerBuilder::new()
-        .with_opt_level(3);
-    pass.populate(builder);
-    pass.run(&module).unwrap();
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
     ee.with_function(func, |fib: extern fn(u64) -> u64| {
         for i in 0..10 {

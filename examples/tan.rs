@@ -17,11 +17,6 @@ fn main() {
     let value = builder.build_div(sin_v, cos_v);
     builder.build_ret(value);
     module.verify().unwrap();
-    let pass = PassManager::new();
-    let builder = PassManagerBuilder::new()
-        .with_opt_level(3);
-    pass.populate(builder);
-    pass.run(&module).unwrap();
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
     ee.with_function(func, |tan:extern fn(f64) -> f64| {
         for i in 0..10 {

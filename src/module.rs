@@ -1,7 +1,8 @@
-use libc::c_char;
+use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMValueRef, LLVMModuleRef};
 use ffi::analysis::LLVMVerifierFailureAction;
 use ffi::{analysis, core, linker, LLVMModule};
+use ffi::transforms::pass_manager_builder as builder;
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
 use cbox::{CBox, CSemiBox};
@@ -109,6 +110,19 @@ impl Module {
     /// Clone this module.
     pub fn clone<'a>(&'a self) -> CSemiBox<'a, Module> {
         CSemiBox::new(unsafe { core::LLVMCloneModule(self.into()) })
+    }
+
+    /// Optimize this module with the given optimization level and size level.
+    pub fn optimize(&self, opt_level: usize, size_level: usize) {
+        unsafe {
+            let builder = builder::LLVMPassManagerBuilderCreate();
+            builder::LLVMPassManagerBuilderSetOptLevel(builder, opt_level as c_uint);
+            builder::LLVMPassManagerBuilderSetSizeLevel(builder, size_level as c_uint);
+            let pass_manager = core::LLVMCreatePassManager();
+            builder::LLVMPassManagerBuilderPopulateModulePassManager(builder, pass_manager);
+            builder::LLVMPassManagerBuilderDispose(builder);
+            core::LLVMRunPassManager(pass_manager, self.into());
+        }
     }
 
     /// Returns the target data of this module represented as a string
