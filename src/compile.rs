@@ -85,26 +85,34 @@ impl<'a> Compile<'a> for *const c_char {
 }
 impl<'a> Compile<'a> for *const str {
     fn compile(self, context: &'a Context) -> &'a Value {
-        unsafe {
-            let text:&str = mem::transmute(self);
-            let ptr = text.as_ptr() as *const c_char;
-            let len = text.len() as c_uint;
-            let ptr = core::LLVMConstStringInContext(context.into(), ptr, len, 1).into();
-            let size = text.len().compile(context);
-            Value::new_struct(context, &[ptr, size], true)
-        }
+        unsafe { mem::transmute::<_, &str>(self) }.compile(context)
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
-        let usize_t = usize::get_type(ctx);
-        StructType::new(ctx, &[usize_t, usize_t], true)
+        <&str as Compile<'a>>::get_type(ctx)
     }
 }
 impl<'a, 'b> Compile<'a> for &'b str {
     fn compile(self, context: &'a Context) -> &'a Value {
-        (self as *const str).compile(context)
+        self.as_bytes().compile(context)
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
-        <*const str as Compile<'a>>::get_type(ctx)
+        <&'b [u8] as Compile<'a>>::get_type(ctx)
+    }
+}
+
+impl<'a, 'b> Compile<'a> for &'b [u8] {
+    fn compile(self, context: &'a Context) -> &'a Value {
+        unsafe {
+            let ptr = self.as_ptr() as *const c_char;
+            let len = self.len() as c_uint;
+            let ptr = core::LLVMConstStringInContext(context.into(), ptr, len, 1).into();
+            let size = self.len().compile(context);
+            Value::new_struct(context, &[ptr, size], false)
+        }
+    }
+    fn get_type(ctx: &'a Context) -> &'a Type {
+        let usize_t = usize::get_type(ctx);
+        StructType::new(ctx, &[usize_t, usize_t], false)
     }
 }
 compile_int!{u8, i8, LLVMInt8TypeInContext}
