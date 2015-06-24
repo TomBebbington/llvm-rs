@@ -12,8 +12,8 @@ fn main() {
     let on_one = func.append("on_one");
     let default = func.append("default");
     let builder = Builder::new(&ctx);
-    let zero = 0u64.compile(&builder, &ctx);
-    let one = 1u64.compile(&builder, &ctx);
+    let zero = 0u64.compile(&ctx);
+    let one = 1u64.compile(&ctx);
     builder.position_at_end(entry);
     builder.build_switch(value, default, &[
         (zero, on_zero),
@@ -24,7 +24,7 @@ fn main() {
     builder.position_at_end(on_one);
     builder.build_ret(one);
     builder.position_at_end(default);
-    let two = 2u64.compile(&builder, &ctx);
+    let two = 2u64.compile(&ctx);
     let a = builder.build_sub(value, one);
     let b = builder.build_sub(value, two);
     let fa = builder.build_tail_call(func, &[a]);

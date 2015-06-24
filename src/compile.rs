@@ -1,7 +1,6 @@
 use libc::{c_uint, c_ulonglong};
 use ffi::core;
 use ffi::prelude::LLVMValueRef;
-use builder::Builder;
 use context::Context;
 use libc::c_char;
 use value::Value;
@@ -9,32 +8,17 @@ use ty::{StructType, Type};
 use std::mem;
 use std::ffi::CStr;
 
-/// Implemented for any type that can be represented in IR.
-///
-/// Please note that destructors are NOT compiled and must be handled manually in the code
-/// you compile using LLVM. Make sure to free any returned pointers to keep your generated
-/// code memory-safe
+/// Implemented for any type that can be represented as a constant in IR.
 pub trait Compile<'a> {
-    /// Compile this value with the builder given in the context given.
-    fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value;
+    /// Compile this value in the context given.
+    fn compile(self, context: &'a Context) -> &'a Value;
     /// Get the type descriptor for this type in the context given.
     fn get_type(context: &'a Context) -> &'a Type;
-}
-impl<'a, T> Compile<'a> for &'a T where T:Sized + Copy + Compile<'a> {
-    fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
-        let val = (*self).compile(builder, context);
-        let ptr = builder.build_alloca(T::get_type(context));
-        builder.build_store(val, ptr);
-        ptr
-    }
-    fn get_type(context: &'a Context) -> &'a Type {
-        Type::new_pointer(T::get_type(context))
-    }
 }
 macro_rules! compile_int(
     ($uty:ty, $sty:ty, $ctx:ident => $ty_ex:expr) => (
         impl<'a> Compile<'a> for $uty {
-            fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+            fn compile(self, context: &'a Context) -> &'a Value {
                 unsafe { core::LLVMConstInt(Self::get_type(context).into(), self as c_ulonglong, 0) }.into()
             }
             fn get_type($ctx: &'a Context) -> &'a Type {
@@ -43,7 +27,7 @@ macro_rules! compile_int(
             }
         }
         impl<'a> Compile<'a> for $sty {
-            fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+            fn compile(self, context: &'a Context) -> &'a Value {
                 unsafe { core::LLVMConstInt(Self::get_type(context).into(), self as c_ulonglong, 0) }.into()
             }
             fn get_type($ctx: &'a Context) -> &'a Type {
@@ -57,7 +41,7 @@ macro_rules! compile_int(
     );
 );
 impl<'a> Compile<'a> for bool {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe { core::LLVMConstInt(Self::get_type(context).into(), self as c_ulonglong, 0) }.into()
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
@@ -65,7 +49,7 @@ impl<'a> Compile<'a> for bool {
     }
 }
 impl<'a> Compile<'a> for f32 {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe { core::LLVMConstReal(Self::get_type(context).into(), self as f64) }.into()
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
@@ -73,7 +57,7 @@ impl<'a> Compile<'a> for f32 {
     }
 }
 impl<'a> Compile<'a> for f64 {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe { core::LLVMConstReal(Self::get_type(context).into(), self) }.into()
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
@@ -81,7 +65,7 @@ impl<'a> Compile<'a> for f64 {
     }
 }
 impl<'a> Compile<'a> for char {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe { core::LLVMConstInt(Self::get_type(context).into(), self as u32 as c_ulonglong, 0) }.into()
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
@@ -89,7 +73,7 @@ impl<'a> Compile<'a> for char {
     }
 }
 impl<'a> Compile<'a> for *const c_char {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe {
             let len = CStr::from_ptr(self).to_bytes().len();
             core::LLVMConstStringInContext(context.into(), self, len as c_uint, 0).into()
@@ -100,13 +84,13 @@ impl<'a> Compile<'a> for *const c_char {
     }
 }
 impl<'a> Compile<'a> for *const str {
-    fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe {
             let text:&str = mem::transmute(self);
             let ptr = text.as_ptr() as *const c_char;
             let len = text.len() as c_uint;
             let ptr = core::LLVMConstStringInContext(context.into(), ptr, len, 1).into();
-            let size = text.len().compile(builder, context);
+            let size = text.len().compile(context);
             Value::new_struct(context, &[ptr, size], true)
         }
     }
@@ -116,8 +100,8 @@ impl<'a> Compile<'a> for *const str {
     }
 }
 impl<'a, 'b> Compile<'a> for &'b str {
-    fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
-        (self as *const str).compile(builder, context)
+    fn compile(self, context: &'a Context) -> &'a Value {
+        (self as *const str).compile(context)
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
         <*const str as Compile<'a>>::get_type(ctx)
@@ -129,7 +113,7 @@ compile_int!{u32, i32, LLVMInt32TypeInContext}
 compile_int!{u64, i64, LLVMInt64TypeInContext}
 compile_int!{usize, isize, ctx => core::LLVMIntTypeInContext(ctx, mem::size_of::<isize>() as c_uint * 8)}
 impl<'a> Compile<'a> for () {
-    fn compile(self, _: &'a Builder, context: &'a Context) -> &'a Value {
+    fn compile(self, context: &'a Context) -> &'a Value {
         unsafe { core::LLVMConstNull(Self::get_type(context).into()) }.into()
     }
     fn get_type(context: &'a Context) -> &'a Type {
@@ -140,9 +124,9 @@ impl<'a> Compile<'a> for () {
 macro_rules! compile_tuple(
     ($($name:ident = $oname:ident),+) => (
         impl<'a, $($name),+> Compile<'a> for ($($name),+) where $($name:Compile<'a>),+ {
-            fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
+            fn compile(self, context: &'a Context) -> &'a Value {
                 let ($($oname, )+) = self;
-                Value::new_struct(context, &[$($oname.compile(builder, context)),+], false)
+                Value::new_struct(context, &[$($oname.compile(context)),+], false)
             }
             fn get_type(context: &'a Context) -> &'a Type {
                 StructType::new(context, &[$($name::get_type(context)),+], false)
@@ -160,8 +144,8 @@ compile_tuple!{A = a, B = b, C = c, D = d, E = e, F = f, G = g}
 macro_rules! compile_array(
     ($ty:ty, $num:expr) => (
         impl<'a, T> Compile<'a> for $ty where T: Copy + Compile<'a> + 'a {
-            fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
-                let values:Vec<_> = self.iter().map(|&value| value.compile(builder, context)).collect();
+            fn compile(self, context: &'a Context) -> &'a Value {
+                let values:Vec<_> = self.iter().map(|&value| value.compile(context)).collect();
                 unsafe { core::LLVMConstVector(values.as_ptr() as *mut LLVMValueRef, $num) }.into()
             }
             fn get_type(context: &'a Context) -> &'a Type {
@@ -181,10 +165,10 @@ compile_array!{[T; 6], 6}
 macro_rules! compile_func(
     ($($name:ident),*) => (
         impl<'a, R, $($name),*> Compile<'a> for fn($($name),*) -> R where R:Compile<'a>, $($name:Compile<'a>),* {
-            fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
+            fn compile(self, context: &'a Context) -> &'a Value {
                 unsafe {
                     let as_usize: usize = mem::transmute(self);
-                    let value = as_usize.compile(builder, context);
+                    let value = as_usize.compile(context);
                     core::LLVMConstIntToPtr(value.into(), Self::get_type(context).into())
                 }.into()
             }
@@ -193,10 +177,10 @@ macro_rules! compile_func(
             }
         }
         impl<'a, R, $($name),*> Compile<'a> for extern fn($($name),*) -> R where R:Compile<'a>, $($name:Compile<'a>),* {
-            fn compile(self, builder: &'a Builder, context: &'a Context) -> &'a Value {
+            fn compile(self, context: &'a Context) -> &'a Value {
                 unsafe {
                     let as_usize: usize = mem::transmute(self);
-                    let value = as_usize.compile(builder, context);
+                    let value = as_usize.compile(context);
                     core::LLVMConstIntToPtr(value.into(), Self::get_type(context).into())
                 }.into()
             }
