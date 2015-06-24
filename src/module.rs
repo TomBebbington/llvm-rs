@@ -42,9 +42,17 @@ impl Module {
         unsafe { CSemiBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
     }
     /// Add a global to the module with the given type and name.
-    pub fn add_global<'a>(&'a self, ty: &'a Type, name: &str) -> &'a Value {
+    pub fn add_global<'a>(&'a self, name: &str, ty: &'a Type) -> &'a Value {
         util::with_cstr(name, |ptr| unsafe {
             core::LLVMAddGlobal(self.into(), ty.into(), ptr).into()
+        })
+    }
+    /// Add a constant global to the module with the given type, name and value.
+    pub fn add_global_constant<'a>(&'a self, name: &str, val: &'a Value) -> &'a Value {
+        util::with_cstr(name, |ptr| unsafe {
+            let global = core::LLVMAddGlobal(self.into(), val.get_type().into(), ptr);
+            core::LLVMSetInitializer (global.into(), val.into());
+            global.into()
         })
     }
     /// Get the global with the name given, or `None` if no global with that name exists.
