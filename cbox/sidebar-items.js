@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["CBox","A wrapper for pointers made by C that are now completely owned by Rust, so they are not limited by any lifetimes."],["CSemiBox","A wrapper for pointers made by C that are now partially owned in Rust."]],"trait":[["DisposeRef","Implemented by any type of which its reference represents a C pointer that can be disposed."]]});

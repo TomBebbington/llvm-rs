@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Attribute` enum in crate `llvm`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Attribute">
+
+    <title>llvm::Attribute - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'Attribute', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>llvm</a>::<wbr><a class='enum' href=''>Attribute</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-13184' class='srclink' href='../src/llvm/value.rs.html#218-271' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum Attribute {
+    ZExt,
+    SExt,
+    NoReturn,
+    InReg,
+    StructRet,
+    NoUnwind,
+    NoAlias,
+    ByVal,
+    Nest,
+    ReadNone,
+    ReadOnly,
+    NoInline,
+    AlwaysInline,
+    OptimizeForSize,
+    StackProtect,
+    StackProtectReq,
+    Alignment,
+    NoCapture,
+    NoRedZone,
+    NoImplicitFloat,
+    Naked,
+    InlineHint,
+    StackAlignment,
+    ReturnsTwice,
+    UWTable,
+    NonLazyBind,
+}</pre><div class='docblock'><p>A way of indicating to LLVM how you want arguments / functions to be handled.</p>
+</div><h2 class='variants'>Variants</h2>
+<table><tr><td id='variant.ZExt'><code>ZExt</code></td><td><div class='docblock'><p>Zero-extended before or after call.</p>
+</div></td></tr><tr><td id='variant.SExt'><code>SExt</code></td><td><div class='docblock'><p>Sign-extended before or after call.</p>
+</div></td></tr><tr><td id='variant.NoReturn'><code>NoReturn</code></td><td><div class='docblock'><p>Mark the function as not returning.</p>
+</div></td></tr><tr><td id='variant.InReg'><code>InReg</code></td><td><div class='docblock'><p>Force argument to be passed in register.</p>
+</div></td></tr><tr><td id='variant.StructRet'><code>StructRet</code></td><td><div class='docblock'><p>Hidden pointer to structure to return.</p>
+</div></td></tr><tr><td id='variant.NoUnwind'><code>NoUnwind</code></td><td><div class='docblock'><p>Function doesn&#39;t unwind stack.</p>
+</div></td></tr><tr><td id='variant.NoAlias'><code>NoAlias</code></td><td><div class='docblock'><p>Consider to not alias after call.</p>
+</div></td></tr><tr><td id='variant.ByVal'><code>ByVal</code></td><td><div class='docblock'><p>Pass structure by value.</p>
+</div></td></tr><tr><td id='variant.Nest'><code>Nest</code></td><td><div class='docblock'><p>Nested function static chain.</p>
+</div></td></tr><tr><td id='variant.ReadNone'><code>ReadNone</code></td><td><div class='docblock'><p>Function doesn&#39;t access memory.</p>
+</div></td></tr><tr><td id='variant.ReadOnly'><code>ReadOnly</code></td><td><div class='docblock'><p>Function only reads from memory.</p>
+</div></td></tr><tr><td id='variant.NoInline'><code>NoInline</code></td><td><div class='docblock'><p>Never inline this function.</p>
+</div></td></tr><tr><td id='variant.AlwaysInline'><code>AlwaysInline</code></td><td><div class='docblock'><p>Always inline this function.</p>
+</div></td></tr><tr><td id='variant.OptimizeForSize'><code>OptimizeForSize</code></td><td><div class='docblock'><p>Optimize this function for size.</p>
+</div></td></tr><tr><td id='variant.StackProtect'><code>StackProtect</code></td><td><div class='docblock'><p>Stack protection.</p>
+</div></td></tr><tr><td id='variant.StackProtectReq'><code>StackProtectReq</code></td><td><div class='docblock'><p>Stack protection required.</p>
+</div></td></tr><tr><td id='variant.Alignment'><code>Alignment</code></td><td><div class='docblock'><p>Alignment of parameter (5 bits) stored as log2 of alignment with +1 bias 0 means unaligned (different from align(1)).</p>
+</div></td></tr><tr><td id='variant.NoCapture'><code>NoCapture</code></td><td><div class='docblock'><p>Function creates no aliases of pointer.</p>
+</div></td></tr><tr><td id='variant.NoRedZone'><code>NoRedZone</code></td><td><div class='docblock'><p>Disable redzone.</p>
+</div></td></tr><tr><td id='variant.NoImplicitFloat'><code>NoImplicitFloat</code></td><td><div class='docblock'><p>Disable implicit float instructions.</p>
+</div></td></tr><tr><td id='variant.Naked'><code>Naked</code></td><td><div class='docblock'><p>Naked function.</p>
+</div></td></tr><tr><td id='variant.InlineHint'><code>InlineHint</code></td><td><div class='docblock'><p>The source language has marked this function as inline.</p>
+</div></td></tr><tr><td id='variant.StackAlignment'><code>StackAlignment</code></td><td><div class='docblock'><p>Alignment of stack for function (3 bits) stored as log2 of alignment with +1 bias 0 means unaligned (different from alignstack=(1)).</p>
+</div></td></tr><tr><td id='variant.ReturnsTwice'><code>ReturnsTwice</code></td><td><div class='docblock'><p>This function returns twice.</p>
+</div></td></tr><tr><td id='variant.UWTable'><code>UWTable</code></td><td><div class='docblock'><p>Function must be in unwind table.</p>
+</div></td></tr><tr><td id='variant.NonLazyBind'><code>NonLazyBind</code></td><td><div class='docblock'><p>Function is called early/often, so lazy binding isn&#39;t effective.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../llvm_sys/struct.LLVMAttribute.html' title='llvm_sys::LLVMAttribute'>LLVMAttribute</a>&gt; for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(attr: <a class='struct' href='../llvm_sys/struct.LLVMAttribute.html' title='llvm_sys::LLVMAttribute'>LLVMAttribute</a>) -&gt; <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a></code></h3><div class='impl-items'></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "llvm";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

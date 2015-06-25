@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Arg` struct in crate `llvm`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Arg">
+
+    <title>llvm::Arg - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'Arg', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>llvm</a>::<wbr><a class='struct' href=''>Arg</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-12189' class='srclink' href='../src/llvm/value.rs.html#66' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Arg;</pre><div class='docblock'><p>A value that represents an argument that has been given to a function.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='method.add_attribute' class='method'><code>fn <a href='#method.add_attribute' class='fnname'>add_attribute</a>(&amp;self, attr: <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a>)</code></h4>
+<div class='docblock'><p>Add an attribute to a function argument</p>
+</div><h4 id='method.add_attributes' class='method'><code>fn <a href='#method.add_attributes' class='fnname'>add_attributes</a>(&amp;self, attrs: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>)</code></h4>
+<div class='docblock'><p>Add attributes to this function argument</p>
+</div><h4 id='method.has_attribute' class='method'><code>fn <a href='#method.has_attribute' class='fnname'>has_attribute</a>(&amp;self, attr: <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Get the attributes set for a function argument</p>
+</div><h4 id='method.has_attributes' class='method'><code>fn <a href='#method.has_attributes' class='fnname'>has_attributes</a>(&amp;self, attrs: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Check if this argument has all the attributes given</p>
+</div><h4 id='method.remove_attribute' class='method'><code>fn <a href='#method.remove_attribute' class='fnname'>remove_attribute</a>(&amp;self, attr: <a class='enum' href='../llvm/enum.Attribute.html' title='llvm::Attribute'>Attribute</a>)</code></h4>
+<div class='docblock'><p>Remove an attribute from a function argument</p>
+</div></div><h2 id='deref-methods'>Methods from <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>&gt;</h2><div class='impl-items'><h4 id='method.new_struct' class='method'><code>fn <a href='#method.new_struct' class='fnname'>new_struct</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, vals: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Create a new constant struct from the values given.</p>
+</div><h4 id='method.new_vector' class='method'><code>fn <a href='#method.new_vector' class='fnname'>new_vector</a>&lt;'a&gt;(vals: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Create a new constant vector from the values given.</p>
+</div><h4 id='method.new_string' class='method'><code>fn <a href='#method.new_string' class='fnname'>new_string</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, text: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, rust_style: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Create a new constant C string from the text given.</p>
+</div><h4 id='method.new_undef' class='method'><code>fn <a href='#method.new_undef' class='fnname'>new_undef</a>&lt;'a&gt;(ty: &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Create a new constant undefined value of the given type.</p>
+</div><h4 id='method.get_name' class='method'><code>fn <a href='#method.get_name' class='fnname'>get_name</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</code></h4>
+<div class='docblock'><p>Returns the name of this value, or <code>None</code> if itlacks a name</p>
+</div><h4 id='method.set_name' class='method'><code>fn <a href='#method.set_name' class='fnname'>set_name</a>(&amp;self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
+<div class='docblock'><p>Sets the name of this value</p>
+</div><h4 id='method.get_type' class='method'><code>fn <a href='#method.get_type' class='fnname'>get_type</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
+<div class='docblock'><p>Returns the type of this value</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a>&gt; for <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMValueRef.html' title='llvm_sys::prelude::LLVMValueRef'>LLVMValueRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMValueRef.html' title='llvm_sys::prelude::LLVMValueRef'>LLVMValueRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMValueRef.html' title='llvm_sys::prelude::LLVMValueRef'>LLVMValueRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMValueRef.html' title='llvm_sys::prelude::LLVMValueRef'>LLVMValueRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../llvm/struct.Arg.html' title='llvm::Arg'>Arg</a></code></h3><div class='impl-items'><h4 id='assoc_type.Target' class='type'><code>type Target = <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<h4 id='method.deref' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "llvm";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
