@@ -29,6 +29,10 @@ impl Value {
             core::LLVMConstStringInContext(context.into(), ptr, len, rust_style as c_int).into()
         }
     }
+    /// Create a new constant undefined value of the given type.
+    pub fn new_undef<'a>(ty: &'a Type) -> &'a Value {
+        unsafe { core::LLVMGetUndef(ty.into()).into() }
+    }
     /// Returns the name of this value, or `None` if itlacks a name
     pub fn get_name(&self) -> Option<&str> {
         unsafe {
