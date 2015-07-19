@@ -155,6 +155,7 @@ impl Builder {
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    bin_op!{build_xor, LLVMBuildXor}
     /// Build an instruction to compare two values with the predicate
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
