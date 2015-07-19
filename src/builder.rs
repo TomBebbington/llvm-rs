@@ -50,6 +50,14 @@ impl Builder {
     pub fn position_at_end(&self, block: &BasicBlock) {
         unsafe { core::LLVMPositionBuilderAtEnd(self.into(), block.into()) }
     }
+    /// Position the builder at `instr` within `block`.
+    pub fn position_at_instr(&self, block: &BasicBlock, instr: &Value) {
+        unsafe { core::LLVMPositionBuilder(self.into(), block.into(), instr.into()) }
+    }
+    /// Get the block that the builder is currently positioned in.
+    pub fn get_position(&self) -> &BasicBlock {
+        unsafe { core::LLVMGetInsertBlock(self.into()) }.into()
+    }
     /// Build an instruction that returns from the function with void.
     pub fn build_ret_void(&self) -> &Value {
         unsafe { core::LLVMBuildRetVoid(self.into()) }.into()
