@@ -105,7 +105,7 @@ impl StructType {
         })
     }
     /// Returns the elements (AKA fields) that make up this struct.
-    pub fn get_elements(&self) -> Vec<Type> {
+    pub fn get_elements(&self) -> Vec<&Type> {
         unsafe {
             let size = core::LLVMCountStructElementTypes(self.into());
             let mut els:Vec<_> = (0..size).map(|_| mem::uninitialized()).collect();
