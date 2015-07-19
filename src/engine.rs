@@ -152,7 +152,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
             }
             let mut options = LLVMMCJITCompilerOptions {
                 OptLevel: options.opt_level as c_uint,
-                CodeModel: LLVMCodeModel::LLVMCodeModelDefault,
+                CodeModel: LLVMCodeModel::LLVMCodeModelJITDefault,
                 NoFramePointerElim: 0,
                 EnableFastISel: 1,
                 MCJMM: ptr::null_mut()
