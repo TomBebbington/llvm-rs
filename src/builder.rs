@@ -3,10 +3,12 @@ use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::{CSemiBox, DisposeRef};
 use std::mem;
+use std::ffi::CString;
 use block::BasicBlock;
 use context::Context;
 use ty::Type;
 use value::{Function, Value, Predicate};
+use phi::PhiNode;
 
 static NULL_NAME:[c_char; 1] = [0];
 
@@ -172,6 +174,11 @@ impl Builder {
         } else {
             panic!("expected numbers, got {:?}", at)
         }
+    }
+
+    /// Build an instruction to select a value depending on the predecessor of the current block.
+    pub fn build_phi(&self, ty: &Type, name: &str) -> &PhiNode {
+        unsafe { core::LLVMBuildPhi(self.into(), ty.into(), CString::new(name).unwrap().as_ptr()) }.into()
     }
 }
 

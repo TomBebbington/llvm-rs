@@ -19,6 +19,7 @@ mod target;
 mod ty;
 mod value;
 mod util;
+mod phi;
 
 pub use cbox::{CBox, CSemiBox};
 pub use builder::Builder;
@@ -32,3 +33,4 @@ pub use target::{TargetData, Target};
 pub use ty::{FunctionType, StructType, Type};
 pub use value::{Arg, Attribute, Value, Function, Predicate};
 pub use util::CastFrom;
+pub use phi::PhiNode;
