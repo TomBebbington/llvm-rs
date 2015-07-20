@@ -93,7 +93,7 @@ impl Module {
         })
     }
     /// Add a function to the module with the name given.
-    pub fn add_function<'a>(&'a self, name: &str, sig: &'a Type) -> &'a mut Function {
+    pub fn add_function<'a>(&'a self, name: &str, sig: &'a Type) -> &'a Function {
         let c_name = CString::new(name).unwrap();
         unsafe { core::LLVMAddFunction(self.into(), c_name.as_ptr(), sig.into()) }.into()
     }
