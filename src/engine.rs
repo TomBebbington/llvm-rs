@@ -110,7 +110,14 @@ impl<'a, 'b> JitEngine<'a> {
             if let Some(args) = StructType::cast(arg) {
                 assert_eq!(sig.get_params(), args.get_elements());
             } else {
-                assert_eq!(arg, sig.get_return());
+                let nparams = sig.get_params().len();
+                if nparams == 1 {
+                    assert_eq!(arg, sig.get_params()[0]);
+                } else if nparams == 0 {
+                    assert_eq!(arg, Type::get::<()>(ctx));
+                } else {
+                    panic!("array type arguments are not yet supported; use a tuple or struct instead");
+                }
             }
         }
         unsafe {
@@ -145,7 +152,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
             }
             let mut options = LLVMMCJITCompilerOptions {
                 OptLevel: options.opt_level as c_uint,
-                CodeModel: LLVMCodeModel::LLVMCodeModelDefault,
+                CodeModel: LLVMCodeModel::LLVMCodeModelJITDefault,
                 NoFramePointerElim: 0,
                 EnableFastISel: 1,
                 MCJMM: ptr::null_mut()

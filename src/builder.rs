@@ -3,10 +3,12 @@ use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::{CSemiBox, DisposeRef};
 use std::mem;
+use std::ffi::CString;
 use block::BasicBlock;
 use context::Context;
 use ty::Type;
 use value::{Function, Value, Predicate};
+use phi::PhiNode;
 
 static NULL_NAME:[c_char; 1] = [0];
 
@@ -47,6 +49,14 @@ impl Builder {
     /// Position the builder at the end of `block`.
     pub fn position_at_end(&self, block: &BasicBlock) {
         unsafe { core::LLVMPositionBuilderAtEnd(self.into(), block.into()) }
+    }
+    /// Position the builder at `instr` within `block`.
+    pub fn position_at_instr(&self, block: &BasicBlock, instr: &Value) {
+        unsafe { core::LLVMPositionBuilder(self.into(), block.into(), instr.into()) }
+    }
+    /// Get the block that the builder is currently positioned in.
+    pub fn get_position(&self) -> &BasicBlock {
+        unsafe { core::LLVMGetInsertBlock(self.into()) }.into()
     }
     /// Build an instruction that returns from the function with void.
     pub fn build_ret_void(&self) -> &Value {
@@ -118,6 +128,10 @@ impl Builder {
     pub fn build_insert_value(&self, agg: &Value, elem: &Value, index: usize) -> &Value {
         unsafe { core::LLVMBuildInsertValue(self.into(), agg.into(), elem.into(), index as c_uint, NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that extracts a value from an aggregate type.
+    pub fn build_extract_value(&self, agg: &Value, index: usize) -> &Value {
+        unsafe { core::LLVMBuildExtractValue(self.into(), agg.into(), index as c_uint, NULL_NAME.as_ptr()).into() }
+    }
     /// Build an instruction that computes the address of a subelement of an aggregate data structure.
     ///
     /// Basically type-safe pointer arithmetic.
@@ -145,6 +159,8 @@ impl Builder {
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    bin_op!{build_xor, LLVMBuildXor}
+    bin_op!{build_rem, LLVMBuildSRem, LLVMBuildFRem}
     /// Build an instruction to compare two values with the predicate
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
@@ -172,6 +188,11 @@ impl Builder {
         } else {
             panic!("expected numbers, got {:?}", at)
         }
+    }
+
+    /// Build an instruction to select a value depending on the predecessor of the current block.
+    pub fn build_phi(&self, ty: &Type, name: &str) -> &PhiNode {
+        unsafe { core::LLVMBuildPhi(self.into(), ty.into(), CString::new(name).unwrap().as_ptr()) }.into()
     }
 }
 

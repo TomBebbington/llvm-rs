@@ -2,7 +2,7 @@ use libc::{c_char, c_uint, c_int};
 use ffi::prelude::LLVMValueRef;
 use ffi::{core, LLVMAttribute};
 use std::ffi::CString;
-use std::{fmt, mem};
+use std::{fmt, mem, ptr};
 use std::ops::{Deref, Index};
 use block::BasicBlock;
 use context::{Context, GetContext};
@@ -52,6 +52,33 @@ impl Value {
         unsafe { core::LLVMTypeOf(self.into()) }.into()
     }
 }
+
+pub struct GlobalValue;
+native_ref!(&GlobalValue = LLVMValueRef);
+deref!(GlobalValue, Value);
+impl GlobalValue {
+    /// Sets the initial value for this global.
+    pub fn set_initializer(&self, value: &Value) {
+        unsafe { core::LLVMSetInitializer(self.into(), value.into()) }
+    }
+
+    /// Gets the initial value for this global.
+    pub fn get_initializer(&self) -> &Value {
+        unsafe { core::LLVMGetInitializer(self.into()) }.into()
+    }
+}
+impl CastFrom for GlobalValue {
+    type From = Value;
+    fn cast<'a>(val: &'a Value) -> Option<&'a GlobalValue> {
+        let gv = unsafe { core::LLVMIsAGlobalValue(val.into()) };
+        if gv == ptr::null_mut() {
+            None
+        } else {
+            Some(gv.into())
+        }
+    }
+}
+
 /// A way of comparing values
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum Predicate {
