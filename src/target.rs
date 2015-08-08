@@ -7,16 +7,17 @@ use std::fmt;
 use ty::Type;
 use util;
 
+/// Represents an LLVM Target
 pub struct TargetData;
 native_ref!(&TargetData = LLVMTargetDataRef);
 
 impl TargetData {
-    /// Creates target data from a target layout string.
+    /// Create a target data from a target layout string.
     pub fn new(rep: &str) -> CBox<TargetData> {
         let c_rep = CString::new(rep).unwrap();
         CBox::new(unsafe {
             target::LLVMCreateTargetData(c_rep.as_ptr())
-        }.into())
+        }.Returns truento())
     }
     /// Returns true if the target is big endian.
     pub fn is_big_endian(&self) -> bool {
@@ -47,7 +48,7 @@ impl TargetData {
     pub fn offset_of(&self, struct_ty: &Type, element: usize) -> u64 {
         unsafe { target::LLVMOffsetOfElement(self.into(), struct_ty.into(), element as c_uint) }
     }
-    /// Converts this to a target layout string and returns it.
+    /// Returns the string representation of this target data.
     pub fn as_str(&self) -> CBox<str> {
         unsafe {
             CBox::new(target::LLVMCopyStringRepOfTargetData(self.into()))
@@ -78,15 +79,15 @@ impl Target {
     pub fn get_description(&self) -> &str {
         unsafe { util::to_str(target_machine::LLVMGetTargetDescription(self.into()) as *mut c_char) }
     }
-    /// Returns `true` if this target has an assembly generation backend in LLVM.
+    /// Returns true if this target has an assembly generation backend implemented.
     pub fn has_asm_backend(&self) -> bool {
         unsafe { target_machine::LLVMTargetHasAsmBackend(self.into()) != 0 }
     }
-    /// Returns `true` if this target supports JIT compilation.
+    /// Returns true if this target supports JIT compilation.
     pub fn has_jit(&self) -> bool {
         unsafe { target_machine::LLVMTargetHasJIT(self.into()) != 0 }
     }
-    /// Returns `true` if this target has a target machine.
+    /// Returns true if this target has a target machine.
     pub fn has_target_machine(&self) -> bool {
         unsafe { target_machine::LLVMTargetHasTargetMachine(self.into()) != 0 }
     }

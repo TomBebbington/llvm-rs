@@ -88,7 +88,7 @@ impl Type {
 get_context!(Type, LLVMGetTypeContext);
 to_str!(Type, LLVMPrintTypeToString);
 
-/// A structure type, such as a tuple or struct
+/// A structure type, such as a tuple or struct.
 pub struct StructType;
 native_ref!(&StructType = LLVMTypeRef);
 impl StructType {
@@ -104,7 +104,7 @@ impl StructType {
             ty.into()
         })
     }
-    /// Returns the elements (AKA fields) that make up this struct.
+    /// Returns the elements that make up this struct.
     pub fn get_elements(&self) -> Vec<Type> {
         unsafe {
             let size = core::LLVMCountStructElementTypes(self.into());
@@ -131,7 +131,7 @@ deref!(StructType, Type);
 get_context!(StructType, LLVMGetTypeContext);
 to_str!(StructType, LLVMPrintTypeToString);
 
-/// A function signature type
+/// A function signature type.
 pub struct FunctionType;
 native_ref!(&FunctionType = LLVMTypeRef);
 deref!(FunctionType, Type);
@@ -153,7 +153,7 @@ impl CastFrom for FunctionType {
     }
 }
 impl FunctionType {
-    /// Returns how many parameters this signature takes.
+    /// Returns the number of parameters this signature takes.
     pub fn num_params(&self) -> usize {
         unsafe { core::LLVMCountParamTypes(self.into()) as usize }
     }

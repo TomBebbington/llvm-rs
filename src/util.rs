@@ -2,9 +2,11 @@ use libc::c_char;
 use std::ffi::{CStr, CString};
 use std::str;
 
-/// Cast between types
+/// Cast from one type into another
 pub trait CastFrom {
+    /// The type that can be casted from.
     type From;
+    /// Cast it
     fn cast<'a>(ty: &'a Self::From) -> Option<&'a Self>;
 }
 

@@ -33,7 +33,7 @@ impl Value {
     pub fn new_undef<'a>(ty: &'a Type) -> &'a Value {
         unsafe { core::LLVMGetUndef(ty.into()).into() }
     }
-    /// Returns the name of this value, or `None` if itlacks a name
+    /// Returns the name of this value, or `None` if it lacks a name
     pub fn get_name(&self) -> Option<&str> {
         unsafe {
             let c_name = core::LLVMGetValueName(self.into());
@@ -52,7 +52,7 @@ impl Value {
         unsafe { core::LLVMTypeOf(self.into()) }.into()
     }
 }
-/// A way of comparing values
+/// Comparative operations on values.
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum Predicate {
     Equal,
@@ -62,7 +62,7 @@ pub enum Predicate {
     LessThan,
     LessThanOrEqual
 }
-/// A value that represents an argument that has been given to a function.
+/// A function argument.
 pub struct Arg;
 native_ref!(&Arg = LLVMValueRef);
 impl Deref for Arg {
@@ -72,11 +72,11 @@ impl Deref for Arg {
     }
 }
 impl Arg {
-    /// Add an attribute to a function argument
+    /// Add the attribute given to this argument.
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddAttribute(self.into(), attr.into()) }
     }
-    /// Add attributes to this function argument
+    /// Add all the attributes given to this argument.
     pub fn add_attributes(&self, attrs: &[Attribute]) {
         let mut sum = LLVMAttribute::empty();
         for attr in attrs {
@@ -85,14 +85,14 @@ impl Arg {
         }
         unsafe { core::LLVMAddAttribute(self.into(), sum.into()) }
     }
-    /// Get the attributes set for a function argument
+    /// Returns true if this argument has the attribute given.
     pub fn has_attribute(&self, attr: Attribute) -> bool {
         unsafe {
             let other = core::LLVMGetAttribute(self.into());
             other.contains(attr.into())
         }
     }
-    /// Check if this argument has all the attributes given
+    /// Returns true if this argument has all the attributes given.
     pub fn has_attributes(&self, attrs: &[Attribute]) -> bool {
         unsafe {
             let other = core::LLVMGetAttribute(self.into());
@@ -104,12 +104,12 @@ impl Arg {
             return true;
         }
     }
-    /// Remove an attribute from a function argument
+    /// Remove an attribute from this argument.
     pub fn remove_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMRemoveAttribute(self.into(), attr.into()) }
     }
 }
-/// A `Value` that represents a `Function`
+/// A function that can be called and contains blocks.
 pub struct Function;
 native_ref!(&Function = LLVMValueRef);
 impl Deref for Function {
@@ -170,11 +170,11 @@ impl Function {
             core::LLVMGetElementType(ty).into()
         }
     }
-    /// Add an attribute to this function.
+    /// Add the attribute given to this function.
     pub fn add_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMAddFunctionAttr(self.into(), attr.into()) }
     }
-    /// Add attributes to this function.
+    /// Add all the attributes given to this function.
     pub fn add_attributes(&self, attrs: &[Attribute]) {
         let mut sum = LLVMAttribute::empty();
         for attr in attrs {
@@ -183,14 +183,14 @@ impl Function {
         }
         unsafe { core::LLVMAddFunctionAttr(self.into(), sum.into()) }
     }
-    /// Check if the attribute is set.
+    /// Returns true if the attribute given is set in this function.
     pub fn has_attribute(&self, attr: Attribute) -> bool {
         unsafe {
             let other = core::LLVMGetFunctionAttr(self.into());
             other.contains(attr.into())
         }
     }
-    /// Check if this function has all the attributes given.
+    /// Returns true if all the attributes given is set in this function.
     pub fn has_attributes(&self, attrs: &[Attribute]) -> bool {
         unsafe {
             let other = core::LLVMGetFunctionAttr(self.into());
@@ -202,7 +202,7 @@ impl Function {
             return true;
         }
     }
-    /// Remove an attribute from the function.
+    /// Remove the attribute given from this function.
     pub fn remove_attribute(&self, attr: Attribute) {
         unsafe { core::LLVMRemoveFunctionAttr(self.into(), attr.into()) }
     }

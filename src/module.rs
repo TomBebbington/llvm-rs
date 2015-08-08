@@ -20,7 +20,7 @@ use value::{Function, Value};
 use ty::Type;
 use util;
 
-/// Represents a single translation unit of code.
+/// Represents a single compilation unit of code.
 ///
 /// This is attached to the lifetime of the context that constructs it, but is owned by the `CSemiBox`.
 pub struct Module;
@@ -91,7 +91,7 @@ impl Module {
         let c_name = CString::new(name).unwrap();
         unsafe { core::LLVMAddFunction(self.into(), c_name.as_ptr(), sig.into()) }.into()
     }
-    /// Returns the function with the name given if it exists.
+    /// Returns the function with the name given, or `None` if no function with that name exists.
     pub fn get_function<'a>(&'a self, name: &str) -> Option<&'a Function> {
         let c_name = CString::new(name).unwrap();
         unsafe {
@@ -99,7 +99,7 @@ impl Module {
             util::ptr_to_null(ty)
         }
     }
-    /// Returns the type with the name given if it exists.
+    /// Returns the type with the name given, or `None`` if no type with that name exists.
     pub fn get_type<'a>(&'a self, name: &str) -> Option<&'a Type> {
         let c_name = CString::new(name).unwrap();
         unsafe {
@@ -113,6 +113,8 @@ impl Module {
     }
 
     /// Optimize this module with the given optimization level and size level.
+    ///
+    /// This runs passes depending on the levels given.
     pub fn optimize(&self, opt_level: usize, size_level: usize) {
         unsafe {
             let builder = builder::LLVMPassManagerBuilderCreate();
@@ -133,13 +135,14 @@ impl Module {
         }
     }
 
-    /// Set the target data of this module
+    /// Set the target data of this module to the target data string given.
     pub fn set_target(&self, target: &str) {
         let c_target = CString::new(target).unwrap();
         unsafe { core::LLVMSetTarget(self.into(), c_target.as_ptr()) }
     }
 
-    /// Verify that the module is safe to run.
+    /// Verify that the module is safe to run, returning a string detailing the error
+    /// when an error occurs.
     pub fn verify(&self) -> Result<(), CBox<str>> {
         unsafe {
             let mut error = mem::uninitialized();
@@ -171,7 +174,9 @@ impl Module {
             .map(|_| ())
     }
 
-    /// Link a module into this module
+    /// Link a module into this module, returning an error string if an error occurs.
+    ///
+    /// This *does not* destroy the source module.
     pub fn link(&self, src: &Module) -> Result<(), CBox<str>> {
         unsafe {
             let dest = self.into();
@@ -185,7 +190,9 @@ impl Module {
         }
     }
 
-    /// Link a module into this module
+    /// Link a module into this module, returning an error string if an error occurs.
+    ///
+    /// This *does* destroy the source module.
     pub fn link_destroy(&self, src: CSemiBox<Module>) -> Result<(), CBox<str>> {
         unsafe {
             let dest = self.into();

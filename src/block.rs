@@ -7,7 +7,7 @@ use util;
 pub struct BasicBlock;
 native_ref!(&BasicBlock = LLVMBasicBlockRef);
 impl BasicBlock {
-    /// Return the enclosing method, or `None` if it is non-existant.
+    /// Return the enclosing method, or `None` if it is not attached to a method.
     pub fn get_parent(&self) -> Option<&Value> {
         unsafe { util::ptr_to_null(core::LLVMGetBasicBlockParent(self.into())) }
     }
@@ -26,7 +26,7 @@ impl BasicBlock {
     /// Delete this basic block.
     ///
     /// This is unsafe because there should be no other reference to this, but
-    /// this can't be guranteed.
+    /// this can't be guranteed using Rust semantics.
     pub unsafe fn delete(&self) {
         core::LLVMDeleteBasicBlock(self.into())
     }

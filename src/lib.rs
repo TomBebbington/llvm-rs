@@ -1,5 +1,8 @@
-//! This library provides wrappers for LLVM that are (mostly) memory-safe and follow
+//! This library provides wrappers for LLVM that are memory-safe and follow
 //! Rust idioms.
+//!
+//! The original LLVM reference is available [here](http://llvm.org/doxygen/)
+//! but take note that this isn't as thorough as this documentation.
 
 extern crate llvm_sys as ffi;
 extern crate libc;

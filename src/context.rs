@@ -2,11 +2,11 @@ use ffi::prelude::LLVMContextRef;
 use ffi::{core, LLVMContext};
 use cbox::CBox;
 
-/// Contains all the LLVM entities such as modules.
+/// Contains all the LLVM entities - mainly modules.
 ///
 /// Every single entity attached to it has its lifetime to enforce the
-/// rule that things from different contexts cannot interact and to keep
-/// their pointer safety intact.
+/// rule that things from different contexts cannot interact and to
+/// preserve pointer safety.
 pub struct Context;
 native_ref!(&Context = LLVMContextRef);
 impl Context {
@@ -17,7 +17,7 @@ impl Context {
     pub unsafe fn get_global() -> &'static Context {
         core::LLVMGetGlobalContext().into()
     }
-    /// Create a new context, owned by the block that calls it.
+    /// Create a new context, which is owned by the callee block.
     pub fn new() -> CBox<Self> {
         CBox::new(unsafe { core::LLVMContextCreate() })
     }

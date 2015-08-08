@@ -18,7 +18,7 @@ use value::{Function, Value};
 ///
 /// This is designed to support both interpreter and just-in-time (JIT) compiler implementations.
 pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self> {
-    /// The options given to this upon creation.
+    /// The options given to the engine upon creation.
     type Options : Copy;
     /// Create a new execution engine with the given `Module` and options, or return a
     /// description of the error.

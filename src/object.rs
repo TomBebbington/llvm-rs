@@ -8,13 +8,13 @@ use std::mem;
 use buffer::MemoryBuffer;
 use util;
 
-/// An external object file that has been parsed by LLVLM
+/// An external object file that has been parsed by LLVM.
 pub struct ObjectFile {
     obj: LLVMObjectFileRef
 }
 native_ref!(ObjectFile, obj: LLVMObjectFileRef);
 impl ObjectFile {
-    /// Attempt to parse the object file at the path given
+    /// Parse the object file at the path given, or return an error string if an error occurs.
     pub fn read(path: &str) -> Result<ObjectFile, CBox<str>> {
         let buf = try!(MemoryBuffer::new_from_file(path));
         unsafe {
@@ -26,7 +26,7 @@ impl ObjectFile {
             }
         }
     }
-    /// Iterate through the symbols in this object fil
+    /// Iterate through the symbols in this object file.
     pub fn symbols(&self) -> Symbols {
         Symbols {
             iter: unsafe { object::LLVMGetSymbols(self.obj) },
@@ -61,7 +61,9 @@ impl<'a> Drop for Symbols<'a> {
     }
 }
 pub struct Symbol<'a> {
+    /// The name of this symbol.
     pub name: &'a str,
+    /// The address that this symbol is at.
     pub address: *const c_void,
     pub size: usize
 }
@@ -77,7 +79,7 @@ impl<'a> fmt::Debug for Symbol<'a> {
     }
 }
 impl<'a> Symbol<'a> {
-    /// Get the pointer for this symbol
+    /// Get the pointer for this symbol.
     pub unsafe fn get<T>(self) -> &'a T {
         mem::transmute(self.address)
     }

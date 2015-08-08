@@ -8,9 +8,9 @@ use ty::{StructType, Type};
 use std::mem;
 use std::ffi::CStr;
 
-/// Implemented for any type that can be represented as a constant in IR.
+/// A type that can be represented as a constant in LLVM IR.
 pub trait Compile<'a> {
-    /// Compile this value in the context given.
+    /// Compile this value into a constant in the context given.
     fn compile(self, context: &'a Context) -> &'a Value;
     /// Get the type descriptor for this type in the context given.
     fn get_type(context: &'a Context) -> &'a Type;
