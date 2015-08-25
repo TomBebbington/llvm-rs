@@ -17,7 +17,7 @@ impl TargetData {
         let c_rep = CString::new(rep).unwrap();
         CBox::new(unsafe {
             target::LLVMCreateTargetData(c_rep.as_ptr())
-        }.Returns truento())
+        }.into())
     }
     /// Returns true if the target is big endian.
     pub fn is_big_endian(&self) -> bool {
