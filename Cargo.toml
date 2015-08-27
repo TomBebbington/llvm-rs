@@ -21,4 +21,4 @@ lto = true
 [dependencies]
 cbox = "*"
 libc = "*"
-llvm-alt-sys = "*"
+llvm-sys = "*"
