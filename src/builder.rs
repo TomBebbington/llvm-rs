@@ -114,6 +114,10 @@ impl Builder {
     pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that truncates the high-order bits of value to fit into a certain type.
+    pub fn build_trunc(&self, value: &Value, dest: &Type) -> &Value {
+        unsafe { core::LLVMBuildTrunc(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
+    }
     /// Build an instruction that inserts a value into an aggregate data value.
     pub fn build_insert_value(&self, agg: &Value, elem: &Value, index: usize) -> &Value {
         unsafe { core::LLVMBuildInsertValue(self.into(), agg.into(), elem.into(), index as c_uint, NULL_NAME.as_ptr()).into() }
