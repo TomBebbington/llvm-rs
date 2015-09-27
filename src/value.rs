@@ -1,6 +1,7 @@
 use libc::{c_char, c_uint, c_int};
 use ffi::prelude::LLVMValueRef;
 use ffi::{core, LLVMAttribute};
+use ffi::LLVMLinkage;
 use std::ffi::CString;
 use std::{fmt, mem};
 use std::ops::{Deref, Index};
@@ -109,12 +110,119 @@ impl Arg {
         unsafe { core::LLVMRemoveAttribute(self.into(), attr.into()) }
     }
 }
+
+/// A global value (eg: Function, Alias, Global variable)
+pub struct GlobalValue;
+native_ref!(&GlobalValue = LLVMValueRef);
+impl Deref for GlobalValue {
+    type Target = Value;
+    fn deref(&self) -> &Value {
+        unsafe { mem::transmute(self) }
+    }
+}
+impl CastFrom for GlobalValue {
+    type From = Value;
+    fn cast<'a>(val: &'a Value) -> Option<&'a GlobalValue> {
+        unsafe {
+            let global = mem::transmute(core::LLVMIsAGlobalValue(val.into()));
+            util::ptr_to_null(global)
+        }
+    }
+}
+impl GlobalValue {
+    /// Set the linkage type for this global
+    pub fn set_linkage(&self, linkage: Linkage) {
+        unsafe {
+            core::LLVMSetLinkage(self.into(), linkage.into());
+        }
+    }
+    /// Returns the linkage type for this global
+    pub fn get_linkage(&self) -> Linkage {
+        unsafe {
+            core::LLVMGetLinkage(self.into()).into()
+        }
+    }
+    /// Returns true if this global is a declaration (as opposed to a definition).
+    pub fn is_declaration(&self) -> bool {
+        unsafe {
+            // FIXME: There should be a constant somewhere, instead of '1'
+            core::LLVMIsDeclaration(self.into()) == 1
+        }
+    }
+}
+
+/// A global variable
+pub struct GlobalVariable;
+native_ref!(&GlobalVariable = LLVMValueRef);
+impl Deref for GlobalVariable {
+    type Target = GlobalValue;
+    fn deref(&self) -> &GlobalValue {
+        unsafe { mem::transmute(self) }
+    }
+}
+impl CastFrom for GlobalVariable {
+    type From = Value;
+    fn cast<'a>(val: &'a Value) -> Option<&'a GlobalVariable> {
+        unsafe {
+            let global = mem::transmute(core::LLVMIsAGlobalVariable(val.into()));
+            util::ptr_to_null(global)
+        }
+    }
+}
+impl GlobalVariable {
+    /// Set the initial value of the global
+    pub fn set_initializer(&self, val: &Value) {
+        unsafe {
+            core::LLVMSetInitializer(self.into(), val.into())
+        }
+    }
+    /// Set the initial value of the global
+    pub fn get_initializer(&self) -> Option<&Value> {
+        unsafe {
+            util::ptr_to_null(core::LLVMGetInitializer(self.into()))
+        }
+    }
+    /// Set whether this global is a constant.
+    pub fn set_constant(&self, is_constant: bool) {
+        let llvm_bool = if is_constant { 1 } else { 0 };
+        unsafe {
+            core::LLVMSetGlobalConstant(self.into(), llvm_bool);
+        }
+    }
+    /// Returns true if this global is a constant.
+    pub fn get_constant(&self) -> bool {
+        unsafe {
+            // FIXME: There should be a constant for True/False
+            core::LLVMIsGlobalConstant(self.into()) == 1
+        }
+    }
+}
+
+/// An alias to another global
+pub struct Alias;
+native_ref!(&Alias = LLVMValueRef);
+impl Deref for Alias {
+    type Target = GlobalValue;
+    fn deref(&self) -> &GlobalValue {
+        unsafe { mem::transmute(self) }
+    }
+}
+impl CastFrom for Alias {
+    type From = Value;
+    fn cast<'a>(val: &'a Value) -> Option<&'a Alias> {
+        unsafe {
+            let alias = mem::transmute(core::LLVMIsAGlobalAlias(val.into()));
+            util::ptr_to_null(alias)
+        }
+    }
+}
+
 /// A function that can be called and contains blocks.
 pub struct Function;
 native_ref!(&Function = LLVMValueRef);
 impl Deref for Function {
-    type Target = Value;
-    fn deref(&self) -> &Value {
+    type Target = GlobalValue;
+    fn deref(&self) -> &GlobalValue {
         unsafe { mem::transmute(self) }
     }
 }
@@ -279,6 +387,45 @@ impl From<Attribute> for LLVMAttribute {
         unsafe { mem::transmute(attr) }
     }
 }
+
+/// A way of indicating to LLVM how you want a global to interact during linkage.
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+#[repr(C)]
+pub enum Linkage {
+    /// Default linkage. The global is externally visible and participates in linkage normally.
+    External            = 0,
+    /// Never emitted to the containing module's object file. Used to allow inlining and/or other optimisations to take place, given knowledge of the definition of the global, which is somewhere outside of the module. Otherwise the same as LinkOnceODR. Only allowed on definitions, not declarations.
+    AvailableExternally = 1,
+    /// Merged with other globals of the same name during linkage. Unreferenced LinkOnce globals may be discarded.
+    LinkOnceAny         = 2,
+    /// Similar to LinkOnceAny, but indicates that it will only be merged with equivalent globals.
+    LinkOnceODR         = 3,
+    /// Same merging semantics as LinkOnceAny. Unlike LinkOnce, unreference globals will not be discarded.
+    WeakAny             = 5,
+    /// Similar to WeakAny, but indicates that it will only be merged with equivalent globals.
+    WeakODR             = 6,
+    /// Only allowed on global array pointers. When two globals with Appending linkage are merged, they are appended together.
+    Appending           = 7,
+    /// Similar to Private, but shows as a local symbol in the object file.
+    Internal            = 8,
+    /// Only directly accessible by objects in the current module. May be renamed as neccessary to avoid collisions, and all references will be updated. Will not show up in the object file's symbol table.
+    Private             = 9,
+    /// Weak until linked. If not linked, the output symbol is null, instead of undefined.
+    ExternalWeak        = 12,
+    /// Similar to Weak, but may not have an explicit section, must have a zero initializer, and may not be marked constant. Cannot be used on functions or aliases.
+    Common              = 14,
+}
+impl From<LLVMLinkage> for Linkage {
+    fn from(attr: LLVMLinkage) -> Linkage {
+        unsafe { mem::transmute(attr) }
+    }
+}
+impl From<Linkage> for LLVMLinkage {
+    fn from(attr: Linkage) -> LLVMLinkage {
+        unsafe { mem::transmute(attr) }
+    }
+}
+
 impl GetContext for Value {
     fn get_context(&self) -> &Context {
         self.get_type().get_context()
