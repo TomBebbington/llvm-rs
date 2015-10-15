@@ -7,6 +7,7 @@ use block::BasicBlock;
 use context::Context;
 use ty::Type;
 use value::{Function, Value, Predicate};
+use util;
 
 static NULL_NAME:[c_char; 1] = [0];
 
@@ -47,6 +48,11 @@ impl Builder {
     /// Position the builder at the end of `block`.
     pub fn position_at_end(&self, block: &BasicBlock) {
         unsafe { core::LLVMPositionBuilderAtEnd(self.into(), block.into()) }
+    }
+    /// Return the block in which the builder is currently inserting code,
+    /// or `None` if the builder has not been positioned yet
+    pub fn get_insert_block(&self) -> Option<&BasicBlock> {
+        unsafe { util::ptr_to_null(core::LLVMGetInsertBlock(self.into())) }
     }
     /// Build an instruction that returns from the function with void.
     pub fn build_ret_void(&self) -> &Value {
