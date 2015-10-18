@@ -13,7 +13,7 @@ use std::io::Result as IoResult;
 use std::{env, fmt, mem};
 use std::marker::PhantomData;
 use std::path::Path;
-use std::process::Command;
+use std::process::{Command, Child};
 use buffer::MemoryBuffer;
 use context::{Context, GetContext};
 use value::{Function, Value};
@@ -159,7 +159,7 @@ impl Module {
     ///
     /// Note that this uses the LLVM tool `llc` to do this, which may or may not be
     /// installed on the user's machine.
-    pub fn compile(&self, path: &Path, opt_level: usize) -> IoResult<()> {
+    pub fn compile(&self, path: &Path, opt_level: usize) -> IoResult<Child> {
         let dir = env::temp_dir();
         let path = path.to_str().unwrap();
         let mod_path = dir.join("module.bc");
@@ -171,7 +171,6 @@ impl Module {
             .arg("-o").arg(path)
             .arg(mod_path)
             .spawn()
-            .map(|_| ())
     }
 
     /// Link a module into this module, returning an error string if an error occurs.

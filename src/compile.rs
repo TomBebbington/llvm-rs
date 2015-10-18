@@ -105,9 +105,9 @@ impl<'a, 'b> Compile<'a> for &'b [u8] {
         unsafe {
             let ptr = self.as_ptr() as *const c_char;
             let len = self.len() as c_uint;
-            let ptr = core::LLVMConstStringInContext(context.into(), ptr, len, 1).into();
+            let llvm_ptr = core::LLVMConstStringInContext(context.into(), ptr, len, 1).into();
             let size = self.len().compile(context);
-            Value::new_struct(context, &[ptr, size], false)
+            Value::new_struct(context, &[llvm_ptr, size], false)
         }
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
