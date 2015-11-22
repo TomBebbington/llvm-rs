@@ -7,6 +7,7 @@ use block::BasicBlock;
 use context::Context;
 use ty::Type;
 use value::{Function, Value, Predicate};
+use util;
 
 static NULL_NAME:[c_char; 1] = [0];
 
@@ -47,6 +48,11 @@ impl Builder {
     /// Position the builder at the end of `block`.
     pub fn position_at_end(&self, block: &BasicBlock) {
         unsafe { core::LLVMPositionBuilderAtEnd(self.into(), block.into()) }
+    }
+    /// Return the block in which the builder is currently inserting code,
+    /// or `None` if the builder has not been positioned yet
+    pub fn get_insert_block(&self) -> Option<&BasicBlock> {
+        unsafe { util::ptr_to_null(core::LLVMGetInsertBlock(self.into())) }
     }
     /// Build an instruction that returns from the function with void.
     pub fn build_ret_void(&self) -> &Value {
@@ -114,6 +120,20 @@ impl Builder {
     pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
     }
+    /// Build an instruction that casts a pointer to an integer.
+    pub fn build_ptr_to_int(&self, val: &Value, dest: &Type) -> &Value {
+        unsafe {
+            core::LLVMBuildPtrToInt(self.into(), val.into(), dest.into(), NULL_NAME.as_ptr())
+                .into()
+        }
+    }
+    /// Build an instruction that casts an integer to a pointer.
+    pub fn build_int_to_ptr(&self, val: &Value, dest: &Type) -> &Value {
+        unsafe {
+            core::LLVMBuildIntToPtr(self.into(), val.into(), dest.into(), NULL_NAME.as_ptr())
+                .into()
+        }
+    }
     /// Build an instruction that inserts a value into an aggregate data value.
     pub fn build_insert_value(&self, agg: &Value, elem: &Value, index: usize) -> &Value {
         unsafe { core::LLVMBuildInsertValue(self.into(), agg.into(), elem.into(), index as c_uint, NULL_NAME.as_ptr()).into() }
@@ -134,6 +154,17 @@ impl Builder {
             switch.into()
         }
     }
+    /// Build a phi node which is used together with branching to select a value depending on the predecessor of the current block
+    pub fn build_phi<'ctx>(&self, ty: &'ctx Type, entries: &[(&'ctx Value, &'ctx BasicBlock)])
+        -> &'ctx Value
+    {
+        let phi_node = unsafe { core::LLVMBuildPhi(self.into(), ty.into(), NULL_NAME.as_ptr()) };
+
+        for &(val, preds) in entries {
+            unsafe { core::LLVMAddIncoming(phi_node, &mut val.into(), &mut preds.into(), 1) }
+        }
+        phi_node.into()
+    }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
@@ -145,6 +176,7 @@ impl Builder {
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    bin_op!{build_xor, LLVMBuildXor}
     /// Build an instruction to compare two values with the predicate given.
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
