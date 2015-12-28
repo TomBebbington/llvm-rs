@@ -63,9 +63,6 @@ impl Builder {
         unsafe { core::LLVMBuildArrayAlloca(self.into(), elem.into(), size.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
     /// Build an instruction that allocates a pointer to fit the size of `ty` then returns this pointer.
-    ///
-    /// Make sure to call `build_free` with the pointer value when you're done with it, or you're
-    /// gonna have a bad time.
     pub fn build_alloca(&self, ty: &Type) -> &Value {
         unsafe { core::LLVMBuildAlloca(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
