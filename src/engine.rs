@@ -152,7 +152,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
             };
             let size = mem::size_of::<LLVMMCJITCompilerOptions>();
             let result = engine::LLVMCreateMCJITCompilerForModule(&mut ee, (&*module).into(), &mut options, size as size_t, &mut out);
-            if result == 0 {
+            if result == 1 {
                 Ok(ee.into())
             } else {
                 Err(CBox::new(out))
@@ -184,7 +184,7 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'a> {
             let mut out = mem::zeroed();
             engine::LLVMLinkInInterpreter();
             let result = engine::LLVMCreateInterpreterForModule(&mut ee, (&*module).into(), &mut out);
-            if result == 0 {
+            if result == 1 {
                 Ok(ee.into())
             } else {
                 Err(CBox::new(out))
