@@ -17,7 +17,7 @@ use value::{Function, Value};
 /// An abstract interface for implementation execution of LLVM modules.
 ///
 /// This is designed to support both interpreter and just-in-time (JIT) compiler implementations.
-pub trait ExecutionEngine<'a, 'b:'a> where LLVMExecutionEngineRef:From<&'b Self> {
+pub trait ExecutionEngine<'a, 'b:'a>:Sized+'b where LLVMExecutionEngineRef:From<&'b Self> {
     /// The options given to the engine upon creation.
     type Options : Copy;
     /// Create a new execution engine with the given `Module` and options, or return a
@@ -130,9 +130,9 @@ impl<'a, 'b> JitEngine<'a> {
         mem::transmute(ptr)
     }
 }
-impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'a> {
+impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'b> {
     type Options = JitOptions;
-    fn new(module: &'a Module, options: JitOptions) -> Result<JitEngine<'a>, CBox<str>> {
+    fn new(module: &'a Module, options: JitOptions) -> Result<JitEngine<'b>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();
@@ -176,9 +176,9 @@ impl<'a> Interpreter<'a> {
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
     }
 }
-impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'a> {
+impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'b> {
     type Options = ();
-    fn new(module: &'a Module, _: ()) -> Result<Interpreter<'a>, CBox<str>> {
+    fn new(module: &'a Module, _: ()) -> Result<Interpreter<'b>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();

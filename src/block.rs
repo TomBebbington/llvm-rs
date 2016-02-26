@@ -1,6 +1,6 @@
 use ffi::core;
 use ffi::prelude::LLVMBasicBlockRef;
-use value::Value;
+use value::Function;
 use util;
 
 /// A container of instructions that execute sequentially.
@@ -8,7 +8,7 @@ pub struct BasicBlock;
 native_ref!(&BasicBlock = LLVMBasicBlockRef);
 impl BasicBlock {
     /// Return the enclosing method, or `None` if it is not attached to a method.
-    pub fn get_parent(&self) -> Option<&Value> {
+    pub fn get_parent(&self) -> Option<&Function> {
         unsafe { util::ptr_to_null(core::LLVMGetBasicBlockParent(self.into())) }
     }
     /// Move this basic block after the `other` basic block in its function.

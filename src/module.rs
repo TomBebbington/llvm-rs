@@ -16,7 +16,7 @@ use std::path::Path;
 use std::process::Command;
 use buffer::MemoryBuffer;
 use context::{Context, GetContext};
-use value::{Function, Value};
+use value::{Alias, Function, GlobalValue, GlobalVariable, Value};
 use ty::Type;
 use util;
 
@@ -43,21 +43,31 @@ impl Module {
         unsafe { CSemiBox::new(core::LLVMModuleCreateWithNameInContext(c_name.as_ptr(), context.into())) }
     }
     /// Add a global to the module with the given type and name.
-    pub fn add_global<'a>(&'a self, name: &str, ty: &'a Type) -> &'a Value {
+    pub fn add_global<'a>(&'a self, name: &str, ty: &'a Type) -> &'a GlobalVariable {
         util::with_cstr(name, |ptr| unsafe {
             core::LLVMAddGlobal(self.into(), ty.into(), ptr).into()
         })
     }
-    /// Add a constant global to the module with the given type, name and value.
-    pub fn add_global_constant<'a>(&'a self, name: &str, val: &'a Value) -> &'a Value {
+    /// Add a global variable to the module with the given type, name and initial value.
+    pub fn add_global_in_address_space<'a>(&'a self, name: &str, ty: &'a Type, address: AddressSpace) -> &'a GlobalVariable {
         util::with_cstr(name, |ptr| unsafe {
-            let global = core::LLVMAddGlobal(self.into(), val.get_type().into(), ptr);
-            core::LLVMSetInitializer (global.into(), val.into());
-            global.into()
+            core::LLVMAddGlobalInAddressSpace(self.into(), ty.into(), ptr, address as u32).into()
+        })
+    }
+    /// Add a global variable to the module with the given type, name and initial value.
+    pub fn add_global_variable<'a>(&'a self, name: &str, val: &'a Value) -> &'a GlobalVariable {
+        let global = self.add_global(name, val.get_type());
+        global.set_initializer(val);
+        global
+    }
+    /// Add a global to the module with the given type and name.
+    pub fn add_global_alias<'a>(&'a self, name: &str, val: &'a GlobalValue) -> &'a Alias {
+        util::with_cstr(name, |ptr| unsafe {
+            core::LLVMAddAlias(self.into(), val.get_type().into(), val.into(), ptr).into()
         })
     }
     /// Get the global with the name given, or `None` if no global with that name exists.
-    pub fn get_global<'a>(&'a self, name: &str) -> Option<&'a Value> {
+    pub fn get_global<'a>(&'a self, name: &str) -> Option<&'a GlobalValue> {
         util::with_cstr(name, |ptr| unsafe {
             let ptr = core::LLVMGetNamedGlobal(self.into(), ptr);
             util::ptr_to_null(ptr)
@@ -237,4 +247,14 @@ impl<'a> Iterator for Functions<'a> {
             Some(self.value.into())
         }
     }
+}
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[repr(C)]
+pub enum AddressSpace {
+    Generic = 0,
+    Global = 1,
+    Shared = 3,
+    Const = 4,
+    Local = 5,
 }

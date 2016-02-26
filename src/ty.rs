@@ -35,8 +35,8 @@ impl Type {
         unsafe { core::LLVMPointerType(elem.into(), 0 as c_uint) }.into()
     }
     /// Make a new structure type with the given types.
-    pub fn new_struct<'a>(elems: &[&'a Type], packed: bool) -> &'a Type {
-        unsafe { core::LLVMStructType(elems.as_ptr() as *mut LLVMTypeRef, elems.len() as c_uint, packed as c_int) }.into()
+    pub fn new_struct<'a>(context:&'a Context, elems: &[&'a Type], packed: bool) -> &'a Type {
+        unsafe { core::LLVMStructTypeInContext(context.into(), elems.as_ptr() as *mut LLVMTypeRef, elems.len() as c_uint, packed as c_int) }.into()
     }
     /// Returns true if the size of the type is known at compile-time.
     ///
