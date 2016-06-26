@@ -192,8 +192,7 @@ impl GlobalVariable {
     /// Returns true if this global is a constant.
     pub fn get_constant(&self) -> bool {
         unsafe {
-            // FIXME: There should be a constant for True/False
-            core::LLVMIsGlobalConstant(self.into()) == 1
+            core::LLVMIsGlobalConstant(self.into()) != 0
         }
     }
 }
