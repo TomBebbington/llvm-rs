@@ -20,6 +20,7 @@ install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq llvm-3.7 libllvm3.7 libllvm3.7-dbg cmake libedit-dev
   - sudo ln -s /usr/bin/llvm-config-3.7 /usr/local/bin/llvm-config
+  - llvm-config-3.7 --version
 script:
   - cargo build --verbose
   - cargo test --verbose
