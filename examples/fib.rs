@@ -30,6 +30,7 @@ fn main() {
     let fa = builder.build_tail_call(func, &[a]);
     let fb = builder.build_tail_call(func, &[b]);
     builder.build_ret(builder.build_add(fa, fb));
+    println!("{:?}", module);
     module.verify().unwrap();
     let ee = JitEngine::new(&module, JitOptions {opt_level: 0}).unwrap();
     ee.with_function(func, |fib: extern fn(u64) -> u64| {

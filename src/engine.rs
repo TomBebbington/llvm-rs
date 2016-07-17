@@ -3,7 +3,7 @@ use ffi::{core, target};
 use ffi::execution_engine as engine;
 use ffi::execution_engine::*;
 use ffi::target_machine::LLVMCodeModel;
-use cbox::CBox;
+use cbox::{CBox, CSemiBox, DisposeRef};
 use std::marker::PhantomData;
 use std::{mem, ptr};
 use std::ops::*;
@@ -17,19 +17,19 @@ use value::{Function, Value};
 /// An abstract interface for implementation execution of LLVM modules.
 ///
 /// This is designed to support both interpreter and just-in-time (JIT) compiler implementations.
-pub trait ExecutionEngine<'a, 'b:'a>:Sized+'b where LLVMExecutionEngineRef:From<&'b Self> {
+pub trait ExecutionEngine<'a>:'a + Sized + DisposeRef where LLVMExecutionEngineRef: From<&'a Self> {
     /// The options given to the engine upon creation.
     type Options : Copy;
-    /// Create a new execution engine with the given `Module` and options, or return a
+    /// Create a new execution engine with the given `Module` and optiions, or return a
     /// description of the error.
-    fn new(module: &'a Module, options: Self::Options) -> Result<Self, CBox<str>>;
+    fn new(module: &'a Module, options: Self::Options) -> Result<CSemiBox<'a, Self>, CBox<str>>;
 
     /// Add a module to the list of modules to interpret or compile.
-    fn add_module(&'b self, module: &'a Module) {
+    fn add_module(&'a self, module: &'a Module) {
         unsafe { engine::LLVMAddModule(self.into(), (&*module).into()) }
     }
     /// Remove a module from the list of modules to interpret or compile.
-    fn remove_module(&'b self, module: &'a Module) -> &'a Module {
+    fn remove_module(&'a self, module: &'a Module) -> &'a Module {
         unsafe {
             let mut out = mem::uninitialized();
             engine::LLVMRemoveModule(self.into(), module.into(), &mut out, ptr::null_mut());
@@ -37,16 +37,16 @@ pub trait ExecutionEngine<'a, 'b:'a>:Sized+'b where LLVMExecutionEngineRef:From<
         }
     }
     /// Execute all of the static constructors for this program.
-    fn run_static_constructors(&'b self) {
+    fn run_static_constructors(&'a self) {
         unsafe { engine::LLVMRunStaticConstructors(self.into()) }
     }
     /// Execute all of the static destructors for this program.
-    fn run_static_destructors(&'b self) {
+    fn run_static_destructors(&'a self) {
         unsafe { engine::LLVMRunStaticDestructors(self.into()) }
     }
     /// Attempt to find a function with the name given, or `None` if there wasn't
     /// a function with that name.
-    fn find_function(&'b self, name: &str) -> Option<&'a Function> {
+    fn find_function(&'a self, name: &str) -> Option<&'a Function> {
         util::with_cstr(name, |c_name| unsafe {
             let mut out = mem::zeroed();
             engine::LLVMFindFunction(self.into(), c_name, &mut out);
@@ -60,7 +60,7 @@ pub trait ExecutionEngine<'a, 'b:'a>:Sized+'b where LLVMExecutionEngineRef:From<
     ///
     /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
     /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method.
-    fn run_function(&'b self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
+    fn run_function(&'a self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
         let ptr = args.as_ptr() as *mut LLVMGenericValueRef;
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
     }
@@ -68,14 +68,14 @@ pub trait ExecutionEngine<'a, 'b:'a>:Sized+'b where LLVMExecutionEngineRef:From<
     ///
     /// This is marked as unsafe because the type cannot be guranteed to be the same as the
     /// type of the global value at this point.
-    unsafe fn get_global<T>(&'b self, global: &'a Value) -> &'b T {
+    unsafe fn get_global<T>(&'a self, global: &'a Value) -> &'a T {
         mem::transmute(engine::LLVMGetPointerToGlobal(self.into(), global.into()))
     }
     /// Returns a pointer to the global value with the name given.
     ///
     /// This is marked as unsafe because the type cannot be guranteed to be the same as the
     /// type of the global value at this point.
-    unsafe fn find_global<T>(&'b self, name: &str) -> Option<&'b T> {
+    unsafe fn find_global<T>(&'a self, name: &str) -> Option<&'a T> {
         util::with_cstr(name, |ptr|
             mem::transmute(engine::LLVMGetGlobalValueAddress(self.into(), ptr))
         )
@@ -91,17 +91,15 @@ pub struct JitOptions {
     pub opt_level: usize
 }
 /// The MCJIT backend, which compiles functions and values into machine code.
-pub struct JitEngine<'a> {
-    engine: LLVMExecutionEngineRef,
-    marker: PhantomData<&'a ()>
-}
-native_ref!{contra JitEngine, engine: LLVMExecutionEngineRef}
-impl<'a, 'b> JitEngine<'a> {
+pub struct JitEngine(PhantomData<[u8]>);
+native_ref!{&JitEngine = LLVMExecutionEngineRef}
+dispose!{JitEngine, LLVMOpaqueExecutionEngine, LLVMDisposeExecutionEngine}
+impl<'a> JitEngine {
     /// Run the closure `cb` with the machine code for the function `function`.
     ///
     /// This will check that the types match at runtime when in debug mode, but not release mode.
     /// You should make sure to use debug mode if you want it to error when the types don't match.
-    pub fn with_function<C, A, R>(&self, function: &'b Function, cb: C) where A:Compile<'b>, R:Compile<'b>, C:FnOnce(extern fn(A) -> R) {
+    pub fn with_function<C, A, R>(&self, function: &'a Function, cb: C) where A:Compile<'a>, R:Compile<'a>, C:FnOnce(extern "C" fn (A) -> R) {
         if cfg!(not(ndebug)) {
             let ctx = function.get_context();
             let sig = function.get_signature();
@@ -118,21 +116,21 @@ impl<'a, 'b> JitEngine<'a> {
         }
     }
     /// Run the closure `cb` with the machine code for the function `function`.
-    pub unsafe fn with_function_unchecked<C, A, R>(&self, function: &'b Function, cb: C) where A:Compile<'b>, R:Compile<'b>, C:FnOnce(extern fn(A) -> R) {
+    pub unsafe fn with_function_unchecked<C, A, R>(&self, function: &'a Function, cb: C) where A:Compile<'a>, R:Compile<'a>, C:FnOnce(extern fn(A) -> R) {
         cb(self.get_function::<A, R>(function));
     }
     /// Returns a pointer to the machine code for the function `function`.
     ///
     /// This is marked as unsafe because the types given as arguments and return could be different
     /// from their internal representation.
-    pub unsafe fn get_function<A, R>(&self, function: &'b Function) -> extern fn(A) -> R {
+    pub unsafe fn get_function<A, R>(&self, function: &'a Function) -> extern fn(A) -> R {
         let ptr:&u8 = self.get_global(function);
         mem::transmute(ptr)
     }
 }
-impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'b> {
+impl<'a> ExecutionEngine<'a> for JitEngine {
     type Options = JitOptions;
-    fn new(module: &'a Module, options: JitOptions) -> Result<JitEngine<'b>, CBox<str>> {
+    fn new(module: &'a Module, options: JitOptions) -> Result<CSemiBox<'a, JitEngine>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();
@@ -161,12 +159,10 @@ impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for JitEngine<'b> {
     }
 }
 /// The interpreter backend
-pub struct Interpreter<'a> {
-    engine: LLVMExecutionEngineRef,
-    marker: PhantomData<&'a ()>
-}
-native_ref!{contra Interpreter, engine: LLVMExecutionEngineRef}
-impl<'a> Interpreter<'a> {
+pub struct Interpreter(PhantomData<[u8]>);
+native_ref!{&Interpreter = LLVMExecutionEngineRef}
+dispose!{Interpreter, LLVMOpaqueExecutionEngine, LLVMDisposeExecutionEngine}
+impl<'a> Interpreter {
     /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one.
     ///
     /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
@@ -176,9 +172,9 @@ impl<'a> Interpreter<'a> {
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
     }
 }
-impl<'a, 'b:'a> ExecutionEngine<'a, 'b> for Interpreter<'b> {
+impl<'a> ExecutionEngine<'a> for Interpreter {
     type Options = ();
-    fn new(module: &'a Module, _: ()) -> Result<Interpreter<'b>, CBox<str>> {
+    fn new(module: &'a Module, _: ()) -> Result<CSemiBox<'a, Interpreter>, CBox<str>> {
         unsafe {
             let mut ee = mem::uninitialized();
             let mut out = mem::zeroed();

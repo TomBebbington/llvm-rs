@@ -1,3 +1,8 @@
+#[macro_escape]
+macro_rules! build {
+    ($ctx:expr) => ()
+}
+
 macro_rules! native_ref(
     (&$name:ident = $alias:ty) => (
         impl Eq for $name {}
