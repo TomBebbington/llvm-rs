@@ -63,7 +63,7 @@ pub enum Predicate {
     LessThan,
     LessThanOrEqual
 }
-/// A function argument.
+/// An argument that is passed to a function.
 pub struct Arg;
 native_ref!(&Arg = LLVMValueRef);
 impl Deref for Arg {
@@ -111,7 +111,7 @@ impl Arg {
     }
 }
 
-/// A global value (eg: Function, Alias, Global variable)
+/// A value with global scope (eg: Function, Alias, Global variable)
 pub struct GlobalValue;
 native_ref!(&GlobalValue = LLVMValueRef);
 impl Deref for GlobalValue {
@@ -197,7 +197,7 @@ impl GlobalVariable {
     }
 }
 
-/// An alias to another global
+/// An alias to another global value.
 pub struct Alias;
 native_ref!(&Alias = LLVMValueRef);
 impl Deref for Alias {
@@ -216,7 +216,10 @@ impl CastFrom for Alias {
     }
 }
 
-/// A function that can be called and contains blocks.
+/// A function is a kind of value that can be called and contains blocks of code.
+///
+/// To get the value of each argument to a function, you can use the index operator.
+/// For example, `&func[0]` is the value that represents the first argument to the function.
 pub struct Function;
 native_ref!(&Function = LLVMValueRef);
 impl Deref for Function {
@@ -319,7 +322,7 @@ impl GetContext for Function {
         self.get_type().get_context()
     }
 }
-/// A way of indicating to LLVM how you want arguments / functions to be handled.
+/// These indicate how you want arguments / functions to be handled.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 #[repr(C)]
 pub enum Attribute {

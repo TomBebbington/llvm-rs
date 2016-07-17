@@ -1,6 +1,9 @@
 language: rust
 rust: beta
 sudo: required
+os: 
+  - linux
+  - osx
 after_success: |
   [ $TRAVIS_BRANCH = master ] &&
   [ $TRAVIS_PULL_REQUEST = false ] &&
@@ -16,7 +19,7 @@ before_install:
 install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq llvm-3.7 libllvm3.7 libllvm3.7-dbg cmake libedit-dev
-  - sudo ln -s /usr/bin/llvm-config-* /usr/bin/llvm-config
+  - sudo ln -s /usr/bin/llvm-config-3.7 /usr/local/bin/llvm-config
 script:
   - cargo build --verbose
   - cargo test --verbose
