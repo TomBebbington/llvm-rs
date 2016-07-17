@@ -6,11 +6,12 @@ use context::{Context, GetContext};
 use target::TargetData;
 use util::{self, CastFrom};
 use std::{fmt, mem};
+use std::marker::PhantomData;
 use std::iter::Iterator;
 use std::ops::Deref;
 
 /// Defines how a value should be laid out in memory.
-pub struct Type;
+pub struct Type(PhantomData<[u8]>);
 native_ref!(&Type = LLVMTypeRef);
 impl Type {
     #[inline(always)]
@@ -105,7 +106,7 @@ impl StructType {
         })
     }
     /// Returns the elements that make up this struct.
-    pub fn get_elements(&self) -> Vec<Type> {
+    pub fn get_elements(&self) -> Vec<&Type> {
         unsafe {
             let size = core::LLVMCountStructElementTypes(self.into());
             let mut els:Vec<_> = (0..size).map(|_| mem::uninitialized()).collect();

@@ -105,11 +105,11 @@ impl<'a> JitEngine {
             let sig = function.get_signature();
             assert_eq!(Type::get::<R>(ctx), sig.get_return());
             let arg = Type::get::<A>(ctx);
-            if let Some(args) = StructType::cast(arg) {
-                assert_eq!(sig.get_params(), args.get_elements());
+            assert_eq!(sig.get_params(), if let Some(args) = StructType::cast(arg) {
+                args.get_elements()
             } else {
-                assert_eq!(arg, sig.get_return());
-            }
+                vec![arg]
+            });
         }
         unsafe {
             cb(self.get_function::<A, R>(function));
