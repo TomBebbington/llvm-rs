@@ -111,6 +111,12 @@ impl Builder {
     pub fn build_bit_cast(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
     }
+    pub fn build_int_to_ptr(&self, value: &Value, dest: &Type) -> &Value {
+        unsafe { core::LLVMBuildIntToPtr(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
+    }
+    pub fn build_zext(&self, value: &Value, dest: &Type) -> &Value {
+        unsafe { core::LLVMBuildZExtOrBitCast(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
+    }
     /// Build an instruction that truncates the high-order bits of value to fit into a certain type.
     pub fn build_trunc(&self, value: &Value, dest: &Type) -> &Value {
         unsafe { core::LLVMBuildTrunc(self.into(), value.into(), dest.into(), NULL_NAME.as_ptr()).into() }
