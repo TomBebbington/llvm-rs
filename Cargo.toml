@@ -10,6 +10,7 @@ name = "llvm-alt"
 readme = "README.md"
 repository = "https://github.com/TomBebbington/llvm-rs"
 version = "0.4.0"
+build = "build.rs"
 
 [lib]
 
@@ -21,4 +22,7 @@ lto = true
 [dependencies]
 cbox = "0.*"
 libc = "0.*"
-llvm-sys = "0.*"
+
+[dependencies.llvm-sys]
+version = "*"
+git = "https://github.com/TomBebbington/llvm-sys.rs"
