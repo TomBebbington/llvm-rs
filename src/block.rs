@@ -1,5 +1,6 @@
 use ffi::core;
 use ffi::prelude::LLVMBasicBlockRef;
+use std::iter::{Iterator, DoubleEndedIterator, IntoIterator};
 use std::marker::PhantomData;
 use std::mem;
 use value::{Function, Value};
@@ -58,5 +59,49 @@ impl BasicBlock {
     /// this can't be guranteed using Rust semantics.
     pub unsafe fn delete(&self) {
         core::LLVMDeleteBasicBlock(self.into())
+    }
+}
+
+/// Iterates through all the blocks contained in a function.
+pub struct BlockIter<'a> {
+    pub min: &'a BasicBlock,
+    pub max: &'a BasicBlock
+}
+
+impl<'a> IntoIterator for &'a Function {
+    type IntoIter = BlockIter<'a>;
+    type Item = &'a BasicBlock;
+    fn into_iter(self) -> BlockIter<'a> {
+        BlockIter {
+            min: unsafe { core::LLVMGetFirstBasicBlock(self.into()).into() },
+            max: unsafe { core::LLVMGetLastBasicBlock(self.into()).into() }
+        }
+    }
+}
+impl<'a> Iterator for BlockIter<'a> {
+    type Item = &'a BasicBlock;
+    fn next(&mut self) -> Option<&'a BasicBlock> {
+        if self.min == self.max {
+            None
+        } else {
+            unsafe {
+                let _block = self.min;
+                self.min = core::LLVMGetNextBasicBlock(self.min.into()).into();
+                Some(_block)
+            }
+        }
+    }
+}
+impl<'a> DoubleEndedIterator for BlockIter<'a> {
+    fn next_back(&mut self) -> Option<&'a BasicBlock> {
+        if self.min == self.max {
+            None
+        } else {
+            unsafe {
+                let _block = self.max;
+                self.max = core::LLVMGetPreviousBasicBlock(self.max.into()).into();
+                Some(_block)
+            }
+        }
     }
 }
