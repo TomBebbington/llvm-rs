@@ -35,14 +35,6 @@ impl Type {
     pub fn get<'a, T>(context:&'a Context) -> &'a Type where T:Compile<'a> {
         T::get_type(context)
     }
-    /// Make a new array with the length given.
-    pub fn new_array<'a>(element: &'a Type, length: usize) -> &'a Type {
-        unsafe { core::LLVMArrayType(element.into(), length as c_uint) }.into()
-    }
-    /// Make a new vector with the length given.
-    pub fn new_vector<'a>(element: &'a Type, length: usize) -> &'a Type {
-        unsafe { core::LLVMVectorType(element.into(), length as c_uint) }.into()
-    }
     /// Returns true if the size of the type is known at compile-time.
     ///
     /// This is equivalent to the type implementing `Sized` in Rust
@@ -195,5 +187,46 @@ impl IntegerType {
     /// Returns how long an integer of this type is, in bits.
     pub fn get_width(&self) -> usize {
         unsafe { core::LLVMGetIntTypeWidth (self.into()) as usize }
+    }
+}
+
+/// A vector type.
+pub struct VectorType;
+native_ref!{&VectorType = LLVMTypeRef}
+get_context!{VectorType, LLVMGetTypeContext}
+to_str!{VectorType, LLVMPrintTypeToString}
+sub!{VectorType, LLVMVectorTypeKind}
+impl VectorType {
+    /// Make a new vector type with the length given.
+    pub fn new(element: &Type, length: usize) -> &VectorType {
+        unsafe { core::LLVMVectorType(element.into(), length as c_uint) }.into()
+    }
+    /// Returns the element type of this vector type.
+    pub fn get_element(&self) -> &Type {
+        unsafe { mem::transmute(core::LLVMGetElementType(self.into())) }
+    }
+    /// Returns the number of elements in this vector type.
+    pub fn get_size(&self) -> usize {
+        unsafe { core::LLVMGetVectorSize(self.into()) as usize }
+    }
+}
+/// An array type.
+pub struct ArrayType;
+native_ref!{&ArrayType = LLVMTypeRef}
+get_context!{ArrayType, LLVMGetTypeContext}
+to_str!{ArrayType, LLVMPrintTypeToString}
+sub!{ArrayType, LLVMArrayTypeKind}
+impl ArrayType {
+    /// Make a new array type with the length given.
+    pub fn new(element: &Type, length: usize) -> &ArrayType {
+        unsafe { core::LLVMArrayType(element.into(), length as c_uint) }.into()
+    }
+    /// Returns the element type of this array type.
+    pub fn get_element(&self) -> &Type {
+        unsafe { mem::transmute(core::LLVMGetElementType(self.into())) }
+    }
+    /// Returns the number of elements in this vector type.
+    pub fn get_length(&self) -> usize {
+        unsafe { core::LLVMGetArrayLength(self.into()) as usize }
     }
 }

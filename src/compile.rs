@@ -4,7 +4,7 @@ use ffi::prelude::LLVMValueRef;
 use context::Context;
 use libc::c_char;
 use value::Value;
-use ty::{StructType, FunctionType, PointerType, Type};
+use ty::*;
 use std::mem;
 use std::ffi::CStr;
 
@@ -157,7 +157,7 @@ macro_rules! compile_array(
                 unsafe { core::LLVMConstVector(values.as_ptr() as *mut LLVMValueRef, $num) }.into()
             }
             fn get_type(context: &'a Context) -> &'a Type {
-                Type::new_vector(Type::get::<T>(context), $num)
+                VectorType::new(Type::get::<T>(context), $num)
             }
         }
     )
