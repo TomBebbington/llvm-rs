@@ -1,7 +1,7 @@
 use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
-use cbox::{CSemiBox, DisposeRef};
+use cbox::CSemiBox;
 use std::marker::PhantomData;
 use std::mem;
 use block::BasicBlock;
@@ -14,6 +14,7 @@ static NULL_NAME:[c_char; 1] = [0];
 /// This provides a uniform API for creating instructions and inserting them into a basic block.
 pub struct Builder(PhantomData<[u8]>);
 native_ref!(&Builder = LLVMBuilderRef);
+dispose!{Builder, LLVMBuilder, core::LLVMDisposeBuilder}
 macro_rules! bin_op(
     ($name:ident, $func:ident) => (
         pub fn $name(&self, left: &Value, right: &Value) -> &Value {
@@ -186,13 +187,5 @@ impl Builder {
         } else {
             panic!("expected numzextbers, got {:?}", at)
         }
-    }
-}
-
-impl DisposeRef for Builder {
-    type RefTo = LLVMBuilder;
-    #[inline(always)]
-    unsafe fn dispose(ptr: LLVMBuilderRef) {
-        core::LLVMDisposeBuilder(ptr)
     }
 }
