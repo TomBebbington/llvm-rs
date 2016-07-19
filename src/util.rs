@@ -1,15 +1,24 @@
 use libc::c_char;
 use std::ffi::{CStr, CString};
+use std::mem;
 use std::str;
-
-/// Cast from one type into another
-pub trait CastFrom {
-    /// The type that can be casted from.
-    type From;
-    /// Cast it
-    fn cast<'a>(ty: &'a Self::From) -> Option<&'a Self>;
+/// Indicates that this structure is a substructure of another.
+pub unsafe trait Sub<T>: Sized {
+    /// Check if the given super value is an instance of this type.
+    fn is(c: &T) -> bool;
+    /// Attempt to cast the given super value into an instance of this type.
+    fn from_super(c: &T) -> Option<&Self> {
+        if Self::is(c) {
+            Some(unsafe { mem::transmute(c) })
+        } else {
+            None
+        }
+    }
+    /// Cast this value to a super value.
+    fn to_super(&self) -> &T {
+        unsafe { mem::transmute(self) }
+    }
 }
-
 #[inline(always)]
 pub fn with_cstr<C, R>(text: &str, cb: C) -> R where C:FnOnce(*const c_char) -> R {
     let c_text = CString::new(text).unwrap();

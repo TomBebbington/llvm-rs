@@ -8,7 +8,31 @@ use std::ops::{Deref, Index};
 use block::BasicBlock;
 use context::{Context, GetContext};
 use ty::{FunctionType, Type};
-use util::{self, CastFrom};
+use util::{self, Sub};
+
+macro_rules! sub {
+    ($this:ty, $name:ident) => (
+        sub!{$this, $name, ::Value}
+    );
+    ($this:ty, $name:ident, $sup:ty) => (
+unsafe impl Sub<$sup> for $this {
+    fn is(value: &$sup) -> bool {
+        unsafe {
+            !core::$name(value.into()).is_null()
+        }
+    }
+    fn from_super(value: &$sup) -> Option<&$this> {
+        unsafe { mem::transmute(core::$name(value.into())) }
+    }
+}
+impl Deref for $this {
+    type Target = $sup;
+    fn deref(&self) -> &$sup {
+        self.to_super()
+    }
+}
+    )
+}
 
 /// A typed value that can be used as an operand in instructions.
 pub struct Value;
@@ -66,12 +90,7 @@ pub enum Predicate {
 /// An argument that is passed to a function.
 pub struct Arg;
 native_ref!(&Arg = LLVMValueRef);
-impl Deref for Arg {
-    type Target = Value;
-    fn deref(&self) -> &Value {
-        unsafe { mem::transmute(self) }
-    }
-}
+sub!{Arg, LLVMIsAArgument}
 impl Arg {
     /// Add the attribute given to this argument.
     pub fn add_attribute(&self, attr: Attribute) {
@@ -114,21 +133,7 @@ impl Arg {
 /// A value with global scope (eg: Function, Alias, Global variable)
 pub struct GlobalValue;
 native_ref!(&GlobalValue = LLVMValueRef);
-impl Deref for GlobalValue {
-    type Target = Value;
-    fn deref(&self) -> &Value {
-        unsafe { mem::transmute(self) }
-    }
-}
-impl CastFrom for GlobalValue {
-    type From = Value;
-    fn cast<'a>(val: &'a Value) -> Option<&'a GlobalValue> {
-        unsafe {
-            let global = mem::transmute(core::LLVMIsAGlobalValue(val.into()));
-            util::ptr_to_null(global)
-        }
-    }
-}
+sub!{GlobalValue, LLVMIsAGlobalValue}
 impl GlobalValue {
     /// Set the linkage type for this global
     pub fn set_linkage(&self, linkage: Linkage) {
@@ -154,21 +159,7 @@ impl GlobalValue {
 /// A global variable
 pub struct GlobalVariable;
 native_ref!(&GlobalVariable = LLVMValueRef);
-impl Deref for GlobalVariable {
-    type Target = GlobalValue;
-    fn deref(&self) -> &GlobalValue {
-        unsafe { mem::transmute(self) }
-    }
-}
-impl CastFrom for GlobalVariable {
-    type From = Value;
-    fn cast<'a>(val: &'a Value) -> Option<&'a GlobalVariable> {
-        unsafe {
-            let global = mem::transmute(core::LLVMIsAGlobalVariable(val.into()));
-            util::ptr_to_null(global)
-        }
-    }
-}
+sub!{GlobalVariable, LLVMIsAGlobalVariable, GlobalValue}
 impl GlobalVariable {
     /// Set the initial value of the global
     pub fn set_initializer(&self, val: &Value) {
@@ -200,34 +191,14 @@ impl GlobalVariable {
 /// An alias to another global value.
 pub struct Alias;
 native_ref!(&Alias = LLVMValueRef);
-impl Deref for Alias {
-    type Target = GlobalValue;
-    fn deref(&self) -> &GlobalValue {
-        unsafe { mem::transmute(self) }
-    }
-}
-impl CastFrom for Alias {
-    type From = Value;
-    fn cast<'a>(val: &'a Value) -> Option<&'a Alias> {
-        unsafe {
-            let alias = mem::transmute(core::LLVMIsAGlobalAlias(val.into()));
-            util::ptr_to_null(alias)
-        }
-    }
-}
-
+sub!{Alias, LLVMIsAGlobalAlias, GlobalValue}
 /// A function is a kind of value that can be called and contains blocks of code.
 ///
 /// To get the value of each argument to a function, you can use the index operator.
 /// For example, `&func[0]` is the value that represents the first argument to the function.
 pub struct Function;
 native_ref!(&Function = LLVMValueRef);
-impl Deref for Function {
-    type Target = GlobalValue;
-    fn deref(&self) -> &GlobalValue {
-        unsafe { mem::transmute(self) }
-    }
-}
+sub!{Function, LLVMIsAFunction, GlobalValue}
 impl Index<usize> for Function {
     type Output = Arg;
     fn index(&self, index: usize) -> &Arg {
@@ -240,19 +211,13 @@ impl Index<usize> for Function {
         }
     }
 }
-impl CastFrom for Function {
-    type From = Value;
-    fn cast<'a>(val: &'a Value) -> Option<&'a Function> {
-        let ty = val.get_type();
-        let mut is_func = ty.is_function();
-        if let Some(elem) = ty.get_element() {
-            is_func = is_func || elem.is_function()
+unsafe impl Sub<Value> for Function {
+    fn is(value: &Value) -> bool {
+        let mut ty = value.get_type();
+        while let Some(elem) = ty.get_element() {
+            ty = elem;
         }
-        if is_func {
-            Some(unsafe { mem::transmute(val) })
-        } else {
-            None
-        }
+        ty.is_function()
     }
 }
 impl Function {

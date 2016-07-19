@@ -4,7 +4,7 @@ use libc::{c_int, c_uint};
 use compile::Compile;
 use context::{Context, GetContext};
 use target::TargetData;
-use util::{self, CastFrom};
+use util::{self, Sub};
 use std::{fmt, mem};
 use std::marker::PhantomData;
 use std::iter::Iterator;
@@ -115,16 +115,11 @@ impl StructType {
         }
     }
 }
-impl CastFrom for StructType {
-    type From = Type;
-    fn cast(ty: &Type) -> Option<&StructType> {
+unsafe impl Sub<Type> for StructType {
+    fn is(ty: &Type) -> bool {
         unsafe {
             let kind = core::LLVMGetTypeKind(ty.into());
-            if kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint {
-                mem::transmute(ty)
-            } else {
-                None
-            }
+            kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint
         }
     }
 }
@@ -136,20 +131,14 @@ to_str!(StructType, LLVMPrintTypeToString);
 pub struct FunctionType;
 native_ref!(&FunctionType = LLVMTypeRef);
 deref!(FunctionType, Type);
-impl CastFrom for FunctionType {
-    type From = Type;
-    fn cast(mut ty: &Type) -> Option<&FunctionType> {
+unsafe impl Sub<Type> for FunctionType {
+    fn is(mut ty: &Type) -> bool {
         unsafe {
-            use libc::c_uint;
             while let Some(elem) = ty.get_element() {
                 ty = elem;
             }
             let kind = core::LLVMGetTypeKind(ty.into());
-            if kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint {
-                mem::transmute(ty)
-            } else {
-                None
-            }
+            kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
         }
     }
 }

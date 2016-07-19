@@ -6,12 +6,11 @@ use ffi::target_machine::LLVMCodeModel;
 use cbox::{CBox, CSemiBox, DisposeRef};
 use std::marker::PhantomData;
 use std::{mem, ptr};
-use std::ops::*;
 use compile::Compile;
 use context::{Context, GetContext};
 use module::Module;
 use ty::{StructType, Type};
-use util::{self, CastFrom};
+use util::{self, Sub};
 use value::{Function, Value};
 
 /// An abstract interface for implementation execution of LLVM modules.
@@ -108,7 +107,7 @@ impl<'a> JitEngine {
             let sig = function.get_signature();
             assert_eq!(Type::get::<R>(ctx), sig.get_return());
             let arg = Type::get::<A>(ctx);
-            assert_eq!(sig.get_params(), if let Some(args) = StructType::cast(arg) {
+            assert_eq!(sig.get_params(), if let Some(args) = StructType::from_super(arg) {
                 args.get_elements()
             } else {
                 vec![arg]

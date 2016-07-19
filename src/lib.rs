@@ -34,4 +34,4 @@ pub use object::{ObjectFile, Symbol, Symbols};
 pub use target::{TargetData, Target};
 pub use ty::{FunctionType, StructType, Type};
 pub use value::{Alias, Arg, Attribute, Value, Function, GlobalValue, GlobalVariable, Linkage, Predicate};
-pub use util::CastFrom;
+pub use util::Sub;
