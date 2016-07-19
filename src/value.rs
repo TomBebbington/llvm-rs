@@ -38,6 +38,7 @@ impl Deref for $this {
 /// A typed value that can be used as an operand in instructions.
 pub struct Value(PhantomData<[u8]>);
 native_ref!(&Value = LLVMValueRef);
+to_str!{Value, LLVMPrintValueToString}
 impl Value {
     /// Create a new constant struct from the values given.
     pub fn new_struct<'a>(context: &'a Context, vals: &[&'a Value], packed: bool) -> &'a Value {
@@ -92,6 +93,7 @@ pub enum Predicate {
 pub struct Arg(PhantomData<[u8]>);
 native_ref!(&Arg = LLVMValueRef);
 sub!{Arg, LLVMIsAArgument}
+to_str!{Arg, LLVMPrintValueToString}
 impl Arg {
     /// Add the attribute given to this argument.
     pub fn add_attribute(&self, attr: Attribute) {
@@ -135,6 +137,7 @@ impl Arg {
 pub struct GlobalValue(PhantomData<[u8]>);
 native_ref!(&GlobalValue = LLVMValueRef);
 sub!{GlobalValue, LLVMIsAGlobalValue}
+to_str!{GlobalValue, LLVMPrintValueToString}
 impl GlobalValue {
     /// Set the linkage type for this global
     pub fn set_linkage(&self, linkage: Linkage) {
@@ -161,6 +164,7 @@ impl GlobalValue {
 pub struct GlobalVariable(PhantomData<[u8]>);
 native_ref!(&GlobalVariable = LLVMValueRef);
 sub!{GlobalVariable, LLVMIsAGlobalVariable, GlobalValue}
+to_str!{GlobalVariable, LLVMPrintValueToString}
 impl GlobalVariable {
     /// Set the initial value of the global
     pub fn set_initializer(&self, val: &Value) {
@@ -193,6 +197,7 @@ impl GlobalVariable {
 pub struct Alias(PhantomData<[u8]>);
 native_ref!(&Alias = LLVMValueRef);
 sub!{Alias, LLVMIsAGlobalAlias, GlobalValue}
+to_str!{Alias, LLVMPrintValueToString}
 /// A function is a kind of value that can be called and contains blocks of code.
 ///
 /// To get the value of each argument to a function, you can use the index operator.
@@ -200,6 +205,7 @@ sub!{Alias, LLVMIsAGlobalAlias, GlobalValue}
 pub struct Function(PhantomData<[u8]>);
 native_ref!(&Function = LLVMValueRef);
 sub!{Function, LLVMIsAFunction, GlobalValue}
+to_str!{Function, LLVMPrintValueToString}
 impl Index<usize> for Function {
     type Output = Arg;
     fn index(&self, index: usize) -> &Arg {
@@ -395,4 +401,3 @@ impl GetContext for Value {
         self.get_type().get_context()
     }
 }
-to_str!(Value, LLVMPrintValueToString);

@@ -3,11 +3,13 @@ use ffi::prelude::LLVMBasicBlockRef;
 use std::iter::{Iterator, DoubleEndedIterator, IntoIterator};
 use std::marker::PhantomData;
 use std::mem;
+use std::ops::Deref;
 use value::{Function, Value};
 use util::{self, Sub};
 
 /// A container of instructions that execute sequentially.
 pub struct BasicBlock(PhantomData<[u8]>);
+deref!{BasicBlock, Value}
 native_ref!(&BasicBlock = LLVMBasicBlockRef);
 
 unsafe impl Sub<Value> for BasicBlock {
