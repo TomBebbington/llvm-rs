@@ -59,7 +59,7 @@ pub trait ExecutionEngine<'a>:'a + Sized + DisposeRef where LLVMExecutionEngineR
     ///
     /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
     /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method.
-    fn run_function(&'a self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
+    fn run_function(&'a self, function: &'a Function, args: &[&'a GenericValue]) -> &'a GenericValue {
         let ptr = args.as_ptr() as *mut LLVMGenericValueRef;
         unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
     }
@@ -164,16 +164,6 @@ impl<'a> ExecutionEngine<'a> for JitEngine {
 pub struct Interpreter(PhantomData<[u8]>);
 native_ref!{&Interpreter = LLVMExecutionEngineRef}
 dispose!{Interpreter, LLVMOpaqueExecutionEngine, LLVMDisposeExecutionEngine}
-impl<'a> Interpreter {
-    /// Run `function` with the arguments given as ``GenericValue`s, then return the result as one.
-    ///
-    /// To convert the arguments to `GenericValue`s, you should use the `GenericValueCast::to_generic` method.
-    /// To convert the return value from a `GenericValue`, you should use the `GenericValueCast::from_generic` method.
-    pub fn run_function(&self, function: &'a Function, args: &[GenericValue<'a>]) -> GenericValue<'a> {
-        let ptr = args.as_ptr() as *mut LLVMGenericValueRef;
-        unsafe { engine::LLVMRunFunction(self.into(), function.into(), args.len() as c_uint, ptr).into() }
-    }
-}
 impl<'a> ExecutionEngine<'a> for Interpreter {
     type Options = ();
     fn new(module: &'a Module, _: ()) -> Result<CSemiBox<'a, Interpreter>, CBox<str>> {
@@ -191,52 +181,43 @@ impl<'a> ExecutionEngine<'a> for Interpreter {
     }
 }
 /// A wrapped value that can be passed to an interpreted function or returned from one
-pub struct GenericValue<'a> {
-    value: LLVMGenericValueRef,
-    marker: PhantomData<&'a ()>
-}
-native_ref!(contra GenericValue, value: LLVMGenericValueRef);
-impl<'a> Drop for GenericValue<'a> {
-    fn drop(&mut self) {
-        unsafe {
-            engine::LLVMDisposeGenericValue(self.value)
-        }
-    }
-}
+pub struct GenericValue(PhantomData<[u8]>);
+native_ref!{&GenericValue = LLVMGenericValueRef}
+dispose!{GenericValue, LLVMOpaqueGenericValue, LLVMDisposeGenericValue}
 
 /// A value that can be cast into a `GenericValue` and that a `GenericValue` can be cast into.
 ///
 /// Both these methods require contexts because some `Type` constructors are needed for the
 /// conversion and these constructors need a context.
-pub trait GenericValueCast<'a> {
+pub trait GenericValueCast {
     /// Create a `GenericValue` from this value.
-    fn to_generic(self, context: &'a Context) -> GenericValue<'a>;
+    fn to_generic(self, context: &Context) -> CSemiBox<GenericValue>;
     /// Convert the `GenericValue` into a value of this type again.
-    fn from_generic(value: GenericValue<'a>, context: &'a Context) -> Self;
+    fn from_generic(value: &GenericValue, context: &Context) -> Self;
 }
 
-impl<'a> GenericValueCast<'a> for f64 {
-    fn to_generic(self, ctx: &'a Context) -> GenericValue<'a> {
+impl GenericValueCast for f64 {
+    fn to_generic(self, ctx: &Context) -> CSemiBox<GenericValue> {
         unsafe {
             let ty = core::LLVMDoubleTypeInContext(ctx.into());
-            engine::LLVMCreateGenericValueOfFloat(ty, self).into()
+            CSemiBox::new(engine::LLVMCreateGenericValueOfFloat(ty, self))
         }
     }
-    fn from_generic(value: GenericValue<'a>, ctx: &'a Context) -> f64 {
+    fn from_generic(value: &GenericValue, ctx: &Context) -> f64 {
         unsafe {
             let ty = core::LLVMDoubleTypeInContext(ctx.into());
             engine::LLVMGenericValueToFloat(ty, value.into())
         }
     }
 }
-impl<'a> GenericValueCast<'a> for f32 {
-    fn to_generic(self, ctx: &'a Context) -> GenericValue<'a> {
+impl GenericValueCast for f32 {
+    fn to_generic(self, ctx: &Context) -> CSemiBox<GenericValue> {
         unsafe {
             let ty = core::LLVMFloatTypeInContext(ctx.into());
-            engine::LLVMCreateGenericValueOfFloat(ty, self as f64).into()
+            CSemiBox::new(engine::LLVMCreateGenericValueOfFloat(ty, self as f64))
         }
     }
-    fn from_generic(value: GenericValue<'a>, ctx: &'a Context) -> f32 {
+    fn from_generic(value: &GenericValue, ctx: &Context) -> f32 {
         unsafe {
             let ty = core::LLVMFloatTypeInContext(ctx.into());
             engine::LLVMGenericValueToFloat(ty, value.into()) as f32
@@ -245,14 +226,14 @@ impl<'a> GenericValueCast<'a> for f32 {
 }
 macro_rules! generic_int(
     ($ty:ty, $signed:expr) => (
-        impl<'a> GenericValueCast<'a> for $ty {
-            fn to_generic(self, ctx: &'a Context) -> GenericValue<'a> {
+        impl GenericValueCast for $ty {
+            fn to_generic(self, ctx: &Context) -> CSemiBox<GenericValue> {
                 unsafe {
-                    let ty = <Self as Compile<'a>>::get_type(ctx);
-                    engine::LLVMCreateGenericValueOfInt(ty.into(), self as c_ulonglong, $signed as c_int).into()
+                    let ty = <Self as Compile>::get_type(ctx);
+                    CSemiBox::new(engine::LLVMCreateGenericValueOfInt(ty.into(), self as c_ulonglong, $signed as c_int))
                 }
             }
-            fn from_generic(value: GenericValue<'a>, _: &'a Context) -> $ty {
+            fn from_generic(value: &GenericValue, _: &Context) -> $ty {
                 unsafe {
                     engine::LLVMGenericValueToInt(value.into(), $signed as c_int) as $ty
                 }
@@ -265,14 +246,14 @@ macro_rules! generic_int(
     );
 );
 
-impl<'a> GenericValueCast<'a> for bool {
-    fn to_generic(self, ctx: &'a Context) -> GenericValue<'a> {
+impl GenericValueCast for bool {
+    fn to_generic(self, ctx: &Context) -> CSemiBox<GenericValue> {
         unsafe {
-            let ty = <Self as Compile<'a>>::get_type(ctx);
-            engine::LLVMCreateGenericValueOfInt(ty.into(), self as c_ulonglong, 0).into()
+            let ty = <Self as Compile>::get_type(ctx);
+            CSemiBox::new(engine::LLVMCreateGenericValueOfInt(ty.into(), self as c_ulonglong, 0))
         }
     }
-    fn from_generic(value: GenericValue<'a>, _: &'a Context) -> bool {
+    fn from_generic(value: &GenericValue, _: &Context) -> bool {
         unsafe {
             engine::LLVMGenericValueToInt(value.into(), 0) != 0
         }
@@ -282,3 +263,4 @@ generic_int!{some i8, u8}
 generic_int!{some i16, u16}
 generic_int!{some i32, u32}
 generic_int!{some i64, u64}
+generic_int!{some isize, usize}
