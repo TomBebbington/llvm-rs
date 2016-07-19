@@ -1,12 +1,28 @@
 use ffi::core;
 use ffi::prelude::LLVMBasicBlockRef;
 use std::marker::PhantomData;
-use value::Function;
-use util;
+use std::mem;
+use value::{Function, Value};
+use util::{self, Sub};
 
 /// A container of instructions that execute sequentially.
 pub struct BasicBlock(PhantomData<[u8]>);
 native_ref!(&BasicBlock = LLVMBasicBlockRef);
+
+unsafe impl Sub<Value> for BasicBlock {
+    fn is(value: &Value) -> bool {
+        unsafe { core::LLVMValueIsBasicBlock(value.into()) != 0 }
+    }
+    fn from_super(value: &Value) -> Option<&BasicBlock> {
+        unsafe {
+            mem::transmute(core::LLVMValueAsBasicBlock(value.into()))
+        }
+    }
+    fn to_super(&self) -> &Value {
+        unsafe { core::LLVMBasicBlockAsValue(self.into()).into() }
+    }
+}
+
 impl BasicBlock {
     /// Return the enclosing method, or `None` if it is not attached to a method.
     pub fn get_parent(&self) -> Option<&Function> {
