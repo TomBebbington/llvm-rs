@@ -213,11 +213,7 @@ impl Index<usize> for Function {
 }
 unsafe impl Sub<Value> for Function {
     fn is(value: &Value) -> bool {
-        let mut ty = value.get_type();
-        while let Some(elem) = ty.get_element() {
-            ty = elem;
-        }
-        ty.is_function()
+        FunctionType::is(value.get_type())
     }
 }
 impl Function {

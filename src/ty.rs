@@ -33,10 +33,6 @@ impl Type {
     pub fn get<'a, T>(context:&'a Context) -> &'a Type where T:Compile<'a> {
         T::get_type(context)
     }
-    /// Make a new function signature with the return type and arguments given.
-    pub fn new_function<'a>(ret: &'a Type, args: &[&'a Type]) -> &'a FunctionType {
-        unsafe { core::LLVMFunctionType(ret.into(), args.as_ptr() as *mut LLVMTypeRef, args.len() as c_uint, 0) }.into()
-    }
     /// Make a new array with the length given.
     pub fn new_array<'a>(element: &'a Type, length: usize) -> &'a Type {
         unsafe { core::LLVMArrayType(element.into(), length as c_uint) }.into()
@@ -44,10 +40,6 @@ impl Type {
     /// Make a new vector with the length given.
     pub fn new_vector<'a>(element: &'a Type, length: usize) -> &'a Type {
         unsafe { core::LLVMVectorType(element.into(), length as c_uint) }.into()
-    }
-    /// Make a new pointer with the given element type.
-    pub fn new_pointer<'a>(elem: &'a Type) -> &'a Type {
-        unsafe { core::LLVMPointerType(elem.into(), 0 as c_uint) }.into()
     }
     /// Returns true if the size of the type is known at compile-time.
     ///
@@ -91,10 +83,6 @@ impl Type {
     pub fn get_size(&self, target: &TargetData) -> usize {
         unsafe { target::LLVMABISizeOfType(target.into(), self.into()) as usize }
     }
-    /// Returns the element of this pointer type.
-    pub fn get_element(&self) -> Option<&Type> {
-        unsafe { mem::transmute(core::LLVMGetElementType(self.into())) }
-    }
 }
 get_context!(Type, LLVMGetTypeContext);
 to_str!(Type, LLVMPrintTypeToString);
@@ -136,8 +124,8 @@ deref!(FunctionType, Type);
 unsafe impl Sub<Type> for FunctionType {
     fn is(mut ty: &Type) -> bool {
         unsafe {
-            while let Some(elem) = ty.get_element() {
-                ty = elem;
+            while let Some(ptr) = PointerType::from_super(ty) {
+                ty = ptr.get_element();
             }
             let kind = core::LLVMGetTypeKind(ty.into());
             kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
@@ -145,6 +133,10 @@ unsafe impl Sub<Type> for FunctionType {
     }
 }
 impl FunctionType {
+    /// Make a new function signature with the return type and arguments given.
+    pub fn new<'a>(ret: &'a Type, args: &[&'a Type]) -> &'a FunctionType {
+        unsafe { core::LLVMFunctionType(ret.into(), args.as_ptr() as *mut LLVMTypeRef, args.len() as c_uint, 0) }.into()
+    }
     /// Returns the number of parameters this signature takes.
     pub fn num_params(&self) -> usize {
         unsafe { core::LLVMCountParamTypes(self.into()) as usize }
@@ -165,3 +157,20 @@ impl FunctionType {
 }
 get_context!(FunctionType, LLVMGetTypeContext);
 to_str!(FunctionType, LLVMPrintTypeToString);
+
+/// A pointer type.
+pub struct PointerType;
+sub!{PointerType, LLVMPointerTypeKind}
+native_ref!(&PointerType = LLVMTypeRef);
+impl PointerType {
+    /// Make a new pointer type with the given element type.
+    pub fn new(elem: &Type) -> &Type {
+        unsafe { core::LLVMPointerType(elem.into(), 0 as c_uint) }.into()
+    }
+    /// Returns the element of this pointer type.
+    pub fn get_element(&self) -> &Type {
+        unsafe { mem::transmute(core::LLVMGetElementType(self.into())) }
+    }
+}
+get_context!(PointerType, LLVMGetTypeContext);
+to_str!(PointerType, LLVMPrintTypeToString);

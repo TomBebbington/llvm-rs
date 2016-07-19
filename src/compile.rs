@@ -4,7 +4,7 @@ use ffi::prelude::LLVMValueRef;
 use context::Context;
 use libc::c_char;
 use value::Value;
-use ty::{StructType, Type};
+use ty::{StructType, FunctionType, PointerType, Type};
 use std::mem;
 use std::ffi::CStr;
 
@@ -80,7 +80,7 @@ impl<'a> Compile<'a> for *const c_char {
         }
     }
     fn get_type(ctx: &'a Context) -> &'a Type {
-        Type::new_pointer(Type::get::<c_char>(ctx))
+        PointerType::new(Type::get::<c_char>(ctx))
     }
 }
 impl<'a> Compile<'a> for *const str {
@@ -181,7 +181,7 @@ macro_rules! compile_func(
                 }.into()
             }
             fn get_type(context: &'a Context) -> &'a Type {
-                Type::new_function(R::get_type(context), &[$($name::get_type(context)),*])
+                FunctionType::new(R::get_type(context), &[$($name::get_type(context)),*])
             }
         }
         impl<'a, R, $($name),*> Compile<'a> for extern fn($($name),*) -> R where R:Compile<'a>, $($name:Compile<'a>),* {
@@ -193,7 +193,7 @@ macro_rules! compile_func(
                 }.into()
             }
             fn get_type(context: &'a Context) -> &'a Type {
-                Type::new_function(R::get_type(context), &[$($name::get_type(context)),*])
+                FunctionType::new(R::get_type(context), &[$($name::get_type(context)),*])
             }
         }
     )
