@@ -3,11 +3,12 @@ use ffi::{core, LLVMMemoryBuffer};
 use ffi::prelude::LLVMMemoryBufferRef;
 use cbox::{CBox, DisposeRef};
 use std::ops::Deref;
+use std::marker::PhantomData;
 use std::mem;
 use util;
 
 
-pub struct MemoryBuffer;
+pub struct MemoryBuffer(PhantomData<[u8]>);
 native_ref!(&MemoryBuffer = LLVMMemoryBufferRef);
 impl MemoryBuffer {
     pub fn new_from_file(path: &str) -> Result<CBox<MemoryBuffer>, CBox<str>> {

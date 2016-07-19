@@ -86,7 +86,7 @@ impl Type {
 }
 
 /// A structure type, such as a tuple or struct.
-pub struct StructType;
+pub struct StructType(PhantomData<[u8]>);
 native_ref!{&StructType = LLVMTypeRef}
 get_context!{StructType, LLVMGetTypeContext}
 to_str!{StructType, LLVMPrintTypeToString}
@@ -116,7 +116,7 @@ impl StructType {
 }
 
 /// A function signature type.
-pub struct FunctionType;
+pub struct FunctionType(PhantomData<[u8]>);
 native_ref!{&FunctionType = LLVMTypeRef}
 get_context!{FunctionType, LLVMGetTypeContext}
 to_str!{FunctionType, LLVMPrintTypeToString}
@@ -157,7 +157,7 @@ impl FunctionType {
 }
 
 /// A pointer type.
-pub struct PointerType;
+pub struct PointerType(PhantomData<[u8]>);
 native_ref!{&PointerType = LLVMTypeRef}
 get_context!{PointerType, LLVMGetTypeContext}
 to_str!{PointerType, LLVMPrintTypeToString}
@@ -174,7 +174,7 @@ impl PointerType {
 }
 
 /// An integer type.
-pub struct IntegerType;
+pub struct IntegerType(PhantomData<[u8]>);
 native_ref!{&IntegerType = LLVMTypeRef}
 get_context!{IntegerType, LLVMGetTypeContext}
 to_str!{IntegerType, LLVMPrintTypeToString}
@@ -191,7 +191,7 @@ impl IntegerType {
 }
 
 /// A vector type.
-pub struct VectorType;
+pub struct VectorType(PhantomData<[u8]>);
 native_ref!{&VectorType = LLVMTypeRef}
 get_context!{VectorType, LLVMGetTypeContext}
 to_str!{VectorType, LLVMPrintTypeToString}
@@ -211,7 +211,7 @@ impl VectorType {
     }
 }
 /// An array type.
-pub struct ArrayType;
+pub struct ArrayType(PhantomData<[u8]>);
 native_ref!{&ArrayType = LLVMTypeRef}
 get_context!{ArrayType, LLVMGetTypeContext}
 to_str!{ArrayType, LLVMPrintTypeToString}

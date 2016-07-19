@@ -19,8 +19,8 @@ mod engine;
 mod module;
 mod object;
 mod target;
-mod ty;
-mod value;
+pub mod types;
+pub mod value;
 mod util;
 
 pub use cbox::{CBox, CSemiBox};
@@ -32,6 +32,6 @@ pub use engine::{JitEngine, JitOptions, Interpreter, ExecutionEngine, GenericVal
 pub use module::{AddressSpace, Module, Functions};
 pub use object::{ObjectFile, Symbol, Symbols};
 pub use target::{TargetData, Target};
-pub use ty::{FunctionType, StructType, Type};
+pub use types::*;
 pub use value::{Alias, Arg, Attribute, Value, Function, GlobalValue, GlobalVariable, Linkage, Predicate};
 pub use util::Sub;

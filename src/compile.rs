@@ -4,7 +4,7 @@ use ffi::prelude::LLVMValueRef;
 use context::Context;
 use libc::c_char;
 use value::Value;
-use ty::*;
+use types::*;
 use std::mem;
 use std::ffi::CStr;
 

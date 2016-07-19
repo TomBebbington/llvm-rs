@@ -1,10 +1,11 @@
 use ffi::core;
 use ffi::prelude::LLVMBasicBlockRef;
+use std::marker::PhantomData;
 use value::Function;
 use util;
 
 /// A container of instructions that execute sequentially.
-pub struct BasicBlock;
+pub struct BasicBlock(PhantomData<[u8]>);
 native_ref!(&BasicBlock = LLVMBasicBlockRef);
 impl BasicBlock {
     /// Return the enclosing method, or `None` if it is not attached to a method.

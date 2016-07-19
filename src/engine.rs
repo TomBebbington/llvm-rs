@@ -9,7 +9,7 @@ use std::{mem, ptr};
 use compile::Compile;
 use context::{Context, GetContext};
 use module::Module;
-use ty::{StructType, Type};
+use types::{StructType, Type};
 use util::{self, Sub};
 use value::{Function, Value};
 

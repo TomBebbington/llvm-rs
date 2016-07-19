@@ -24,5 +24,5 @@ cbox = "0.*"
 libc = "0.*"
 
 [dependencies.llvm-sys]
-version = "*"
-git = "https://github.com/TomBebbington/llvm-sys.rs"
+version = "0.*"
+git = "https://github.com/TomBebbington/llvm-rs"

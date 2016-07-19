@@ -2,16 +2,17 @@ use libc::{c_char, c_uint};
 use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::{CSemiBox, DisposeRef};
+use std::marker::PhantomData;
 use std::mem;
 use block::BasicBlock;
 use context::Context;
-use ty::Type;
+use types::Type;
 use value::{Function, Value, Predicate};
 
 static NULL_NAME:[c_char; 1] = [0];
 
 /// This provides a uniform API for creating instructions and inserting them into a basic block.
-pub struct Builder;
+pub struct Builder(PhantomData<[u8]>);
 native_ref!(&Builder = LLVMBuilderRef);
 macro_rules! bin_op(
     ($name:ident, $func:ident) => (

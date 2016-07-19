@@ -1,10 +1,10 @@
 [root]
 name = "llvm-alt"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "cbox 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
- "llvm-sys 0.3.0 (git+https://github.com/TomBebbington/llvm-sys.rs)",
+ "llvm-sys 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -33,7 +33,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "llvm-sys"
 version = "0.3.0"
-source = "git+https://github.com/TomBebbington/llvm-sys.rs#88a4f2da362f5162d28d8fd60503733476040db6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bitflags 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gcc 0.3.31 (registry+https://github.com/rust-lang/crates.io-index)",

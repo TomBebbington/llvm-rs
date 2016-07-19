@@ -1,5 +1,6 @@
 use ffi::prelude::LLVMContextRef;
 use ffi::{core, LLVMContext};
+use std::marker::PhantomData;
 use cbox::CBox;
 
 /// Contains all the LLVM entities - mainly modules.
@@ -7,7 +8,7 @@ use cbox::CBox;
 /// Every single entity attached to it has its lifetime to enforce the
 /// rule that things from different contexts cannot interact and to
 /// preserve pointer safety.
-pub struct Context;
+pub struct Context(PhantomData<[u8]>);
 native_ref!(&Context = LLVMContextRef);
 impl Context {
     /// Get a reference to the global context.

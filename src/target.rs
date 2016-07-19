@@ -4,11 +4,12 @@ use ffi::target::{self, LLVMTargetDataRef, LLVMOpaqueTargetData};
 use cbox::{CBox, DisposeRef};
 use std::ffi::CString;
 use std::fmt;
-use ty::Type;
+use std::marker::PhantomData;
+use types::Type;
 use util;
 
 /// Represents an LLVM Target
-pub struct TargetData;
+pub struct TargetData(PhantomData<[u8]>);
 native_ref!(&TargetData = LLVMTargetDataRef);
 
 impl TargetData {
@@ -68,7 +69,7 @@ impl DisposeRef for TargetData {
     }
 }
 
-pub struct Target;
+pub struct Target(PhantomData<[u8]>);
 native_ref!(&Target = LLVMTargetRef);
 impl Target {
     /// Returns the name of this target.

@@ -5,9 +5,10 @@ use ffi::LLVMLinkage;
 use std::ffi::CString;
 use std::{fmt, mem};
 use std::ops::{Deref, Index};
+use std::marker::PhantomData;
 use block::BasicBlock;
 use context::{Context, GetContext};
-use ty::{FunctionType, Type};
+use types::{FunctionType, Type};
 use util::{self, Sub};
 
 macro_rules! sub {
@@ -35,7 +36,7 @@ impl Deref for $this {
 }
 
 /// A typed value that can be used as an operand in instructions.
-pub struct Value;
+pub struct Value(PhantomData<[u8]>);
 native_ref!(&Value = LLVMValueRef);
 impl Value {
     /// Create a new constant struct from the values given.
@@ -88,7 +89,7 @@ pub enum Predicate {
     LessThanOrEqual
 }
 /// An argument that is passed to a function.
-pub struct Arg;
+pub struct Arg(PhantomData<[u8]>);
 native_ref!(&Arg = LLVMValueRef);
 sub!{Arg, LLVMIsAArgument}
 impl Arg {
@@ -131,7 +132,7 @@ impl Arg {
 }
 
 /// A value with global scope (eg: Function, Alias, Global variable)
-pub struct GlobalValue;
+pub struct GlobalValue(PhantomData<[u8]>);
 native_ref!(&GlobalValue = LLVMValueRef);
 sub!{GlobalValue, LLVMIsAGlobalValue}
 impl GlobalValue {
@@ -157,7 +158,7 @@ impl GlobalValue {
 }
 
 /// A global variable
-pub struct GlobalVariable;
+pub struct GlobalVariable(PhantomData<[u8]>);
 native_ref!(&GlobalVariable = LLVMValueRef);
 sub!{GlobalVariable, LLVMIsAGlobalVariable, GlobalValue}
 impl GlobalVariable {
@@ -189,14 +190,14 @@ impl GlobalVariable {
 }
 
 /// An alias to another global value.
-pub struct Alias;
+pub struct Alias(PhantomData<[u8]>);
 native_ref!(&Alias = LLVMValueRef);
 sub!{Alias, LLVMIsAGlobalAlias, GlobalValue}
 /// A function is a kind of value that can be called and contains blocks of code.
 ///
 /// To get the value of each argument to a function, you can use the index operator.
 /// For example, `&func[0]` is the value that represents the first argument to the function.
-pub struct Function;
+pub struct Function(PhantomData<[u8]>);
 native_ref!(&Function = LLVMValueRef);
 sub!{Function, LLVMIsAFunction, GlobalValue}
 impl Index<usize> for Function {

@@ -17,13 +17,13 @@ use std::process::Command;
 use buffer::MemoryBuffer;
 use context::{Context, GetContext};
 use value::{Alias, Function, GlobalValue, GlobalVariable, Value};
-use ty::Type;
+use types::Type;
 use util;
 
 /// Represents a single compilation unit of code.
 ///
 /// This is attached to the lifetime of the context that constructs it, but is owned by the `CSemiBox`.
-pub struct Module;
+pub struct Module(PhantomData<[u8]>);
 native_ref!(&Module = LLVMModuleRef);
 impl Module {
     /// Create a new module in the context given with the name given.
