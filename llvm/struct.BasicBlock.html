@@ -9,7 +9,9 @@
 
     <title>llvm::BasicBlock - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'BasicBlock', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,13 +44,14 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>llvm</a>::<wbr><a class='struct' href=''>BasicBlock</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-302' class='srclink' href='../src/llvm/block.rs.html#7' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-73' class='srclink' href='../src/llvm/src/block.rs.html#7' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct BasicBlock;</pre><div class='docblock'><p>A container of instructions that execute sequentially.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'><h4 id='method.get_parent' class='method'><code>fn <a href='#method.get_parent' class='fnname'>get_parent</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>&gt;</code></h4>
-<div class='docblock'><p>Return the enclosing method, or <code>None</code> if it is non-existant.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-107' class='srclink' href='../src/llvm/src/block.rs.html#9-33' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get_parent' class='method'><code>fn <a href='#method.get_parent' class='fnname'>get_parent</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>&gt;</code></h4>
+<div class='docblock'><p>Return the enclosing method, or <code>None</code> if it is not attached to a method.</p>
 </div><h4 id='method.move_after' class='method'><code>fn <a href='#method.move_after' class='fnname'>move_after</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>)</code></h4>
 <div class='docblock'><p>Move this basic block after the <code>other</code> basic block in its function.</p>
 </div><h4 id='method.move_before' class='method'><code>fn <a href='#method.move_before' class='fnname'>move_before</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>)</code></h4>
@@ -59,52 +62,74 @@
 <div class='docblock'><p>Delete this basic block.</p>
 
 <p>This is unsafe because there should be no other reference to this, but
-this can&#39;t be guranteed.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt; for <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h4>
-</div></section>
+this can&#39;t be guranteed using Rust semantics.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-75' class='srclink' href='../src/llvm/src/macros.rs.html#8' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt; for <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-76' class='srclink' href='../src/llvm/src/macros.rs.html#9-14' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-81' class='srclink' href='../src/llvm/src/macros.rs.html#15-20' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-97' class='srclink' href='../src/llvm/src/macros.rs.html#33-38' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-102' class='srclink' href='../src/llvm/src/macros.rs.html#39-44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBasicBlockRef.html' title='llvm_sys::prelude::LLVMBasicBlockRef'>LLVMBasicBlockRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -116,6 +141,6 @@ this can&#39;t be guranteed.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

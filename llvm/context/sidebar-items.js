@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Context","Contains all the LLVM entities such as modules."]],"trait":[["GetContext","Implemented by everything that is owned by a context."]]});

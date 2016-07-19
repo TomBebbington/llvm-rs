@@ -9,7 +9,9 @@
 
     <title>llvm::ExecutionEngine - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'ExecutionEngine', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,104 +44,115 @@
 
     <section id='main' class="content trait">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>llvm</a>::<wbr><a class='trait' href=''>ExecutionEngine</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-6004' class='srclink' href='../src/llvm/engine.rs.html#20-83' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait ExecutionEngine&lt;'a, 'b&gt; <span class='where'>where <a class='type' href='../llvm_sys/execution_engine/type.LLVMExecutionEngineRef.html' title='llvm_sys::execution_engine::LLVMExecutionEngineRef'>LLVMExecutionEngineRef</a>: <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;&amp;'b Self&gt;</span> {
-    type Options: <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a>;
-    fn <a href='#tymethod.new' class='fnname'>new</a>(module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>, options: Self::<a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>Options</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, <a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;;
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1000' class='srclink' href='../src/llvm/src/engine.rs.html#19-82' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait ExecutionEngine&lt;'a&gt;: 'a + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a> + <a class='trait' href='../cbox/trait.DisposeRef.html' title='cbox::DisposeRef'>DisposeRef</a> <span class='where'>where <a class='type' href='../llvm_sys/execution_engine/type.LLVMExecutionEngineRef.html' title='llvm_sys::execution_engine::LLVMExecutionEngineRef'>LLVMExecutionEngineRef</a>: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;&amp;'a Self&gt;</span> {
+    type <a href='#associatedtype.Options' class='type'>Options</a>: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a>;
+    fn <a href='#tymethod.new' class='fnname'>new</a>(module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>, options: Self::<a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>Options</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../llvm/struct.CSemiBox.html' title='llvm::CSemiBox'>CSemiBox</a>&lt;'a,&nbsp;Self&gt;,&nbsp;<a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;;
 
-    fn <a href='#method.add_module' class='fnname'>add_module</a>(&amp;'b self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) { ... }
-    fn <a href='#method.remove_module' class='fnname'>remove_module</a>(&amp;'b self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a> { ... }
-    fn <a href='#method.run_static_constructors' class='fnname'>run_static_constructors</a>(&amp;'b self) { ... }
-    fn <a href='#method.run_static_destructors' class='fnname'>run_static_destructors</a>(&amp;'b self) { ... }
-    fn <a href='#method.find_function' class='fnname'>find_function</a>(&amp;'b self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>&gt; { ... }
-    fn <a href='#method.run_function' class='fnname'>run_function</a>(&amp;'b self, function: &amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt; { ... }
-    unsafe fn <a href='#method.get_global' class='fnname'>get_global</a>&lt;T&gt;(&amp;'b self, global: &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;'b T { ... }
-    unsafe fn <a href='#method.find_global' class='fnname'>find_global</a>&lt;T&gt;(&amp;'b self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'b T&gt; { ... }
+    fn <a href='#method.add_module' class='fnname'>add_module</a>(&amp;'a self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) { ... }
+    fn <a href='#method.remove_module' class='fnname'>remove_module</a>(&amp;'a self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a> { ... }
+    fn <a href='#method.run_static_constructors' class='fnname'>run_static_constructors</a>(&amp;'a self) { ... }
+    fn <a href='#method.run_static_destructors' class='fnname'>run_static_destructors</a>(&amp;'a self) { ... }
+    fn <a href='#method.find_function' class='fnname'>find_function</a>(&amp;'a self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>&gt; { ... }
+    fn <a href='#method.run_function' class='fnname'>run_function</a>(&amp;'a self, function: &amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt; { ... }
+    unsafe fn <a href='#method.get_global' class='fnname'>get_global</a>&lt;T&gt;(&amp;'a self, global: &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;'a T { ... }
+    unsafe fn <a href='#method.find_global' class='fnname'>find_global</a>&lt;T&gt;(&amp;'a self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a T&gt; { ... }
 }</pre><div class='docblock'><p>An abstract interface for implementation execution of LLVM modules.</p>
 
 <p>This is designed to support both interpreter and just-in-time (JIT) compiler implementations.</p>
 </div>
             <h2 id='associated-types'>Associated Types</h2>
             <div class='methods'>
-        <h3 id='associatedtype.Options' class='method stab '><code>type Options: <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a></code></h3><div class='docblock'><p>The options given to this upon creation.</p>
+        <h3 id='associatedtype.Options' class='method stab '><code>type <a href='#associatedtype.Options' class='type'>Options</a>: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a></code></h3><div class='docblock'><p>The options given to the engine upon creation.</p>
 </div></div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.new' class='method stab '><code>fn <a href='#tymethod.new' class='fnname'>new</a>(module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>, options: Self::<a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>Options</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, <a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h3><div class='docblock'><p>Create a new execution engine with the given <code>Module</code> and options, or return a
+        <h3 id='tymethod.new' class='method stab '><code>fn <a href='#tymethod.new' class='fnname'>new</a>(module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>, options: Self::<a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>Options</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../llvm/struct.CSemiBox.html' title='llvm::CSemiBox'>CSemiBox</a>&lt;'a,&nbsp;Self&gt;,&nbsp;<a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h3><div class='docblock'><p>Create a new execution engine with the given <code>Module</code> and optiions, or return a
 description of the error.</p>
 </div></div>
             <h2 id='provided-methods'>Provided Methods</h2>
             <div class='methods'>
-        <h3 id='method.add_module' class='method stab '><code>fn <a href='#method.add_module' class='fnname'>add_module</a>(&amp;'b self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>)</code></h3><div class='docblock'><p>Add a module to the list of modules to interpret or compile.</p>
-</div><h3 id='method.remove_module' class='method stab '><code>fn <a href='#method.remove_module' class='fnname'>remove_module</a>(&amp;'b self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a></code></h3><div class='docblock'><p>Remove a module from the list of modules to interpret or compile.</p>
-</div><h3 id='method.run_static_constructors' class='method stab '><code>fn <a href='#method.run_static_constructors' class='fnname'>run_static_constructors</a>(&amp;'b self)</code></h3><div class='docblock'><p>Execute all of the static constructors for this program.</p>
-</div><h3 id='method.run_static_destructors' class='method stab '><code>fn <a href='#method.run_static_destructors' class='fnname'>run_static_destructors</a>(&amp;'b self)</code></h3><div class='docblock'><p>Execute all of the static destructors for this program.</p>
-</div><h3 id='method.find_function' class='method stab '><code>fn <a href='#method.find_function' class='fnname'>find_function</a>(&amp;'b self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>&gt;</code></h3><div class='docblock'><p>Attempt to find a function with the name given, or <code>None</code> if there wasn&#39;t
+        <h3 id='method.add_module' class='method stab '><code>fn <a href='#method.add_module' class='fnname'>add_module</a>(&amp;'a self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>)</code></h3><div class='docblock'><p>Add a module to the list of modules to interpret or compile.</p>
+</div><h3 id='method.remove_module' class='method stab '><code>fn <a href='#method.remove_module' class='fnname'>remove_module</a>(&amp;'a self, module: &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Module.html' title='llvm::Module'>Module</a></code></h3><div class='docblock'><p>Remove a module from the list of modules to interpret or compile.</p>
+</div><h3 id='method.run_static_constructors' class='method stab '><code>fn <a href='#method.run_static_constructors' class='fnname'>run_static_constructors</a>(&amp;'a self)</code></h3><div class='docblock'><p>Execute all of the static constructors for this program.</p>
+</div><h3 id='method.run_static_destructors' class='method stab '><code>fn <a href='#method.run_static_destructors' class='fnname'>run_static_destructors</a>(&amp;'a self)</code></h3><div class='docblock'><p>Execute all of the static destructors for this program.</p>
+</div><h3 id='method.find_function' class='method stab '><code>fn <a href='#method.find_function' class='fnname'>find_function</a>(&amp;'a self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>&gt;</code></h3><div class='docblock'><p>Attempt to find a function with the name given, or <code>None</code> if there wasn&#39;t
 a function with that name.</p>
-</div><h3 id='method.run_function' class='method stab '><code>fn <a href='#method.run_function' class='fnname'>run_function</a>(&amp;'b self, function: &amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;</code></h3><div class='docblock'><p>Run <code>function</code> with the arguments given as `<code>GenericValue</code>s, then return the result as one.</p>
+</div><h3 id='method.run_function' class='method stab '><code>fn <a href='#method.run_function' class='fnname'>run_function</a>(&amp;'a self, function: &amp;'a <a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../llvm/struct.GenericValue.html' title='llvm::GenericValue'>GenericValue</a>&lt;'a&gt;</code></h3><div class='docblock'><p>Run <code>function</code> with the arguments given as `<code>GenericValue</code>s, then return the result as one.</p>
 
 <p>Note that if this engine is a <code>JitEngine</code>, it only supports a small fraction of combinations
 for the arguments and return value, so be warned.</p>
 
 <p>To convert the arguments to <code>GenericValue</code>s, you should use the <code>GenericValueCast::to_generic</code> method.
 To convert the return value from a <code>GenericValue</code>, you should use the <code>GenericValueCast::from_generic</code> method.</p>
-</div><h3 id='method.get_global' class='method stab '><code>unsafe fn <a href='#method.get_global' class='fnname'>get_global</a>&lt;T&gt;(&amp;'b self, global: &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;'b T</code></h3><div class='docblock'><p>Returns a pointer to the global value given.</p>
+</div><h3 id='method.get_global' class='method stab '><code>unsafe fn <a href='#method.get_global' class='fnname'>get_global</a>&lt;T&gt;(&amp;'a self, global: &amp;'a <a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;'a T</code></h3><div class='docblock'><p>Returns a pointer to the global value given.</p>
 
 <p>This is marked as unsafe because the type cannot be guranteed to be the same as the
 type of the global value at this point.</p>
-</div><h3 id='method.find_global' class='method stab '><code>unsafe fn <a href='#method.find_global' class='fnname'>find_global</a>&lt;T&gt;(&amp;'b self, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'b T&gt;</code></h3><div class='docblock'><p>Returns a pointer to the global value with the name given.</p>
+</div><h3 id='method.find_global' class='method stab '><code>unsafe fn <a href='#method.find_global' class='fnname'>find_global</a>&lt;T&gt;(&amp;'a self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a T&gt;</code></h3><div class='docblock'><p>Returns a pointer to the global value with the name given.</p>
 
 <p>This is marked as unsafe because the type cannot be guranteed to be the same as the
 type of the global value at this point.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;'a, 'b&gt; <a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>ExecutionEngine</a>&lt;'a, 'b&gt; for <a class='struct' href='../llvm/struct.JitEngine.html' title='llvm::JitEngine'>JitEngine</a>&lt;'a&gt;</code></li>
-<li><code>impl&lt;'a, 'b&gt; <a class='trait' href='../llvm/trait.ExecutionEngine.html' title='llvm::ExecutionEngine'>ExecutionEngine</a>&lt;'a, 'b&gt; for <a class='struct' href='../llvm/struct.Interpreter.html' title='llvm::Interpreter'>Interpreter</a>&lt;'a&gt;</code></li>
+    <li><code>impl&lt;'a&gt; ExecutionEngine&lt;'a&gt; for <a class='struct' href='../llvm/struct.JitEngine.html' title='llvm::JitEngine'>JitEngine</a></code></li>
+<li><code>impl&lt;'a&gt; ExecutionEngine&lt;'a&gt; for <a class='struct' href='../llvm/struct.Interpreter.html' title='llvm::Interpreter'>Interpreter</a></code></li>
 </ul><script type="text/javascript" async
-                              src="../implementors/llvm/trait.ExecutionEngine.js">
-                      </script></section>
+                         src="../implementors/llvm/trait.ExecutionEngine.js">
+                 </script></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -151,6 +164,6 @@ type of the global value at this point.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

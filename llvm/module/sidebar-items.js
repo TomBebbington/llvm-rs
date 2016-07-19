@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Functions","An iterator through the functions contained in a module."],["Module","Represents a single translation unit of code."]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["ObjectFile","An external object file that has been parsed by LLVLM"],["Symbol",""],["Symbols",""]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["FunctionType","A function signature type"],["StructType","A structure type, such as a tuple or struct"],["Type","Defines how a value should be laid out in memory."]]});

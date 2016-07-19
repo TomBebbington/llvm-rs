@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["Compile","Implemented for any type that can be represented as a constant in IR."]]});

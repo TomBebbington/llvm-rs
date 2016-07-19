@@ -4,12 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/llvm-alt-sys-0.1.4/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/tom/.cargo/registry/src/github.com-1ecc6299db9ec823/llvm-sys-0.3.0/src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -383,69 +385,49 @@
 <span id="341">341</span>
 <span id="342">342</span>
 <span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Bindings to LLVM&#39;s C API.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! Refer to the [LLVM documentation](http://llvm.org/docs/) for more</span>
 <span class='doccomment'>//! information.</span>
 
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>non_upper_case_globals</span>)]</span>
+
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>bitflags</span>;
 
 <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMMemoryBuffer</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMContext</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMModule</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMType</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMValue</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMBasicBlock</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMBuilder</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMModuleProvider</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMPassManager</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMPassRegistry</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMUse</span>;
-<span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LLVMDiagnosticInfo</span>;
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMMemoryBuffer</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMContext</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMModule</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMType</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMValue</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMBasicBlock</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMBuilder</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMModuleProvider</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMPassManager</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMPassRegistry</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMUse</span> {}
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>LLVMDiagnosticInfo</span> {}
 
 <span class='doccomment'>/// Core types used throughout LLVM.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// In most cases you will want to `use llvm::prelude::*`.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span> {
     <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMBool</span> <span class='op'>=</span> ::<span class='ident'>libc</span>::<span class='ident'>c_int</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMMemoryBufferRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMMemoryBuffer</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMContextRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMContext</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMModuleRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMModule</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMTypeRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMType</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMValueRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMValue</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMBasicBlockRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMBasicBlock</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMBuilderRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMBuilder</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMModuleProviderRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMModuleProvider</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMPassManagerRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMPassManager</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMPassRegistryRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMPassRegistry</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMUseRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMUse</span>;
-    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMDiagnosticInfoRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>super</span>::<span class='ident'>LLVMDiagnosticInfo</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMMemoryBufferRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMMemoryBuffer</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMContextRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMContext</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMModuleRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMModule</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMTypeRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMType</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMValueRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMValue</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMBasicBlockRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMBasicBlock</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMBuilderRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMBuilder</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMModuleProviderRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMModuleProvider</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMPassManagerRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMPassManager</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMPassRegistryRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMPassRegistry</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMUseRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMUse</span>;
+    <span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>LLVMDiagnosticInfoRef</span> <span class='op'>=</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='kw'>super</span>::<span class='ident'>LLVMDiagnosticInfo</span>;
 }
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>analysis</span>;
@@ -473,7 +455,7 @@
 
 <span class='macro'>bitflags</span><span class='macro'>!</span> {
     <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
-    <span class='ident'>flags</span> <span class='ident'>LLVMAttribute</span>: ::<span class='ident'>libc</span>::<span class='ident'>c_int</span> {
+    <span class='kw'>pub</span> <span class='ident'>flags</span> <span class='ident'>LLVMAttribute</span>: ::<span class='ident'>libc</span>::<span class='ident'>c_int</span> {
         <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_upper_case_globals</span>)]</span> 
         <span class='kw'>const</span> <span class='ident'>LLVMZExtAttribute</span> <span class='op'>=</span> <span class='number'>1</span> <span class='op'>&lt;&lt;</span> <span class='number'>0</span>,
         <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>non_upper_case_globals</span>)]</span> 
@@ -753,40 +735,51 @@
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -798,6 +791,6 @@
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     
-    <script async src="../../search-index.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

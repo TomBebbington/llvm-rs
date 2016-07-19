@@ -9,7 +9,9 @@
 
     <title>llvm_sys::LLVMOpcode - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm_sys</a></p><script>window.sidebarCurrent = {name: 'LLVMOpcode', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,10 +44,10 @@
 
     <section id='main' class="content enum">
 <h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>llvm_sys</a>::<wbr><a class='enum' href=''>LLVMOpcode</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-8903' class='srclink' href='../src/llvm_sys/lib.rs.html#137-197' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-3019' class='srclink' href='../src/llvm_sys/lib.rs.html#127-187' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum LLVMOpcode {
     LLVMRet,
     LLVMBr,
@@ -107,45 +109,56 @@
     LLVMResume,
     LLVMLandingPad,
 }</pre><h2 class='variants'>Variants</h2>
-<table><tr><td id='variant.LLVMRet'><code>LLVMRet</code></td><td></td></tr><tr><td id='variant.LLVMBr'><code>LLVMBr</code></td><td></td></tr><tr><td id='variant.LLVMSwitch'><code>LLVMSwitch</code></td><td></td></tr><tr><td id='variant.LLVMIndirectBr'><code>LLVMIndirectBr</code></td><td></td></tr><tr><td id='variant.LLVMInvoke'><code>LLVMInvoke</code></td><td></td></tr><tr><td id='variant.LLVMUnreachable'><code>LLVMUnreachable</code></td><td></td></tr><tr><td id='variant.LLVMAdd'><code>LLVMAdd</code></td><td></td></tr><tr><td id='variant.LLVMFAdd'><code>LLVMFAdd</code></td><td></td></tr><tr><td id='variant.LLVMSub'><code>LLVMSub</code></td><td></td></tr><tr><td id='variant.LLVMFSub'><code>LLVMFSub</code></td><td></td></tr><tr><td id='variant.LLVMMul'><code>LLVMMul</code></td><td></td></tr><tr><td id='variant.LLVMFMul'><code>LLVMFMul</code></td><td></td></tr><tr><td id='variant.LLVMUDiv'><code>LLVMUDiv</code></td><td></td></tr><tr><td id='variant.LLVMSDiv'><code>LLVMSDiv</code></td><td></td></tr><tr><td id='variant.LLVMFDiv'><code>LLVMFDiv</code></td><td></td></tr><tr><td id='variant.LLVMURem'><code>LLVMURem</code></td><td></td></tr><tr><td id='variant.LLVMSRem'><code>LLVMSRem</code></td><td></td></tr><tr><td id='variant.LLVMFRem'><code>LLVMFRem</code></td><td></td></tr><tr><td id='variant.LLVMShl'><code>LLVMShl</code></td><td></td></tr><tr><td id='variant.LLVMLShr'><code>LLVMLShr</code></td><td></td></tr><tr><td id='variant.LLVMAShr'><code>LLVMAShr</code></td><td></td></tr><tr><td id='variant.LLVMAnd'><code>LLVMAnd</code></td><td></td></tr><tr><td id='variant.LLVMOr'><code>LLVMOr</code></td><td></td></tr><tr><td id='variant.LLVMXor'><code>LLVMXor</code></td><td></td></tr><tr><td id='variant.LLVMAlloca'><code>LLVMAlloca</code></td><td></td></tr><tr><td id='variant.LLVMLoad'><code>LLVMLoad</code></td><td></td></tr><tr><td id='variant.LLVMStore'><code>LLVMStore</code></td><td></td></tr><tr><td id='variant.LLVMGetElementPtr'><code>LLVMGetElementPtr</code></td><td></td></tr><tr><td id='variant.LLVMTrunc'><code>LLVMTrunc</code></td><td></td></tr><tr><td id='variant.LLVMZExt'><code>LLVMZExt</code></td><td></td></tr><tr><td id='variant.LLVMSExt'><code>LLVMSExt</code></td><td></td></tr><tr><td id='variant.LLVMFPToUI'><code>LLVMFPToUI</code></td><td></td></tr><tr><td id='variant.LLVMFPToSI'><code>LLVMFPToSI</code></td><td></td></tr><tr><td id='variant.LLVMUIToFP'><code>LLVMUIToFP</code></td><td></td></tr><tr><td id='variant.LLVMSIToFP'><code>LLVMSIToFP</code></td><td></td></tr><tr><td id='variant.LLVMFPTrunc'><code>LLVMFPTrunc</code></td><td></td></tr><tr><td id='variant.LLVMFPExt'><code>LLVMFPExt</code></td><td></td></tr><tr><td id='variant.LLVMPtrToInt'><code>LLVMPtrToInt</code></td><td></td></tr><tr><td id='variant.LLVMIntToPtr'><code>LLVMIntToPtr</code></td><td></td></tr><tr><td id='variant.LLVMBitCast'><code>LLVMBitCast</code></td><td></td></tr><tr><td id='variant.LLVMAddrSpaceCast'><code>LLVMAddrSpaceCast</code></td><td></td></tr><tr><td id='variant.LLVMICmp'><code>LLVMICmp</code></td><td></td></tr><tr><td id='variant.LLVMFCmp'><code>LLVMFCmp</code></td><td></td></tr><tr><td id='variant.LLVMPHI'><code>LLVMPHI</code></td><td></td></tr><tr><td id='variant.LLVMCall'><code>LLVMCall</code></td><td></td></tr><tr><td id='variant.LLVMSelect'><code>LLVMSelect</code></td><td></td></tr><tr><td id='variant.LLVMUserOp1'><code>LLVMUserOp1</code></td><td></td></tr><tr><td id='variant.LLVMUserOp2'><code>LLVMUserOp2</code></td><td></td></tr><tr><td id='variant.LLVMVAArg'><code>LLVMVAArg</code></td><td></td></tr><tr><td id='variant.LLVMExtractElement'><code>LLVMExtractElement</code></td><td></td></tr><tr><td id='variant.LLVMInsertElement'><code>LLVMInsertElement</code></td><td></td></tr><tr><td id='variant.LLVMShuffleVector'><code>LLVMShuffleVector</code></td><td></td></tr><tr><td id='variant.LLVMExtractValue'><code>LLVMExtractValue</code></td><td></td></tr><tr><td id='variant.LLVMInsertValue'><code>LLVMInsertValue</code></td><td></td></tr><tr><td id='variant.LLVMFence'><code>LLVMFence</code></td><td></td></tr><tr><td id='variant.LLVMAtomicCmpXchg'><code>LLVMAtomicCmpXchg</code></td><td></td></tr><tr><td id='variant.LLVMAtomicRMW'><code>LLVMAtomicRMW</code></td><td></td></tr><tr><td id='variant.LLVMResume'><code>LLVMResume</code></td><td></td></tr><tr><td id='variant.LLVMLandingPad'><code>LLVMLandingPad</code></td><td></td></tr></table></section>
+<span id='variant.LLVMRet' class='variant'><code>LLVMRet</code></span><span id='variant.LLVMBr' class='variant'><code>LLVMBr</code></span><span id='variant.LLVMSwitch' class='variant'><code>LLVMSwitch</code></span><span id='variant.LLVMIndirectBr' class='variant'><code>LLVMIndirectBr</code></span><span id='variant.LLVMInvoke' class='variant'><code>LLVMInvoke</code></span><span id='variant.LLVMUnreachable' class='variant'><code>LLVMUnreachable</code></span><span id='variant.LLVMAdd' class='variant'><code>LLVMAdd</code></span><span id='variant.LLVMFAdd' class='variant'><code>LLVMFAdd</code></span><span id='variant.LLVMSub' class='variant'><code>LLVMSub</code></span><span id='variant.LLVMFSub' class='variant'><code>LLVMFSub</code></span><span id='variant.LLVMMul' class='variant'><code>LLVMMul</code></span><span id='variant.LLVMFMul' class='variant'><code>LLVMFMul</code></span><span id='variant.LLVMUDiv' class='variant'><code>LLVMUDiv</code></span><span id='variant.LLVMSDiv' class='variant'><code>LLVMSDiv</code></span><span id='variant.LLVMFDiv' class='variant'><code>LLVMFDiv</code></span><span id='variant.LLVMURem' class='variant'><code>LLVMURem</code></span><span id='variant.LLVMSRem' class='variant'><code>LLVMSRem</code></span><span id='variant.LLVMFRem' class='variant'><code>LLVMFRem</code></span><span id='variant.LLVMShl' class='variant'><code>LLVMShl</code></span><span id='variant.LLVMLShr' class='variant'><code>LLVMLShr</code></span><span id='variant.LLVMAShr' class='variant'><code>LLVMAShr</code></span><span id='variant.LLVMAnd' class='variant'><code>LLVMAnd</code></span><span id='variant.LLVMOr' class='variant'><code>LLVMOr</code></span><span id='variant.LLVMXor' class='variant'><code>LLVMXor</code></span><span id='variant.LLVMAlloca' class='variant'><code>LLVMAlloca</code></span><span id='variant.LLVMLoad' class='variant'><code>LLVMLoad</code></span><span id='variant.LLVMStore' class='variant'><code>LLVMStore</code></span><span id='variant.LLVMGetElementPtr' class='variant'><code>LLVMGetElementPtr</code></span><span id='variant.LLVMTrunc' class='variant'><code>LLVMTrunc</code></span><span id='variant.LLVMZExt' class='variant'><code>LLVMZExt</code></span><span id='variant.LLVMSExt' class='variant'><code>LLVMSExt</code></span><span id='variant.LLVMFPToUI' class='variant'><code>LLVMFPToUI</code></span><span id='variant.LLVMFPToSI' class='variant'><code>LLVMFPToSI</code></span><span id='variant.LLVMUIToFP' class='variant'><code>LLVMUIToFP</code></span><span id='variant.LLVMSIToFP' class='variant'><code>LLVMSIToFP</code></span><span id='variant.LLVMFPTrunc' class='variant'><code>LLVMFPTrunc</code></span><span id='variant.LLVMFPExt' class='variant'><code>LLVMFPExt</code></span><span id='variant.LLVMPtrToInt' class='variant'><code>LLVMPtrToInt</code></span><span id='variant.LLVMIntToPtr' class='variant'><code>LLVMIntToPtr</code></span><span id='variant.LLVMBitCast' class='variant'><code>LLVMBitCast</code></span><span id='variant.LLVMAddrSpaceCast' class='variant'><code>LLVMAddrSpaceCast</code></span><span id='variant.LLVMICmp' class='variant'><code>LLVMICmp</code></span><span id='variant.LLVMFCmp' class='variant'><code>LLVMFCmp</code></span><span id='variant.LLVMPHI' class='variant'><code>LLVMPHI</code></span><span id='variant.LLVMCall' class='variant'><code>LLVMCall</code></span><span id='variant.LLVMSelect' class='variant'><code>LLVMSelect</code></span><span id='variant.LLVMUserOp1' class='variant'><code>LLVMUserOp1</code></span><span id='variant.LLVMUserOp2' class='variant'><code>LLVMUserOp2</code></span><span id='variant.LLVMVAArg' class='variant'><code>LLVMVAArg</code></span><span id='variant.LLVMExtractElement' class='variant'><code>LLVMExtractElement</code></span><span id='variant.LLVMInsertElement' class='variant'><code>LLVMInsertElement</code></span><span id='variant.LLVMShuffleVector' class='variant'><code>LLVMShuffleVector</code></span><span id='variant.LLVMExtractValue' class='variant'><code>LLVMExtractValue</code></span><span id='variant.LLVMInsertValue' class='variant'><code>LLVMInsertValue</code></span><span id='variant.LLVMFence' class='variant'><code>LLVMFence</code></span><span id='variant.LLVMAtomicCmpXchg' class='variant'><code>LLVMAtomicCmpXchg</code></span><span id='variant.LLVMAtomicRMW' class='variant'><code>LLVMAtomicRMW</code></span><span id='variant.LLVMResume' class='variant'><code>LLVMResume</code></span><span id='variant.LLVMLandingPad' class='variant'><code>LLVMLandingPad</code></span></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -157,6 +170,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

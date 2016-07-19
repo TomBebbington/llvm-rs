@@ -9,7 +9,9 @@
 
     <title>llvm::ObjectFile - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'ObjectFile', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,57 +44,71 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>llvm</a>::<wbr><a class='struct' href=''>ObjectFile</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-9139' class='srclink' href='../src/llvm/object.rs.html#12-14' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1571' class='srclink' href='../src/llvm/src/object.rs.html#12-14' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ObjectFile {
     // some fields omitted
-}</pre><div class='docblock'><p>An external object file that has been parsed by LLVLM</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></h3><div class='impl-items'><h4 id='method.read' class='method'><code>fn <a href='#method.read' class='fnname'>read</a>(path: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a>, <a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
-<div class='docblock'><p>Attempt to parse the object file at the path given</p>
+}</pre><div class='docblock'><p>An external object file that has been parsed by LLVM.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1587' class='srclink' href='../src/llvm/src/object.rs.html#16-36' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.read' class='method'><code>fn <a href='#method.read' class='fnname'>read</a>(path: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a>,&nbsp;<a class='struct' href='../llvm/struct.CBox.html' title='llvm::CBox'>CBox</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt;</code></h4>
+<div class='docblock'><p>Parse the object file at the path given, or return an error string if an error occurs.</p>
 </div><h4 id='method.symbols' class='method'><code>fn <a href='#method.symbols' class='fnname'>symbols</a>(&amp;self) -&gt; <a class='struct' href='../llvm/struct.Symbols.html' title='llvm::Symbols'>Symbols</a></code></h4>
-<div class='docblock'><p>Iterate through the symbols in this object fil</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/object/type.LLVMObjectFileRef.html' title='llvm_sys::object::LLVMObjectFileRef'>LLVMObjectFileRef</a>&gt; for <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ptr: <a class='type' href='../llvm_sys/object/type.LLVMObjectFileRef.html' title='llvm_sys::object::LLVMObjectFileRef'>LLVMObjectFileRef</a>) -&gt; <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></h4>
-</div></section>
+<div class='docblock'><p>Iterate through the symbols in this object file.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/object/type.LLVMObjectFileRef.html' title='llvm_sys::object::LLVMObjectFileRef'>LLVMObjectFileRef</a>&gt; for <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1584' class='srclink' href='../src/llvm/src/macros.rs.html#65-72' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ptr: <a class='type' href='../llvm_sys/object/type.LLVMObjectFileRef.html' title='llvm_sys::object::LLVMObjectFileRef'>LLVMObjectFileRef</a>) -&gt; <a class='struct' href='../llvm/struct.ObjectFile.html' title='llvm::ObjectFile'>ObjectFile</a></code></h4>
+<div class='docblock'><p>Convert from a native pointer</p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -104,6 +120,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

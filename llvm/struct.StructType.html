@@ -9,7 +9,9 @@
 
     <title>llvm::StructType - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'StructType', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,100 +44,127 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>llvm</a>::<wbr><a class='struct' href=''>StructType</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-10737' class='srclink' href='../src/llvm/ty.rs.html#92' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct StructType;</pre><div class='docblock'><p>A structure type, such as a tuple or struct</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, fields: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1843' class='srclink' href='../src/llvm/src/ty.rs.html#89' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct StructType;</pre><div class='docblock'><p>A structure type, such as a tuple or struct.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1893' class='srclink' href='../src/llvm/src/ty.rs.html#94-116' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, fields: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
 <div class='docblock'><p>Make a new struct with the given fields and packed representation.</p>
-</div><h4 id='method.new_named' class='method'><code>fn <a href='#method.new_named' class='fnname'>new_named</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, name: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, fields: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
+</div><h4 id='method.new_named' class='method'><code>fn <a href='#method.new_named' class='fnname'>new_named</a>&lt;'a&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, fields: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
 <div class='docblock'><p>Make a new named struct with the given fields and packed representation.</p>
-</div><h4 id='method.get_elements' class='method'><code>fn <a href='#method.get_elements' class='fnname'>get_elements</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt;</code></h4>
-<div class='docblock'><p>Returns the elements (AKA fields) that make up this struct.</p>
-</div></div><h2 id='deref-methods'>Methods from <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt;</h2><div class='impl-items'><h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>&lt;'a, T&gt;(context: &amp;'a <a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a> <span class='where'>where T: <a class='trait' href='../llvm/trait.Compile.html' title='llvm::Compile'>Compile</a>&lt;'a&gt;</span></code></h4>
-<div class='docblock'><p>Get the type given as an LLVM type descriptor in the context given.</p>
-</div><h4 id='method.new_function' class='method'><code>fn <a href='#method.new_function' class='fnname'>new_function</a>&lt;'a&gt;(ret: &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>, args: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.FunctionType.html' title='llvm::FunctionType'>FunctionType</a></code></h4>
-<div class='docblock'><p>Make a new function signature with the return type and arguments given.</p>
-</div><h4 id='method.new_array' class='method'><code>fn <a href='#method.new_array' class='fnname'>new_array</a>&lt;'a&gt;(element: &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>, length: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<div class='docblock'><p>Make a new array with the length given.</p>
-</div><h4 id='method.new_vector' class='method'><code>fn <a href='#method.new_vector' class='fnname'>new_vector</a>&lt;'a&gt;(element: &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>, length: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<div class='docblock'><p>Make a new vector with the length given.</p>
-</div><h4 id='method.new_pointer' class='method'><code>fn <a href='#method.new_pointer' class='fnname'>new_pointer</a>&lt;'a&gt;(elem: &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<div class='docblock'><p>Make a new pointer with the given element type.</p>
-</div><h4 id='method.new_struct' class='method'><code>fn <a href='#method.new_struct' class='fnname'>new_struct</a>&lt;'a&gt;(elems: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, packed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<div class='docblock'><p>Make a new structure type with the given types.</p>
-</div><h4 id='method.is_sized' class='method'><code>fn <a href='#method.is_sized' class='fnname'>is_sized</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h4 id='method.get_elements' class='method'><code>fn <a href='#method.get_elements' class='fnname'>get_elements</a>(&amp;self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt;</code></h4>
+<div class='docblock'><p>Returns the elements that make up this struct.</p>
+</div></div><h2 id='deref-methods'>Methods from <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;Target=<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt;</h2><div class='impl-items'><h4 id='method.is_sized' class='method'><code>fn <a href='#method.is_sized' class='fnname'>is_sized</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if the size of the type is known at compile-time.</p>
 
 <p>This is equivalent to the type implementing <code>Sized</code> in Rust</p>
-</div><h4 id='method.is_function' class='method'><code>fn <a href='#method.is_function' class='fnname'>is_function</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h4 id='method.is_function' class='method'><code>fn <a href='#method.is_function' class='fnname'>is_function</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is a function.</p>
-</div><h4 id='method.is_struct' class='method'><code>fn <a href='#method.is_struct' class='fnname'>is_struct</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+
+<p>This is equivalent to <code>FunctionType::is</code>.</p>
+</div><h4 id='method.is_struct' class='method'><code>fn <a href='#method.is_struct' class='fnname'>is_struct</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is a struct.</p>
-</div><h4 id='method.is_void' class='method'><code>fn <a href='#method.is_void' class='fnname'>is_void</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+
+<p>This is equivalent to <code>StructType::is</code>.</p>
+</div><h4 id='method.is_void' class='method'><code>fn <a href='#method.is_void' class='fnname'>is_void</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is void.</p>
-</div><h4 id='method.is_pointer' class='method'><code>fn <a href='#method.is_pointer' class='fnname'>is_pointer</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h4 id='method.is_pointer' class='method'><code>fn <a href='#method.is_pointer' class='fnname'>is_pointer</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is a pointer.</p>
-</div><h4 id='method.is_integer' class='method'><code>fn <a href='#method.is_integer' class='fnname'>is_integer</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+
+<p>This is equivalent to <code>PointerType::is</code>.</p>
+</div><h4 id='method.is_integer' class='method'><code>fn <a href='#method.is_integer' class='fnname'>is_integer</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is an integer.</p>
-</div><h4 id='method.is_float' class='method'><code>fn <a href='#method.is_float' class='fnname'>is_float</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h4 id='method.is_float' class='method'><code>fn <a href='#method.is_float' class='fnname'>is_float</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 <div class='docblock'><p>Returns true if this type is any floating-point number.</p>
-</div><h4 id='method.get_size' class='method'><code>fn <a href='#method.get_size' class='fnname'>get_size</a>(&amp;self, target: &amp;<a class='struct' href='../llvm/struct.TargetData.html' title='llvm::TargetData'>TargetData</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+</div><h4 id='method.get_size' class='method'><code>fn <a href='#method.get_size' class='fnname'>get_size</a>(&amp;self, target: &amp;<a class='struct' href='../llvm/struct.TargetData.html' title='llvm::TargetData'>TargetData</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
 <div class='docblock'><p>Returns the size of the type in bytes.</p>
-</div><h4 id='method.get_element' class='method'><code>fn <a href='#method.get_element' class='fnname'>get_element</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt;</code></h4>
-<div class='docblock'><p>Returns the element of this pointer type.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>&gt; for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='../llvm/trait.CastFrom.html' title='llvm::CastFrom'>CastFrom</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='assoc_type.From' class='type'><code>type From = <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<h4 id='method.cast' class='method'><code>fn <a href='../llvm/trait.CastFrom.html#method.cast' class='fnname'>cast</a>(ty: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>&gt;</code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='assoc_type.Target' class='type'><code>type Target = <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-<h4 id='method.deref' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='../llvm/trait.GetContext.html' title='llvm::GetContext'>GetContext</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.get_context' class='method'><code>fn <a href='../llvm/trait.GetContext.html#method.get_context' class='fnname'>get_context</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, fmt: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
-</div></section>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1845' class='srclink' href='../src/llvm/src/macros.rs.html#8' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>&gt; for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1846' class='srclink' href='../src/llvm/src/macros.rs.html#9-14' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1851' class='srclink' href='../src/llvm/src/macros.rs.html#15-20' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1867' class='srclink' href='../src/llvm/src/macros.rs.html#33-38' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1872' class='srclink' href='../src/llvm/src/macros.rs.html#39-44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMTypeRef.html' title='llvm_sys::prelude::LLVMTypeRef'>LLVMTypeRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../llvm/trait.GetContext.html' title='llvm::GetContext'>GetContext</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1877' class='srclink' href='../src/llvm/src/macros.rs.html#176-180' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get_context' class='method'><code>fn <a href='../llvm/trait.GetContext.html#tymethod.get_context' class='fnname'>get_context</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a></code></h4>
+<div class='docblock'><p>Returns a reference to the context that owns this value. <a href="../llvm/trait.GetContext.html#tymethod.get_context">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1880' class='srclink' href='../src/llvm/src/macros.rs.html#164-171' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, fmt: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../llvm/trait.Sub.html' title='llvm::Sub'>Sub</a>&lt;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>&gt; for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1885' class='srclink' href='../src/llvm/src/ty.rs.html#15-22' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.is' class='method'><code>fn <a href='../llvm/trait.Sub.html#tymethod.is' class='fnname'>is</a>(ty: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Check if the given super value is an instance of this type.</p>
+</div><h4 id='method.from_super' class='method'><code>fn <a href='../llvm/trait.Sub.html#method.from_super' class='fnname'>from_super</a>(c: &amp;T) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;Self&gt;</code></h4>
+<div class='docblock'><p>Attempt to cast the given super value into an instance of this type.</p>
+</div><h4 id='method.to_super' class='method'><code>fn <a href='../llvm/trait.Sub.html#method.to_super' class='fnname'>to_super</a>(&amp;self) -&gt; &amp;T</code></h4>
+<div class='docblock'><p>Cast this value to a super value.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a> for <a class='struct' href='../llvm/struct.StructType.html' title='llvm::StructType'>StructType</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1889' class='srclink' href='../src/llvm/src/macros.rs.html#185-190' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Target' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#associatedtype.Target' class='type'>Target</a> = <a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
+<div class='docblock'><p>The resulting type after dereferencing</p>
+</div><h4 id='method.deref' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Deref.html#tymethod.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a></code></h4>
+<div class='docblock'><p>The method called to dereference a value</p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -147,6 +176,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

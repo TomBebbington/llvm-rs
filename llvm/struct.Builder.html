@@ -9,7 +9,9 @@
 
     <title>llvm::Builder - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -24,17 +26,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>llvm</a></p><script>window.sidebarCurrent = {name: 'Builder', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,12 +44,13 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>llvm</a>::<wbr><a class='struct' href=''>Builder</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-574' class='srclink' href='../src/llvm/builder.rs.html#14' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-132' class='srclink' href='../src/llvm/src/builder.rs.html#14' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Builder;</pre><div class='docblock'><p>This provides a uniform API for creating instructions and inserting them into a basic block.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(context: &amp;<a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>) -&gt; <a class='struct' href='../llvm/struct.CSemiBox.html' title='llvm::CSemiBox'>CSemiBox</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt;</code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-166' class='srclink' href='../src/llvm/src/builder.rs.html#42-187' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(context: &amp;<a class='struct' href='../llvm/struct.Context.html' title='llvm::Context'>Context</a>) -&gt; <a class='struct' href='../llvm/struct.CSemiBox.html' title='llvm::CSemiBox'>CSemiBox</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt;</code></h4>
 <div class='docblock'><p>Create a new builder in the context given.</p>
 </div><h4 id='method.position_at_end' class='method'><code>fn <a href='#method.position_at_end' class='fnname'>position_at_end</a>(&amp;self, block: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>)</code></h4>
 <div class='docblock'><p>Position the builder at the end of <code>block</code>.</p>
@@ -61,9 +64,6 @@
 <p>The size of this array will be the size of <code>elem</code> times <code>size</code>.</p>
 </div><h4 id='method.build_alloca' class='method'><code>fn <a href='#method.build_alloca' class='fnname'>build_alloca</a>(&amp;self, ty: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that allocates a pointer to fit the size of <code>ty</code> then returns this pointer.</p>
-
-<p>Make sure to call <code>build_free</code> with the pointer value when you&#39;re done with it, or you&#39;re
-gonna have a bad time.</p>
 </div><h4 id='method.build_free' class='method'><code>fn <a href='#method.build_free' class='fnname'>build_free</a>(&amp;self, val: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that frees the <code>val</code>, which <em>MUST</em> be a pointer that was returned
 from <code>build_alloca</code>.</p>
@@ -71,13 +71,13 @@ from <code>build_alloca</code>.</p>
 <div class='docblock'><p>Build an instruction that store the value <code>val</code> in the pointer <code>ptr</code>.</p>
 </div><h4 id='method.build_br' class='method'><code>fn <a href='#method.build_br' class='fnname'>build_br</a>(&amp;self, dest: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that branches to the block <code>dest</code>.</p>
-</div><h4 id='method.build_cond_br' class='method'><code>fn <a href='#method.build_cond_br' class='fnname'>build_cond_br</a>(&amp;self, cond: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, if_block: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>, else_block: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt;) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div><h4 id='method.build_cond_br' class='method'><code>fn <a href='#method.build_cond_br' class='fnname'>build_cond_br</a>(&amp;self, cond: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, if_block: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>, else_block: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>&gt;) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that branches to <code>if_block</code> if <code>cond</code> evaluates to true, and <code>else_block</code> otherwise.</p>
-</div><h4 id='method.build_call' class='method'><code>fn <a href='#method.build_call' class='fnname'>build_call</a>(&amp;self, func: &amp;<a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div><h4 id='method.build_call' class='method'><code>fn <a href='#method.build_call' class='fnname'>build_call</a>(&amp;self, func: &amp;<a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that calls the function <code>func</code> with the arguments <code>args</code>.</p>
 
 <p>This will return the return value of the function.</p>
-</div><h4 id='method.build_tail_call' class='method'><code>fn <a href='#method.build_tail_call' class='fnname'>build_tail_call</a>(&amp;self, func: &amp;<a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div><h4 id='method.build_tail_call' class='method'><code>fn <a href='#method.build_tail_call' class='fnname'>build_tail_call</a>(&amp;self, func: &amp;<a class='struct' href='../llvm/struct.Function.html' title='llvm::Function'>Function</a>, args: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that calls the function <code>func</code> with the arguments <code>args</code>.</p>
 
 <p>This will return the return value of the function.</p>
@@ -85,13 +85,19 @@ from <code>build_alloca</code>.</p>
 <div class='docblock'><p>Build an instruction that yields to <code>true_val</code> if <code>cond</code> is equal to <code>1</code>, and <code>false_val</code> otherwise.</p>
 </div><h4 id='method.build_bit_cast' class='method'><code>fn <a href='#method.build_bit_cast' class='fnname'>build_bit_cast</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, dest: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that casts a value into a certain type.</p>
-</div><h4 id='method.build_insert_value' class='method'><code>fn <a href='#method.build_insert_value' class='fnname'>build_insert_value</a>(&amp;self, agg: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, elem: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, index: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
-<div class='docblock'><p>Build an instruction that inserts a value into an aggregate type.</p>
-</div><h4 id='method.build_gep' class='method'><code>fn <a href='#method.build_gep' class='fnname'>build_gep</a>(&amp;self, pointer: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, indices: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div><h4 id='method.build_int_to_ptr' class='method'><code>fn <a href='#method.build_int_to_ptr' class='fnname'>build_int_to_ptr</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, dest: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<h4 id='method.build_zext' class='method'><code>fn <a href='#method.build_zext' class='fnname'>build_zext</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, dest: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<h4 id='method.build_trunc' class='method'><code>fn <a href='#method.build_trunc' class='fnname'>build_trunc</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, dest: &amp;<a class='struct' href='../llvm/struct.Type.html' title='llvm::Type'>Type</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Build an instruction that truncates the high-order bits of value to fit into a certain type.</p>
+</div><h4 id='method.build_insert_value' class='method'><code>fn <a href='#method.build_insert_value' class='fnname'>build_insert_value</a>(&amp;self, agg: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, elem: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, index: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Build an instruction that inserts a value into an aggregate data value.</p>
+</div><h4 id='method.build_extract_value' class='method'><code>fn <a href='#method.build_extract_value' class='fnname'>build_extract_value</a>(&amp;self, agg: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, index: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+<div class='docblock'><p>Build an instruction that extracts a value from an aggregate data value.</p>
+</div><h4 id='method.build_gep' class='method'><code>fn <a href='#method.build_gep' class='fnname'>build_gep</a>(&amp;self, pointer: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, indices: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that computes the address of a subelement of an aggregate data structure.</p>
 
 <p>Basically type-safe pointer arithmetic.</p>
-</div><h4 id='method.build_switch' class='method'><code>fn <a href='#method.build_switch' class='fnname'>build_switch</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, default: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>, cases: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>)</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
+</div><h4 id='method.build_switch' class='method'><code>fn <a href='#method.build_switch' class='fnname'>build_switch</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, default: &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a>, cases: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a>&amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, &amp;<a class='struct' href='../llvm/struct.BasicBlock.html' title='llvm::BasicBlock'>BasicBlock</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <div class='docblock'><p>Build an instruction that runs whichever block matches the value, or <code>default</code> if none of them matched it.</p>
 </div><h4 id='method.build_load' class='method'><code>fn <a href='#method.build_load' class='fnname'>build_load</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <h4 id='method.build_neg' class='method'><code>fn <a href='#method.build_neg' class='fnname'>build_neg</a>(&amp;self, value: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
@@ -105,54 +111,79 @@ from <code>build_alloca</code>.</p>
 <h4 id='method.build_and' class='method'><code>fn <a href='#method.build_and' class='fnname'>build_and</a>(&amp;self, left: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, right: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <h4 id='method.build_or' class='method'><code>fn <a href='#method.build_or' class='fnname'>build_or</a>(&amp;self, left: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, right: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
 <h4 id='method.build_cmp' class='method'><code>fn <a href='#method.build_cmp' class='fnname'>build_cmp</a>(&amp;self, a: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, b: &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a>, pred: <a class='enum' href='../llvm/enum.Predicate.html' title='llvm::Predicate'>Predicate</a>) -&gt; &amp;<a class='struct' href='../llvm/struct.Value.html' title='llvm::Value'>Value</a></code></h4>
-<div class='docblock'><p>Build an instruction to compare two values with the predicate</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt; for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html#method.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h4>
-</div><h3 class='impl'><code>impl <a class='trait' href='../cbox/trait.DisposeRef.html' title='cbox::DisposeRef'>DisposeRef</a> for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h3><div class='impl-items'><h4 id='assoc_type.RefTo' class='type'><code>type RefTo = <a class='struct' href='../llvm_sys/struct.LLVMBuilder.html' title='llvm_sys::LLVMBuilder'>LLVMBuilder</a></code></h4>
-<h4 id='method.dispose' class='method'><code>unsafe fn <a href='../cbox/trait.DisposeRef.html#method.dispose' class='fnname'>dispose</a>(ptr: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>)</code></h4>
-</div></section>
+<div class='docblock'><p>Build an instruction to compare two values with the predicate given.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-134' class='srclink' href='../src/llvm/src/macros.rs.html#8' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt; for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-135' class='srclink' href='../src/llvm/src/macros.rs.html#9-14' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a>&lt;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-140' class='srclink' href='../src/llvm/src/macros.rs.html#15-20' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>&gt; for &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-156' class='srclink' href='../src/llvm/src/macros.rs.html#33-38' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>) -&gt; &amp;'a <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>&gt; for &amp;'a mut <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-161' class='srclink' href='../src/llvm/src/macros.rs.html#39-44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(ty: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>) -&gt; &amp;'a mut <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../cbox/trait.DisposeRef.html' title='cbox::DisposeRef'>DisposeRef</a> for <a class='struct' href='../llvm/struct.Builder.html' title='llvm::Builder'>Builder</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-313' class='srclink' href='../src/llvm/src/builder.rs.html#189-195' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.RefTo' class='type'><code>type <a href='../cbox/trait.DisposeRef.html#associatedtype.RefTo' class='type'>RefTo</a> = <a class='enum' href='../llvm_sys/enum.LLVMBuilder.html' title='llvm_sys::LLVMBuilder'>LLVMBuilder</a></code></h4>
+<div class='docblock'><p>What a reference to this type represents as a C pointer.</p>
+</div><h4 id='method.dispose' class='method'><code>unsafe fn <a href='../cbox/trait.DisposeRef.html#method.dispose' class='fnname'>dispose</a>(ptr: <a class='type' href='../llvm_sys/prelude/type.LLVMBuilderRef.html' title='llvm_sys::prelude::LLVMBuilderRef'>LLVMBuilderRef</a>)</code></h4>
+<div class='docblock'><p>Destroy the contents at the pointer&#39;s location. <a href="../cbox/trait.DisposeRef.html#method.dispose">Read more</a></p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-            <p>
-                Search functions by type signature (e.g.
-                <code>vec -> usize</code>)
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 
@@ -164,6 +195,6 @@ from <code>build_alloca</code>.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>
