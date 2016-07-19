@@ -28,6 +28,18 @@ impl BasicBlock {
     pub fn get_parent(&self) -> Option<&Function> {
         unsafe { util::ptr_to_null(core::LLVMGetBasicBlockParent(self.into())) }
     }
+    /// Return the terminator instruction for this basic block.
+    pub fn get_terminator(&self) -> Option<&Value> {
+        unsafe { util::ptr_to_null(core::LLVMGetBasicBlockTerminator(self.into())) }
+    }
+    /// Return the first instruction for this basic block.
+    pub fn get_first(&self) -> Option<&Value> {
+        unsafe { util::ptr_to_null(core::LLVMGetFirstInstruction(self.into())) }
+    }
+    /// Return the last instruction for this basic block.
+    pub fn get_last(&self) -> Option<&Value> {
+        unsafe { util::ptr_to_null(core::LLVMGetLastInstruction(self.into())) }
+    }
     /// Move this basic block after the `other` basic block in its function.
     pub fn move_after(&self, other: &BasicBlock) {
         unsafe { core::LLVMMoveBasicBlockAfter(self.into(), other.into()) }
