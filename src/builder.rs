@@ -159,7 +159,7 @@ impl Builder {
     bin_op!{build_ashr, LLVMBuildAShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
-    /// Build an instruction to compare two values with the predicate given.
+    /// Build an instruction to compare the values `a` and `b` with the predicate / comparative operator `pred`.
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
         assert_eq!(at, bt);
@@ -184,7 +184,7 @@ impl Builder {
             };
             unsafe { core::LLVMBuildFCmp(self.into(), pred, a.into(), b.into(), NULL_NAME.as_ptr()) }.into()
         } else {
-            panic!("expected numbers, got {:?}", at)
+            panic!("expected numzextbers, got {:?}", at)
         }
     }
 }
