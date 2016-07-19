@@ -6,7 +6,7 @@ use std::ffi::CString;
 use std::{fmt, mem};
 use std::ops::{Deref, Index};
 use std::marker::PhantomData;
-use block::BasicBlock;
+use block::{BasicBlock, BlockIter};
 use context::{Context, GetContext};
 use types::{FunctionType, Type};
 use util::{self, Sub};
@@ -229,6 +229,10 @@ impl Function {
         util::with_cstr(name, |ptr| unsafe {
             core::LLVMAppendBasicBlockInContext(self.get_context().into(), self.into(), ptr).into()
         })
+    }
+    /// Iterate through this function's basic blocks.
+    pub fn blocks(&self) -> BlockIter {
+        BlockIter::new(self)
     }
     /// Returns the entry block of this function or `None` if there is none.
     pub fn get_entry(&self) -> Option<&BasicBlock> {

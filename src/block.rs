@@ -69,15 +69,20 @@ pub struct BlockIter<'a> {
     pub min: &'a BasicBlock,
     pub max: &'a BasicBlock
 }
+impl<'a> BlockIter<'a> {
+    pub fn new(function: &'a Function) -> BlockIter<'a> {
+        BlockIter {
+            min: unsafe { core::LLVMGetFirstBasicBlock(function.into()).into() },
+            max: unsafe { core::LLVMGetLastBasicBlock(function.into()).into() }
+        }
+    }
+}
 
 impl<'a> IntoIterator for &'a Function {
     type IntoIter = BlockIter<'a>;
     type Item = &'a BasicBlock;
     fn into_iter(self) -> BlockIter<'a> {
-        BlockIter {
-            min: unsafe { core::LLVMGetFirstBasicBlock(self.into()).into() },
-            max: unsafe { core::LLVMGetLastBasicBlock(self.into()).into() }
-        }
+        BlockIter::new(self)
     }
 }
 impl<'a> Iterator for BlockIter<'a> {

@@ -102,7 +102,7 @@ impl<'a> JitEngine {
     /// This will check that the types match at runtime when in debug mode, but not release mode.
     /// You should make sure to use debug mode if you want it to error when the types don't match.
     pub fn with_function<C, A, R>(&self, function: &'a Function, cb: C) where A:Compile<'a>, R:Compile<'a>, C:FnOnce(extern "C" fn (A) -> R) {
-        if cfg!(not(ndebug)) {
+        if cfg!(debug_assertions) {
             let ctx = function.get_context();
             let sig = function.get_signature();
             assert_eq!(Type::get::<R>(ctx), sig.get_return());
