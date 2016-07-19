@@ -238,13 +238,6 @@ impl Function {
     pub fn get_entry(&self) -> Option<&BasicBlock> {
         unsafe { mem::transmute(core::LLVMGetEntryBasicBlock(self.into())) }
     }
-    /// Returns the name of this function.
-    pub fn get_name(&self) -> &str {
-        unsafe {
-            let c_name = core::LLVMGetValueName(self.into());
-            util::to_str(c_name as *mut i8)
-        }
-    }
     /// Returns the function signature representing this function's signature.
     pub fn get_signature(&self) -> &FunctionType {
         unsafe {
@@ -338,7 +331,7 @@ pub enum Attribute {
     NoRedZone =         0b1000000000000000000,
     /// Disable implicit float instructions.
     NoImplicitFloat =   0b10000000000000000000,
-    /// Naked function.
+    /// Only allows native assembly code in the function.
     Naked =             0b100000000000000000000,
     /// The source language has marked this function as inline.
     InlineHint =        0b1000000000000000000000,
