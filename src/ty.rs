@@ -26,7 +26,9 @@ deref!{$ty, Type}
 
 /// Defines how a value should be laid out in memory.
 pub struct Type(PhantomData<[u8]>);
-native_ref!(&Type = LLVMTypeRef);
+native_ref!{&Type = LLVMTypeRef}
+get_context!{Type, LLVMGetTypeContext}
+to_str!{Type, LLVMPrintTypeToString}
 impl Type {
     #[inline(always)]
     /// Get the type given as an LLVM type descriptor in the context given.
@@ -48,11 +50,15 @@ impl Type {
         unsafe { core::LLVMTypeIsSized(self.into()) != 0 }
     }
     /// Returns true if this type is a function.
+    ///
+    /// This is equivalent to `FunctionType::is`.
     pub fn is_function(&self) -> bool {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMFunctionTypeKind as c_uint
     }
     /// Returns true if this type is a struct.
+    ///
+    /// This is equivalent to `StructType::is`.
     pub fn is_struct(&self) -> bool {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint
@@ -63,6 +69,8 @@ impl Type {
         kind as c_uint == LLVMTypeKind::LLVMVoidTypeKind as c_uint
     }
     /// Returns true if this type is a pointer.
+    ///
+    /// This is equivalent to `PointerType::is`.
     pub fn is_pointer(&self) -> bool {
         let kind = unsafe { core::LLVMGetTypeKind(self.into()) };
         kind as c_uint == LLVMTypeKind::LLVMPointerTypeKind as c_uint
@@ -84,12 +92,12 @@ impl Type {
         unsafe { target::LLVMABISizeOfType(target.into(), self.into()) as usize }
     }
 }
-get_context!(Type, LLVMGetTypeContext);
-to_str!(Type, LLVMPrintTypeToString);
 
 /// A structure type, such as a tuple or struct.
 pub struct StructType;
-native_ref!(&StructType = LLVMTypeRef);
+native_ref!{&StructType = LLVMTypeRef}
+get_context!{StructType, LLVMGetTypeContext}
+to_str!{StructType, LLVMPrintTypeToString}
 sub!{StructType, LLVMStructTypeKind}
 impl StructType {
     /// Make a new struct with the given fields and packed representation.
@@ -114,13 +122,13 @@ impl StructType {
         }
     }
 }
-get_context!(StructType, LLVMGetTypeContext);
-to_str!(StructType, LLVMPrintTypeToString);
 
 /// A function signature type.
 pub struct FunctionType;
-native_ref!(&FunctionType = LLVMTypeRef);
-deref!(FunctionType, Type);
+native_ref!{&FunctionType = LLVMTypeRef}
+get_context!{FunctionType, LLVMGetTypeContext}
+to_str!{FunctionType, LLVMPrintTypeToString}
+deref!{FunctionType, Type}
 unsafe impl Sub<Type> for FunctionType {
     fn is(mut ty: &Type) -> bool {
         unsafe {
@@ -155,13 +163,13 @@ impl FunctionType {
         unsafe { core::LLVMGetReturnType(self.into()).into() }
     }
 }
-get_context!(FunctionType, LLVMGetTypeContext);
-to_str!(FunctionType, LLVMPrintTypeToString);
 
 /// A pointer type.
 pub struct PointerType;
+native_ref!{&PointerType = LLVMTypeRef}
+get_context!{PointerType, LLVMGetTypeContext}
+to_str!{PointerType, LLVMPrintTypeToString}
 sub!{PointerType, LLVMPointerTypeKind}
-native_ref!(&PointerType = LLVMTypeRef);
 impl PointerType {
     /// Make a new pointer type with the given element type.
     pub fn new(elem: &Type) -> &Type {
@@ -172,5 +180,20 @@ impl PointerType {
         unsafe { mem::transmute(core::LLVMGetElementType(self.into())) }
     }
 }
-get_context!(PointerType, LLVMGetTypeContext);
-to_str!(PointerType, LLVMPrintTypeToString);
+
+/// An integer type.
+pub struct IntegerType;
+native_ref!{&IntegerType = LLVMTypeRef}
+get_context!{IntegerType, LLVMGetTypeContext}
+to_str!{IntegerType, LLVMPrintTypeToString}
+sub!{IntegerType, LLVMPointerTypeKind}
+impl IntegerType {
+    /// Make a new integer type that will be the size of the given number of bits.
+    pub fn new(context: &Context, numbits: usize) -> &IntegerType {
+        unsafe { core::LLVMIntTypeInContext(context.into(), numbits as c_uint) }.into()
+    }
+    /// Returns how long an integer of this type is, in bits.
+    pub fn get_width(&self) -> usize {
+        unsafe { core::LLVMGetIntTypeWidth (self.into()) as usize }
+    }
+}
