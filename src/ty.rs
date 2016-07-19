@@ -10,6 +10,20 @@ use std::marker::PhantomData;
 use std::iter::Iterator;
 use std::ops::Deref;
 
+macro_rules! sub {
+    ($ty:ty, $kind:ident) => (
+unsafe impl Sub<::Type> for $ty {
+    fn is(ty: &Type) -> bool {
+        unsafe {
+            let kind = core::LLVMGetTypeKind(ty.into());
+            kind as c_uint == LLVMTypeKind::$kind as c_uint
+        }
+    }
+}
+deref!{$ty, Type}
+    )
+}
+
 /// Defines how a value should be laid out in memory.
 pub struct Type(PhantomData<[u8]>);
 native_ref!(&Type = LLVMTypeRef);
@@ -34,10 +48,6 @@ impl Type {
     /// Make a new pointer with the given element type.
     pub fn new_pointer<'a>(elem: &'a Type) -> &'a Type {
         unsafe { core::LLVMPointerType(elem.into(), 0 as c_uint) }.into()
-    }
-    /// Make a new structure type with the given types.
-    pub fn new_struct<'a>(context:&'a Context, elems: &[&'a Type], packed: bool) -> &'a Type {
-        unsafe { core::LLVMStructTypeInContext(context.into(), elems.as_ptr() as *mut LLVMTypeRef, elems.len() as c_uint, packed as c_int) }.into()
     }
     /// Returns true if the size of the type is known at compile-time.
     ///
@@ -92,6 +102,7 @@ to_str!(Type, LLVMPrintTypeToString);
 /// A structure type, such as a tuple or struct.
 pub struct StructType;
 native_ref!(&StructType = LLVMTypeRef);
+sub!{StructType, LLVMStructTypeKind}
 impl StructType {
     /// Make a new struct with the given fields and packed representation.
     pub fn new<'a>(context: &'a Context, fields: &[&'a Type], packed: bool) -> &'a StructType {
@@ -115,15 +126,6 @@ impl StructType {
         }
     }
 }
-unsafe impl Sub<Type> for StructType {
-    fn is(ty: &Type) -> bool {
-        unsafe {
-            let kind = core::LLVMGetTypeKind(ty.into());
-            kind as c_uint == LLVMTypeKind::LLVMStructTypeKind as c_uint
-        }
-    }
-}
-deref!(StructType, Type);
 get_context!(StructType, LLVMGetTypeContext);
 to_str!(StructType, LLVMPrintTypeToString);
 
