@@ -104,6 +104,28 @@ impl StructType {
             ty.into()
         })
     }
+    /// Make a new named struct without defining its fields yet.
+    ///
+    /// You can use this opaque struct without defining its fields (for creating recursive types, etc.). When you want to define its fields (which may include itself), use set_elements().
+    pub fn new_opaque<'a>(context: &'a Context, name: &str) -> &'a StructType {
+        util::with_cstr(name, |name| unsafe {
+            core::LLVMStructCreateNamed(context.into(), name).into()
+        })
+    }
+    /// Set the elements that make up this struct.
+    ///
+    /// Can only be called once, and only on a StructType created through the new_opaque() function.
+    /// Returns Err(()) if the struct is not opaque.
+    pub fn set_elements<'a>(&self, fields: &[&'a Type], packed: bool) -> Result<(), ()> {
+        unsafe {
+            if core::LLVMIsOpaqueStruct(self.into()) != 0 {
+                core::LLVMStructSetBody(self.into(), fields.as_ptr() as *mut LLVMTypeRef, fields.len() as c_uint, packed as c_int);
+                Ok(())
+            } else {
+                Err(())
+            }
+        }
+    }
     /// Returns the elements that make up this struct.
     pub fn get_elements(&self) -> Vec<&Type> {
         unsafe {
