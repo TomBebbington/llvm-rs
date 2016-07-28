@@ -156,10 +156,13 @@ impl Builder {
     bin_op!{build_sub, LLVMBuildSub, LLVMBuildFSub}
     bin_op!{build_mul, LLVMBuildMul, LLVMBuildFMul}
     bin_op!{build_div, LLVMBuildSDiv, LLVMBuildFDiv}
+    bin_op!{build_rem, LLVMBuildSRem, LLVMBuildFRem}
     bin_op!{build_shl, LLVMBuildShl}
     bin_op!{build_ashr, LLVMBuildAShr}
+    bin_op!{build_lshr, LLVMBuildLShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    bin_op!{build_xor, LLVMBuildXor}
     /// Build an instruction to compare the values `a` and `b` with the predicate / comparative operator `pred`.
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
