@@ -149,6 +149,14 @@ impl Builder {
             switch.into()
         }
     }
+    /// Build a phi node which is used together with branching to select a value depending on the predecessor of the current block
+    pub fn build_phi(&self, ty: &Type, entries: &[(&Value, &BasicBlock)]) -> &Value {
+        let phi_node = unsafe { core::LLVMBuildPhi(self.into(), ty.into(), NULL_NAME.as_ptr()) };
+        for &(val, preds) in entries {
+            unsafe { core::LLVMAddIncoming(phi_node, &mut val.into(), &mut preds.into(), 1) }
+        }
+        phi_node.into()
+    }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
