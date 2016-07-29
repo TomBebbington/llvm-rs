@@ -82,8 +82,8 @@ impl Builder {
         unsafe { core::LLVMBuildBr(self.into(), dest.into()).into() }
     }
     /// Build an instruction that branches to `if_block` if `cond` evaluates to true, and `else_block` otherwise.
-    pub fn build_cond_br(&self, cond: &Value, if_block: &BasicBlock, else_block: Option<&BasicBlock>) -> &Value {
-        unsafe { core::LLVMBuildCondBr(self.into(), cond.into(), if_block.into(), mem::transmute(else_block)).into() }
+    pub fn build_cond_br(&self, cond: &Value, if_block: &BasicBlock, else_block: &BasicBlock) -> &Value {
+        unsafe { core::LLVMBuildCondBr(self.into(), cond.into(), if_block.into(), else_block.into()).into() }
     }
     /// Build an instruction that calls the function `func` with the arguments `args`.
     ///
