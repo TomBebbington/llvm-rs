@@ -67,8 +67,18 @@ impl Builder {
     pub fn build_alloca(&self, ty: &Type) -> &Value {
         unsafe { core::LLVMBuildAlloca(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
+    /// Build an instruction that allocates an array with the element type `elem` and the size `size`.
+    ///
+    /// The size of this array will be the size of `elem` times `size`.
+    pub fn build_array_malloc(&self, elem: &Type, size: &Value) -> &Value {
+        unsafe { core::LLVMBuildArrayMalloc(self.into(), elem.into(), size.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
+    }
+    /// Build an instruction that allocates a pointer to fit the size of `ty` then returns this pointer.
+    pub fn build_malloc(&self, ty: &Type) -> &Value {
+        unsafe { core::LLVMBuildMalloc(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
+    }
     /// Build an instruction that frees the `val`, which _MUST_ be a pointer that was returned
-    /// from `build_alloca`.
+    /// from `build_malloc`.
     pub fn build_free(&self, val: &Value) -> &Value {
         unsafe { core::LLVMBuildFree(self.into(), val.into()) }.into()
     }
