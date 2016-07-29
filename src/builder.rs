@@ -3,7 +3,6 @@ use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::CSemiBox;
 use std::marker::PhantomData;
-use std::mem;
 use block::BasicBlock;
 use context::Context;
 use types::Type;
