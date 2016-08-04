@@ -3,6 +3,7 @@ use ffi::prelude::{LLVMValueRef, LLVMModuleRef};
 use ffi::analysis::LLVMVerifierFailureAction;
 use ffi::{analysis, core, linker, LLVMModule};
 use ffi::transforms::pass_manager_builder as builder;
+use ffi::transforms::ipo as ipo;
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
 use cbox::{CBox, CSemiBox};
@@ -130,7 +131,17 @@ impl Module {
             let builder = builder::LLVMPassManagerBuilderCreate();
             builder::LLVMPassManagerBuilderSetOptLevel(builder, opt_level as c_uint);
             builder::LLVMPassManagerBuilderSetSizeLevel(builder, size_level as c_uint);
+
             let pass_manager = core::LLVMCreatePassManager();
+
+            if opt_level > 1 {
+                builder::LLVMPassManagerBuilderUseInlinerWithThreshold(builder, size_level as c_uint);
+            } else {
+                // otherwise, we will add the builder to the top of the list of passes.
+                // This is not exactly what llvm-opt does, but it is pretty close
+                ipo::LLVMAddAlwaysInlinerPass(pass_manager);
+            }
+
             builder::LLVMPassManagerBuilderPopulateModulePassManager(builder, pass_manager);
             builder::LLVMPassManagerBuilderDispose(builder);
             core::LLVMRunPassManager(pass_manager, self.into());
