@@ -5,6 +5,7 @@ use ffi::{analysis, core, linker, LLVMModule};
 use ffi::transforms::pass_manager_builder as builder;
 use ffi::bit_writer as writer;
 use ffi::bit_reader as reader;
+use ffi::ir_reader;
 use cbox::{CBox, CSemiBox};
 use std::ffi::CString;
 use std::iter::{Iterator, IntoIterator};
@@ -95,6 +96,19 @@ impl Module {
                 Ok(())
             }
         })
+    }
+    /// Parse IR assembly unto a module, or return an error string.
+    pub fn parse_ir_from_str<'a>(context: &'a Context, s: &str) -> Result<CSemiBox<'a, Module>, CBox<str>> {
+        unsafe {
+            let mut out = mem::uninitialized();
+            let mut err = mem::uninitialized();
+            let buf = try!(MemoryBuffer::new_from_str(s, None));
+            if ir_reader::LLVMParseIRInContext(context.into(), buf.as_ptr(), &mut out, &mut err) == 1 {
+                Err(CBox::new(err))
+            } else {
+                Ok(CSemiBox::new(out))
+            }
+        }
     }
     /// Add a function to the module with the name given.
     pub fn add_function<'a>(&'a self, name: &str, sig: &'a Type) -> &'a mut Function {
