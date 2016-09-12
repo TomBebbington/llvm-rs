@@ -1,12 +1,13 @@
-use libc::c_char;
+use libc::{c_char, size_t};
 use ffi::{core, LLVMMemoryBuffer};
 use ffi::prelude::LLVMMemoryBufferRef;
 use cbox::{CBox, DisposeRef};
 use std::ops::Deref;
 use std::marker::PhantomData;
 use std::mem;
+use std::ffi::CString;
+use std::default::Default;
 use util;
-
 
 pub struct MemoryBuffer(PhantomData<[u8]>);
 native_ref!(&MemoryBuffer = LLVMMemoryBufferRef);
@@ -21,6 +22,19 @@ impl MemoryBuffer {
                 Ok(CBox::new(output))
             }
         })
+    }
+
+    pub fn new_from_str(buf: &str, name: Option<&str>) -> Result<CBox<MemoryBuffer>, CBox<str>> {
+        unsafe {
+            let in_name = name
+                .map(|n| n.as_bytes().to_vec())
+                .map(|mut v| { v.push(0); CString::from_vec_unchecked(v) })
+                .unwrap_or(CString::default());
+
+            let out = core::LLVMCreateMemoryBufferWithMemoryRangeCopy(
+                buf.as_ptr() as *const c_char, buf.len() as size_t, in_name.as_ptr());
+            Ok(CBox::new(out))
+        }
     }
 }
 impl Deref for MemoryBuffer {
