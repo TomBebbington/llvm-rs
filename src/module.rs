@@ -187,29 +187,12 @@ impl Module {
     /// Link a module into this module, returning an error string if an error occurs.
     ///
     /// This *does not* destroy the source module.
-    pub fn link(&self, src: &Module) -> Result<(), CBox<str>> {
+    pub fn link(&self, src: &Module) -> Result<(), ()> {
         unsafe {
             let dest = self.into();
             let src = src.into();
-            let mut message = mem::uninitialized();
-            if linker::LLVMLinkModules(dest, src, linker::LLVMLinkerMode::LLVMLinkerPreserveSource, &mut message) == 1 {
-                Err(CBox::new(message))
-            } else {
-                Ok(())
-            }
-        }
-    }
-
-    /// Link a module into this module, returning an error string if an error occurs.
-    ///
-    /// This *does* destroy the source module.
-    pub fn link_destroy(&self, src: CSemiBox<Module>) -> Result<(), CBox<str>> {
-        unsafe {
-            let dest = self.into();
-            let src = src.as_ptr();
-            let mut message = mem::uninitialized();
-            if linker::LLVMLinkModules(dest, src, linker::LLVMLinkerMode::LLVMLinkerDestroySource, &mut message) == 1 {
-                Err(CBox::new(message))
+            if linker::LLVMLinkModules2(dest, src) == 1 {
+                Err(())
             } else {
                 Ok(())
             }

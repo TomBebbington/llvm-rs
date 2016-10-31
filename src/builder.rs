@@ -3,7 +3,6 @@ use ffi::prelude::{LLVMBuilderRef, LLVMValueRef};
 use ffi::{core, LLVMBuilder, LLVMRealPredicate, LLVMIntPredicate};
 use cbox::CSemiBox;
 use std::marker::PhantomData;
-use std::mem;
 use block::BasicBlock;
 use context::Context;
 use types::Type;
@@ -68,8 +67,18 @@ impl Builder {
     pub fn build_alloca(&self, ty: &Type) -> &Value {
         unsafe { core::LLVMBuildAlloca(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
     }
+    /// Build an instruction that allocates an array with the element type `elem` and the size `size`.
+    ///
+    /// The size of this array will be the size of `elem` times `size`.
+    pub fn build_array_malloc(&self, elem: &Type, size: &Value) -> &Value {
+        unsafe { core::LLVMBuildArrayMalloc(self.into(), elem.into(), size.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
+    }
+    /// Build an instruction that allocates a pointer to fit the size of `ty` then returns this pointer.
+    pub fn build_malloc(&self, ty: &Type) -> &Value {
+        unsafe { core::LLVMBuildMalloc(self.into(), ty.into(), NULL_NAME.as_ptr() as *const c_char) }.into()
+    }
     /// Build an instruction that frees the `val`, which _MUST_ be a pointer that was returned
-    /// from `build_alloca`.
+    /// from `build_malloc`.
     pub fn build_free(&self, val: &Value) -> &Value {
         unsafe { core::LLVMBuildFree(self.into(), val.into()) }.into()
     }
@@ -82,8 +91,8 @@ impl Builder {
         unsafe { core::LLVMBuildBr(self.into(), dest.into()).into() }
     }
     /// Build an instruction that branches to `if_block` if `cond` evaluates to true, and `else_block` otherwise.
-    pub fn build_cond_br(&self, cond: &Value, if_block: &BasicBlock, else_block: Option<&BasicBlock>) -> &Value {
-        unsafe { core::LLVMBuildCondBr(self.into(), cond.into(), if_block.into(), mem::transmute(else_block)).into() }
+    pub fn build_cond_br(&self, cond: &Value, if_block: &BasicBlock, else_block: &BasicBlock) -> &Value {
+        unsafe { core::LLVMBuildCondBr(self.into(), cond.into(), if_block.into(), else_block.into()).into() }
     }
     /// Build an instruction that calls the function `func` with the arguments `args`.
     ///
@@ -149,6 +158,14 @@ impl Builder {
             switch.into()
         }
     }
+    /// Build a phi node which is used together with branching to select a value depending on the predecessor of the current block
+    pub fn build_phi(&self, ty: &Type, entries: &[(&Value, &BasicBlock)]) -> &Value {
+        let phi_node = unsafe { core::LLVMBuildPhi(self.into(), ty.into(), NULL_NAME.as_ptr()) };
+        for &(val, preds) in entries {
+            unsafe { core::LLVMAddIncoming(phi_node, &mut val.into(), &mut preds.into(), 1) }
+        }
+        phi_node.into()
+    }
     un_op!{build_load, LLVMBuildLoad}
     un_op!{build_neg, LLVMBuildNeg}
     un_op!{build_not, LLVMBuildNot}
@@ -156,10 +173,13 @@ impl Builder {
     bin_op!{build_sub, LLVMBuildSub, LLVMBuildFSub}
     bin_op!{build_mul, LLVMBuildMul, LLVMBuildFMul}
     bin_op!{build_div, LLVMBuildSDiv, LLVMBuildFDiv}
+    bin_op!{build_rem, LLVMBuildSRem, LLVMBuildFRem}
     bin_op!{build_shl, LLVMBuildShl}
     bin_op!{build_ashr, LLVMBuildAShr}
+    bin_op!{build_lshr, LLVMBuildLShr}
     bin_op!{build_and, LLVMBuildAnd}
     bin_op!{build_or, LLVMBuildOr}
+    bin_op!{build_xor, LLVMBuildXor}
     /// Build an instruction to compare the values `a` and `b` with the predicate / comparative operator `pred`.
     pub fn build_cmp(&self, a: &Value, b: &Value, pred: Predicate) -> &Value {
         let (at, bt) = (a.get_type(), b.get_type());
