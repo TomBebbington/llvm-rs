@@ -26,4 +26,5 @@ fn main() {
             println!("thr {} = {}", i, thr(0 as N))
         }
     });
+    ee.remove_module(&module);
 }

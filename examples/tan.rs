@@ -24,4 +24,5 @@ fn main() {
             println!("tan {} = {}", i, tan(i))
         }
     });
+    ee.remove_module(&module);
 }
