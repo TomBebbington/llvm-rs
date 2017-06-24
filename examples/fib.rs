@@ -38,4 +38,5 @@ fn main() {
             println!("fib {} = {}", i, fib(i))
         }
     });
+    ee.remove_module(&module);
 }
